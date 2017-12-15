@@ -1,8 +1,8 @@
-export function setEnv_act(url) {
+export function setUrl_act(backendurl) {
 
     return {
-        type: 'SET_EXAMPLE',
-        payload: 'example'
+        type: 'SET_BACKEND_URL',
+        payload: backendurl
     }
 
 }
