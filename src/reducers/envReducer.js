@@ -4,6 +4,13 @@ const envReducer = (
 ) => {
 
     switch (action.type) {
+        case "SET_BACKEND_URL":
+            state = {
+                ...state,
+                backendUrl: action.payload
+            }
+            break
+
         default:
             break
     }
