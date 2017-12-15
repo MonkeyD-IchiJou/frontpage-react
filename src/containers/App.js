@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { setEnv_act } from './actions/envActions'
+import { setUrl_act } from './actions/envActions'
 import { setUser_act } from './actions/userActions'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import Homepage from './components/Homepage'
+import Loginpage from './components/Loginpage'
+import Signuppage from './components/Signuppage'
 
 class App extends Component {
 
     componentDidMount() {
-        this.props.setEnv_act()
-        this.props.setUser_act()
+        // first setup the correct url for backend server calling
+        this.props.setUrl_act('https://localhost')
     }
 
     render() {
@@ -19,19 +22,25 @@ class App extends Component {
                     <Route
                         exact
                         path='/'
-                        render={props => <div>homepage pls</div>}
+                        render={props => <Homepage {...props} />}
                     />
 
                     <Route
                         exact
                         path='/logout'
-                        render={props => <div>logout pls</div>}
+                        render={props => <div>logout page</div>}
                     />
 
                     <Route
                         exact
                         path='/login'
-                        render={props => <div>login pls</div>}
+                        render={props => <Loginpage {...props} />}
+                    />
+
+                    <Route
+                        exact
+                        path='/signup'
+                        render={props => <Signuppage {...props} />}
                     />
 
                 </Switch>
@@ -49,8 +58,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setEnv_act: () => {
-            dispatch(setEnv_act())
+        setUrl_act: (backendurl) => {
+            dispatch(setUrl_act(backendurl))
         },
         setUser_act: () => {
             dispatch(setUser_act())
