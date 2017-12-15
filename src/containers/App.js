@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { setUrl_act } from './actions/envActions'
-import { setUser_act } from './actions/userActions'
+import { reqLogin_act, reqLogout_act } from './actions/userActions'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Homepage from './components/Homepage'
 import Loginpage from './components/Loginpage'
@@ -12,6 +12,8 @@ class App extends Component {
     componentDidMount() {
         // first setup the correct url for backend server calling
         this.props.setUrl_act('https://localhost')
+        this.props.reqLogin_act('ichijou8282@gmail.com', 'ichijou1234')
+        //this.props.reqLogout_act()
     }
 
     render() {
@@ -61,8 +63,11 @@ const mapDispatchToProps = (dispatch) => {
         setUrl_act: (backendurl) => {
             dispatch(setUrl_act(backendurl))
         },
-        setUser_act: () => {
-            dispatch(setUser_act())
+        reqLogin_act: (email, password) => {
+            dispatch(reqLogin_act(email, password)).catch(err=>{}) // simply catching error
+        },
+        reqLogout_act: () => {
+            dispatch(reqLogout_act())
         }
     }
 }

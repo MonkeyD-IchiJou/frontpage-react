@@ -6,7 +6,11 @@ class Homepage extends Component {
         return (
             <div>
                 Home page here
-                <Button> SignIn</Button>
+                <Button
+                    onClick={() => this.props.history.push('/login')}
+                >
+                    Login
+                </Button>
             </div>
         )
     }
