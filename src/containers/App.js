@@ -4,7 +4,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                this is my chatbox
+                this is my frontpage
             </div>
         );
     }
