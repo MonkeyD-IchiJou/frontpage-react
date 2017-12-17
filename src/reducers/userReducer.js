@@ -1,5 +1,5 @@
 const userReducer = (
-    state = { username: '', email: '', jwt: '', loginErrors: '', signupErrors: '' },
+    state = { userid: 0, username: '', email: '', userjoindate: '', jwt: '', uservalidate: false },
     action
 ) => {
 
@@ -12,26 +12,23 @@ const userReducer = (
             // set the jwt state
             state = {
                 ...state,
-                jwt: action.payload,
-                loginErrors: ''
+                jwt: action.payload
             }
 
             break
 
-        case "USR_REQ_LOGIN_REJECTED":
+        case "REQ_CHECKTOKEN_STORAGE_FULFILLED":
 
-            // rm the jwt in my localStorage
-            localStorage.removeItem('token')
-
-            // set the loginErrors state
+            // if there is jwt in localstorage
             state = {
                 ...state,
-                jwt: '',
-                loginErrors: action.payload
+                jwt: action.payload
             }
 
             break
 
+        case "REQ_CHECKTOKEN_STORAGE_REJECTED":
+        case "USR_REQ_LOGIN_REJECTED":
         case "USR_REQ_LOGOUT":
 
             // rm the jwt in my localStorage
@@ -40,8 +37,32 @@ const userReducer = (
             // set the jwt state to null
             state = {
                 ...state,
-                jwt: ''
+                jwt: '',
+                uservalidate: false
             }
+            break
+
+        case "USR_REQ_INFO_FULFILLED":
+
+            let userpayload = action.payload
+            state = {
+                ...state,
+                userid: userpayload.id,
+                username: userpayload.username,
+                email: userpayload.email,
+                userjoindate: userpayload.joindate,
+                uservalidate: true
+            }
+
+            break
+
+        case "USR_REQ_INFO_REJECTED":
+
+            state = {
+                ...state,
+                uservalidate: false
+            }
+
             break
 
         default:
