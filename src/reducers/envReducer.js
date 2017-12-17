@@ -1,13 +1,20 @@
 const envReducer = (
-    state = { backendUrl: '' },
+    state = { backendUrl: '', validatingUser: true },
     action
 ) => {
 
     switch (action.type) {
-        case "SET_BACKEND_URL":
+        case "SET_BACKEND_URL_FULFILLED":
             state = {
                 ...state,
                 backendUrl: action.payload
+            }
+            break
+
+        case "SET_VALIDATING_USR":
+            state = {
+                ...state,
+                validatingUser: action.payload
             }
             break
 
