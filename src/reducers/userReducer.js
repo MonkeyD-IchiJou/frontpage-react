@@ -27,21 +27,6 @@ const userReducer = (
 
             break
 
-        case "REQ_CHECKTOKEN_STORAGE_REJECTED":
-        case "USR_REQ_LOGIN_REJECTED":
-        case "USR_REQ_LOGOUT":
-
-            // rm the jwt in my localStorage
-            localStorage.removeItem('token')
-
-            // set the jwt state to null
-            state = {
-                ...state,
-                jwt: '',
-                uservalidate: false
-            }
-            break
-
         case "USR_REQ_INFO_FULFILLED":
 
             let userpayload = action.payload
@@ -56,13 +41,24 @@ const userReducer = (
 
             break
 
+        case "REQ_CHECKTOKEN_STORAGE_REJECTED":
+        case "USR_REQ_LOGIN_REJECTED":
+        case "USR_REQ_LOGOUT":
         case "USR_REQ_INFO_REJECTED":
 
+            // rm the jwt in my localStorage
+            localStorage.removeItem('token')
+
+            // reset the user state
             state = {
                 ...state,
+                userid: 0, 
+                username: '', 
+                email: '', 
+                userjoindate: '', 
+                jwt: '', 
                 uservalidate: false
             }
-
             break
 
         default:
