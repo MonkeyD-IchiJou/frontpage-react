@@ -22,18 +22,22 @@ var UserRequestLogin = (backendurl, email, password) => {
             })
             .end((err, res) => {
 
-                if (err || !res.ok) {
-                    let errormsg = res.body.errors
-                    reject(errormsg)
-                }
-                else {
-                    let result = res.body
-
-                    if (!result || !result.authResult) {
-                        reject('no body msg')
+                try{
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
                     }
+                    else {
+                        let result = res.body
 
-                    resolve(result.jwt)
+                        if (!result || !result.authResult) {
+                            throw new Error('no body msg')
+                        }
+
+                        resolve(result.jwt)
+                    }
+                } catch (e) {
+                    reject(e.toString())
                 }
 
             })
@@ -52,27 +56,31 @@ var RequestUserInfo = (backendurl, jwt) => {
             })
             .end((err, res) => {
 
-                if (err || !res.ok) {
-                    let errormsg = res.body.errors
-                    reject(errormsg)
-                }
-                else {
-                    let result = res.body
-
-                    if (!result || !result.success) {
-                        reject('cannot verify user')
+                try{
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
                     }
+                    else {
+                        let result = res.body
 
-                    resolve(result.userinfo)
+                        if (!result || !result.success) {
+                            throw new Error('no such user')
+                        }
+
+                        resolve(result.userinfo)
+                    }
+                } catch(e) {
+                    reject(e.toString())
                 }
 
             })
     })
 }
 
+// check whether got token in my localstorage or not
 var CheckTokenPromise = () => {
     return new Promise((resolve, reject) => {
-
         let jwt = localStorage.getItem('token')
         if (jwt) {
             resolve(jwt)
