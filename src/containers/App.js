@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { setUrl_act, setValidatingUser_act } from './actions/envActions'
+import { setAppLoading_act } from './actions/envActions'
 import { reqLogin_act, reqLogout_act, reqUserInfo_act, reqCheckToken_act } from './actions/userActions'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Homepage from './components/Homepage'
@@ -31,37 +31,34 @@ const PrivateRoute = ({ component: Component, confirmLogin: loginornot, compProp
 class App extends Component {
 
     componentDidMount() {
-
         // at the very beginning, I am first validating the user
-
-        // simple set the backend url
-        this.props.dispatch(setUrl_act('https://localhost')).then(async () => {
-
-            try {
-
-                // see whether got jwt token stored in the storage or not
-                await this.props.dispatch(reqCheckToken_act())
-
-                let backendUrl = this.props.envReducer.backendUrl
-                let jwt = this.props.userReducer.jwt
-
-                // get user info based on jwt
-                await this.props.dispatch(reqUserInfo_act(backendUrl, jwt))
-
-                // finish validating the user
-                this.props.dispatch(setValidatingUser_act(false))
-
-            } catch (e) {
-                // finish validating the user
-                this.props.dispatch(setValidatingUser_act(false))
-            }
-        })
-
+        this.FirstCheckUser()
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        // do not update my component if i am validating the user
-        return !nextProps.envReducer.validatingUser
+        // do not render my component if i am loading my app
+        return !nextProps.envReducer.apploading
+    }
+
+    FirstCheckUser = async () => {
+        try {
+
+            // see whether got jwt token stored in the storage or not
+            await this.props.dispatch(reqCheckToken_act())
+
+            let backendUrl = this.props.envReducer.backendUrl
+            let jwt = this.props.userReducer.jwt
+
+            // get user info based on jwt
+            await this.props.dispatch(reqUserInfo_act(backendUrl, jwt))
+
+            // finish validating the user
+            this.props.dispatch(setAppLoading_act(false))
+
+        } catch (e) {
+            // finish validating the user
+            this.props.dispatch(setAppLoading_act(false))
+        }
     }
 
     ClickLogout = () => {
@@ -72,10 +69,11 @@ class App extends Component {
     ClickLogin = async (email, password, successCB, errorCB) => {
 
         // loading screen start
-        this.props.dispatch(setValidatingUser_act(true))
+        this.props.dispatch(setAppLoading_act(true))
 
         try {
 
+            // get the backend url from my props
             let backendUrl = this.props.envReducer.backendUrl
 
             // user login request
@@ -85,7 +83,7 @@ class App extends Component {
             await this.props.dispatch(reqUserInfo_act(backendUrl, this.props.userReducer.jwt))
 
             // finish loading
-            this.props.dispatch(setValidatingUser_act(false))
+            this.props.dispatch(setAppLoading_act(false))
 
             // login successfully liao
             successCB()
@@ -93,7 +91,7 @@ class App extends Component {
         } catch (e) {
 
             // finish loading
-            this.props.dispatch(setValidatingUser_act(false))
+            this.props.dispatch(setAppLoading_act(false))
 
             // login error, componenet callback do something about it
             errorCB(e.toString())
@@ -102,8 +100,8 @@ class App extends Component {
 
     render() {
 
-        // If i am not validating the user
-        if (!this.props.envReducer.validatingUser) {
+        // do not render anything If I am loading my app
+        if (!this.props.envReducer.apploading) {
 
             // whether this user has really logged in before
             let confirmLogin = this.props.userReducer.uservalidate
@@ -121,7 +119,7 @@ class App extends Component {
                         <Route
                             exact
                             path='/login'
-                            render={props => <Loginpage {...props} ClickLogin={this.ClickLogin} />}
+                            render={props => <Loginpage {...props} confirmLogin={confirmLogin} ClickLogin={this.ClickLogin} />}
                         />
 
                         <Route
