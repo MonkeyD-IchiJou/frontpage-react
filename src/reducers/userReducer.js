@@ -5,19 +5,10 @@ const userReducer = (
 
     switch (action.type) {
         case "USR_REQ_LOGIN_FULFILLED":
+        case "REQ_CHECKTOKEN_STORAGE_FULFILLED":
 
             // set the jwt into my localStorage
             localStorage.setItem('token', action.payload)
-
-            // set the jwt state
-            state = {
-                ...state,
-                jwt: action.payload
-            }
-
-            break
-
-        case "REQ_CHECKTOKEN_STORAGE_FULFILLED":
 
             // if there is jwt in localstorage
             state = {
@@ -29,6 +20,7 @@ const userReducer = (
 
         case "USR_REQ_INFO_FULFILLED":
 
+            // setting up user info here
             let userpayload = action.payload
             state = {
                 ...state,
