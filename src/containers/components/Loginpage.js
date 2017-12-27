@@ -11,14 +11,15 @@ class Loginpage extends Component {
     }
 
     errorCB = (e) => {
-        console.log(e)
         this.setState({info: e})
     }
     successCB = () => {
+        // if success, automatically go to console page
         this.props.history.push('/console')
     }
 
     render() {
+
         return (
             <div>
                 Login page here
