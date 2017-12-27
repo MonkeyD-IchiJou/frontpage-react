@@ -1,22 +1,7 @@
-var SetUrlPromise = (backendurl) => {
-    return new Promise((resolve, reject) => {
-        resolve(backendurl)
-    })
-}
-
-export function setUrl_act(backendurl) {
+export function setAppLoading_act(payload) {
 
     return {
-        type: 'SET_BACKEND_URL',
-        payload: SetUrlPromise(backendurl)
-    }
-
-}
-
-export function setValidatingUser_act(payload) {
-
-    return {
-        type: 'SET_VALIDATING_USR',
+        type: 'SET_APP_LOADING',
         payload: payload
     }
 
