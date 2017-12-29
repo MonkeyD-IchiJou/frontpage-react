@@ -119,7 +119,7 @@ class App extends Component {
                         <Route
                             exact
                             path='/login'
-                            render={props => <Loginpage {...props} confirmLogin={confirmLogin} ClickLogin={this.ClickLogin} />}
+                            render={props => <Loginpage {...props} ClickLogin={this.ClickLogin} />}
                         />
 
                         <Route
@@ -132,7 +132,7 @@ class App extends Component {
                             path='/console'
                             component={Console}
                             confirmLogin={confirmLogin}
-                            compProps={{ ClickLogout: this.ClickLogout }}
+                            compProps={{ ClickLogout: this.ClickLogout, userReducer: this.props.userReducer }}
                         />
 
                     </Switch>
