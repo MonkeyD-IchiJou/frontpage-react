@@ -5,12 +5,7 @@ class Homepage extends Component {
     render() {
         return (
             <div>
-                Home page here
-                <Button
-                    onClick={() => this.props.history.push('/login')}
-                >
-                    Login
-                </Button>
+                <Button onClick={() => { this.props.history.push('/console')}}>Go to Console Page</Button>
             </div>
         )
     }
