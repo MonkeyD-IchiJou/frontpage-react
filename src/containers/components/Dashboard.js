@@ -16,7 +16,7 @@ class Dashboard extends Component {
             <Grid stackable columns='equal' ref={this.handleContextRef}>
 
                 <Grid.Column>
-                    <UsrDashboard userReducer={this.props.userReducer}/>
+                    <UsrDashboard userReducer={this.props.userReducer} chatbotsReducer={this.props.chatbotsReducer}/>
                 </Grid.Column>
 
                 <Grid.Column>

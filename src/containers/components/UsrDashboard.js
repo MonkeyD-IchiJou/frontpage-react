@@ -27,7 +27,7 @@ class UsrDashboard extends Component {
                     <Card.Content extra>
                         <a>
                             <Icon name='compose' />
-                            1 chatbot
+                            {this.props.chatbotsReducer.length} chatbot
                             1 livechat
                         </a>
                     </Card.Content>
