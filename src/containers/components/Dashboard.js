@@ -20,7 +20,7 @@ class Dashboard extends Component {
                 </Grid.Column>
 
                 <Grid.Column>
-                    <CbDashboard />
+                    <CbDashboard chatbotsReducer={this.props.chatbotsReducer}/>
                 </Grid.Column>
 
                 <Grid.Column>

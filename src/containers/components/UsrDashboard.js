@@ -5,7 +5,7 @@ import { Card, Icon, Feed } from 'semantic-ui-react'
 class UsrDashboard extends Component {
     render() {
         const {userReducer} = this.props
-        console.log(userReducer)
+
         return (
             <Segment>
 
