@@ -32,7 +32,7 @@ class Console extends Component {
                 <Route 
                     exact 
                     path={`${match.url}/`} 
-                    render={props => <Dashboard {...props} changeTitle={this.changeTitle}/>}
+                    render={props => <Dashboard {...props} changeTitle={this.changeTitle} userReducer={this.props.userReducer}/>}
                 />
                 <Route
                     exact
