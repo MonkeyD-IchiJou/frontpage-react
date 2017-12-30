@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard'
 import Chatbot from './components/Chatbot'
 import Livechat from './components/Livechat'
 import ConsoleHeader from './components/ConsoleHeader'
+import { reqChatbotsInfos_act } from './actions/chatbotsActions'
 import { Container } from 'semantic-ui-react'
 
 class Console extends Component {
@@ -16,12 +17,20 @@ class Console extends Component {
         }
     }
 
+    componentDidMount() {
+        this.getAllChatbotsInfo()
+    }
+
     changeTitle = (title) => {
         this.setState({title: title})
     }
 
-    render() {
+    getAllChatbotsInfo = () => {
+        let userReducer = this.props.userReducer
+        this.props.dispatch(reqChatbotsInfos_act(this.props.backendUrl, userReducer.jwt))
+    }
 
+    render() {
         const { match } = this.props
 
         return (
@@ -32,7 +41,7 @@ class Console extends Component {
                 <Route 
                     exact 
                     path={`${match.url}/`} 
-                    render={props => <Dashboard {...props} changeTitle={this.changeTitle} userReducer={this.props.userReducer}/>}
+                    render={props => <Dashboard {...props} changeTitle={this.changeTitle} userReducer={this.props.userReducer} chatbotsReducer={this.props.chatbotsReducer}/>}
                 />
                 <Route
                     exact
@@ -51,7 +60,7 @@ class Console extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        chatbotReducer: state.chatbotReducer,
+        chatbotsReducer: state.chatbotsReducer,
         livechatReducer: state.livechatReducer
     }
 }

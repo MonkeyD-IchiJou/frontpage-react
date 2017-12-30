@@ -132,7 +132,7 @@ class App extends Component {
                             path='/console'
                             component={Console}
                             confirmLogin={confirmLogin}
-                            compProps={{ ClickLogout: this.ClickLogout, userReducer: this.props.userReducer }}
+                            compProps={{ ClickLogout: this.ClickLogout, userReducer: this.props.userReducer, backendUrl: this.props.envReducer.backendUrl }}
                         />
 
                     </Switch>
