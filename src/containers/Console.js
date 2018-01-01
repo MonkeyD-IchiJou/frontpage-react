@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard'
 import Chatbot from './components/Chatbot'
 import Livechat from './components/Livechat'
 import ConsoleHeader from './components/ConsoleHeader'
-import { reqChatbotsInfos_act, chatbotClientsListUpdate_act } from './actions/chatbotsActions'
+import { reqChatbotsInfos_act, chatbotClientsListUpdate_act, reqChatbotMLData_act } from './actions/chatbotsActions'
 import { Container } from 'semantic-ui-react'
 
 class Console extends Component {
@@ -29,7 +29,7 @@ class Console extends Component {
         let userReducer = this.props.userReducer
         this.props.dispatch(reqChatbotsInfos_act(this.props.backendUrl, userReducer.jwt)).then((result) => {
             this.connectChatbots()
-            // get domain, stories and nlu too
+            this.updateChatbotMLData()
         }).catch((e) => {
             console.log(e)
         })
@@ -66,22 +66,30 @@ class Console extends Component {
         }
     }
 
+    updateChatbotMLData = () => {
+        let userReducer = this.props.userReducer
+        const chatbotsReducer = this.props.chatbotsReducer
+        for (let i = 0; i < chatbotsReducer.length; ++i) {
+            this.props.dispatch(reqChatbotMLData_act(this.props.backendUrl, chatbotsReducer[i].uuid, userReducer.jwt, i))
+        }
+    }
+
     render() {
-        const { match } = this.props
+        const { match, ClickLogout, history, userReducer, chatbotsReducer } = this.props
 
         return (
             <Container>
                 
-                <ConsoleHeader ClickLogout={this.props.ClickLogout} history={this.props.history} title={this.state.title}/>
+                <ConsoleHeader ClickLogout={ClickLogout} history={history} title={this.state.title}/>
                 
                 <Route 
                     exact 
                     path={`${match.url}/`} 
-                    render={props => <Dashboard {...props} changeTitle={this.changeTitle} userReducer={this.props.userReducer} chatbotsReducer={this.props.chatbotsReducer}/>}
+                    render={props => <Dashboard {...props} changeTitle={this.changeTitle} userReducer={userReducer} chatbotsReducer={chatbotsReducer}/>}
                 />
                 <Route
                     path={`${match.url}/chatbot`}
-                    render={props => <Chatbot {...props} changeTitle={this.changeTitle} chatbotsReducer={this.props.chatbotsReducer}/>}
+                    render={props => <Chatbot {...props} changeTitle={this.changeTitle} chatbotsReducer={chatbotsReducer} />}
                 />
                 <Route
                     exact
