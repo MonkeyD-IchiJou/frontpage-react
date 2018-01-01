@@ -8,10 +8,10 @@ class CbDashboard extends Component {
         const listChatbots = chatbotsReducer.map((chatbot) =>
             <Table.Row key={chatbot.uuid} textAlign='center'>
                 <Table.Cell selectable>
-                    <a href='/homepage/console'>{chatbot.name}</a>
+                    <a href={'/homepage/console/chatbot/' + chatbot.uuid}>{chatbot.name}</a>
                 </Table.Cell>
                 <Table.Cell selectable>
-                    <a href='/homepage/console'>{chatbot.description}</a>
+                    <a href={'/homepage/console/chatbot/' + chatbot.uuid}>{chatbot.description}</a>
                 </Table.Cell>
             </Table.Row>
         )
