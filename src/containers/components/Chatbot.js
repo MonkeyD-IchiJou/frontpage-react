@@ -28,6 +28,9 @@ class DisplayChatbot extends Component {
             <div>
                 <h3>{chatbotInfo.uuid}</h3>
                 {clientsList}
+                {JSON.stringify(chatbotInfo.domain)}
+                {JSON.stringify(chatbotInfo.nlu_data)}
+                {JSON.stringify(chatbotInfo.stories)}
             </div>
         )
     }
@@ -40,6 +43,7 @@ class Chatbot extends Component {
         // change the header title to dashboard
         this.props.changeTitle('Chatbot')
     }
+
     render() {
 
         return (
