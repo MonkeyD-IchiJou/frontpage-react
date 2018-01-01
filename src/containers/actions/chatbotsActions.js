@@ -35,6 +35,9 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                         for(let i = 0; i < result.result.length; ++i) {
                             result.result[i].chatbotSocket = new SocketConnect(result.result[i].uuid)
                             result.result[i].clientsList = []
+                            result.result[i].domain = {}
+                            result.result[i].nlu_data = {}
+                            result.result[i].stories = []
                         }
 
                         resolve(result.result)
@@ -47,6 +50,121 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
     })
 }
 
+// get chatbot domain info
+var GetChatbotDomain = (backendurl, cbuuid, jwt) => {
+    return new Promise((resolve, reject) => {
+        request
+            .get(backendurl + '/chatbot/v1/domain')
+            .query({
+                token: jwt,
+                uuid: cbuuid
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        let result = res.body
+
+                        if (!result || !result.success) {
+                            throw new Error('no body msg')
+                        }
+
+                        resolve(result.result.domain)
+                    }
+                } catch (e) {
+                    reject(e.toString())
+                }
+
+            })
+    })
+}
+
+// get chatbot nlu data
+var GetChatbotNLUData = (backendurl, cbuuid, jwt) => {
+    return new Promise((resolve, reject) => {
+        request
+            .get(backendurl + '/chatbot/v1/NLUData')
+            .query({
+                token: jwt,
+                uuid: cbuuid
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        let result = res.body
+
+                        if (!result || !result.success) {
+                            throw new Error('no body msg')
+                        }
+
+                        resolve(result.result.rasa_nlu_data)
+                    }
+                } catch (e) {
+                    reject(e.toString())
+                }
+
+            })
+    })
+}
+
+// get chatbot stories data
+var GetChatbotStories = (backendurl, cbuuid, jwt) => {
+    return new Promise((resolve, reject) => {
+        request
+            .get(backendurl + '/chatbot/v1/stories')
+            .query({
+                token: jwt,
+                uuid: cbuuid
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        let result = res.body
+
+                        if (!result || !result.success) {
+                            throw new Error('no body msg')
+                        }
+
+                        resolve(result.result.stories)
+                    }
+                } catch (e) {
+                    reject(e.toString())
+                }
+
+            })
+    })
+}
+
+// get query domain, nlu data, stories all at the same time
+var GetChatbotMLData = (backendurl, cbuuid, jwt, cbid) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let mldata = await Promise.all([
+                GetChatbotDomain(backendurl, cbuuid, jwt),
+                GetChatbotNLUData(backendurl, cbuuid, jwt),
+                GetChatbotStories(backendurl, cbuuid, jwt)
+            ])
+            resolve({ domain: mldata[0], nlu_data: mldata[1], stories: mldata[2], cbindex: cbid})
+        } catch(e) {
+            reject(e.toString())
+        }
+    })
+}
+
 // request login action
 export function reqChatbotsInfos_act(backendurl, jwt) {
     return {
@@ -55,10 +173,18 @@ export function reqChatbotsInfos_act(backendurl, jwt) {
     }
 }
 
-// request login action
+// chatbot listening for new client online
 export function chatbotClientsListUpdate_act(cbindex, clientsList) {
     return {
         type: 'CHATBOT_UPDATE_CLIENTS',
         payload: { cbindex: cbindex, clientsList: clientsList }
+    }
+}
+
+// request to get domain, nlu data, stories of this chatbot
+export function reqChatbotMLData_act(backendurl, cbuuid, jwt, cbid) {
+    return {
+        type: 'USR_REQ_CHATBOT_ML_DATA',
+        payload: GetChatbotMLData(backendurl, cbuuid, jwt, cbid)
     }
 }
