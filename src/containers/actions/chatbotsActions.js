@@ -5,6 +5,7 @@
 })*/
 
 import request from 'superagent'
+import SocketConnect from './../socketapi'
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -31,6 +32,11 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             throw new Error('no body msg')
                         }
 
+                        for(let i = 0; i < result.result.length; ++i) {
+                            result.result[i].chatbotSocket = new SocketConnect(result.result[i].uuid)
+                            result.result[i].clientsList = []
+                        }
+
                         resolve(result.result)
                     }
                 } catch (e) {
@@ -46,5 +52,13 @@ export function reqChatbotsInfos_act(backendurl, jwt) {
     return {
         type: 'USR_REQ_CHATBOTS',
         payload: GetAllChatbotsInfos(backendurl, jwt)
+    }
+}
+
+// request login action
+export function chatbotClientsListUpdate_act(cbindex, clientsList) {
+    return {
+        type: 'CHATBOT_UPDATE_CLIENTS',
+        payload: { cbindex: cbindex, clientsList: clientsList }
     }
 }
