@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
+import ReactJson from 'react-json-view'
+import { Grid } from 'semantic-ui-react'
 
 class DisplayChatbot extends Component {
 
@@ -25,13 +27,36 @@ class DisplayChatbot extends Component {
         }
 
         return(
-            <div>
-                <h3>{chatbotInfo.uuid}</h3>
-                {clientsList}
-                {JSON.stringify(chatbotInfo.domain)}
-                {JSON.stringify(chatbotInfo.nlu_data)}
-                {JSON.stringify(chatbotInfo.stories)}
-            </div>
+            <Grid stackable columns='equal'>
+                <Grid.Row columns='equal'>
+                    <Grid.Column>
+                        <h3>Domain</h3>
+                        <ReactJson src={chatbotInfo.domain} />
+                    </Grid.Column>
+
+                    <Grid.Column>
+                        <h3>Intents</h3>
+                        <ReactJson src={chatbotInfo.nlu_data} />
+                    </Grid.Column>
+
+                    <Grid.Column>
+                        <h3>Stories</h3>
+                        <ReactJson src={chatbotInfo.stories} />
+                    </Grid.Column>
+                </Grid.Row>
+
+                <Grid.Row columns='equal'>
+                    <Grid.Column>
+                        <h3>Chatbot public token: </h3>
+                        {chatbotInfo.uuid}
+                    </Grid.Column>
+
+                    <Grid.Column>
+                        <h3>Total Chatbots Online: </h3>
+                        {clientsList}
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         )
     }
 
