@@ -12,19 +12,21 @@ class Dashboard extends Component {
     }
 
     render() {
+        const { userReducer, chatbotsReducer, livechatsReducer } = this.props
+
         return (
             <Grid stackable columns='equal'>
 
                 <Grid.Column>
-                    <UsrDashboard userReducer={this.props.userReducer} chatbotsReducer={this.props.chatbotsReducer}/>
+                    <UsrDashboard userReducer={userReducer} chatbotsReducer={chatbotsReducer} livechatsReducer={livechatsReducer}/>
                 </Grid.Column>
 
                 <Grid.Column>
-                    <CbDashboard chatbotsReducer={this.props.chatbotsReducer}/>
+                    <CbDashboard chatbotsReducer={chatbotsReducer}/>
                 </Grid.Column>
 
                 <Grid.Column>
-                    <LcDashboard />
+                    <LcDashboard livechatsReducer={livechatsReducer}/>
                 </Grid.Column>
 
             </Grid>
