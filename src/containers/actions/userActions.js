@@ -36,7 +36,7 @@ var UserRequestLogin = (backendurl, email, password) => {
 
                         if (result.hasLoginBefore) {
                             // prevent concurrent user login
-                            throw new Error('this user has login in other places')
+                            throw new Error('concurrent user')
                         }
 
                         resolve(result.jwt)

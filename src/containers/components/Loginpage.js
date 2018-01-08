@@ -11,12 +11,18 @@ class Loginpage extends Component {
             submittedName: '',
             submittedEmail: '',
             formError: false,
-            formLoading: false
+            formLoading: false,
+            formErrorMsg: 'Email address or password are incorrect'
         }
     }
 
     errorCB = (e) => {
-        this.setState({ formError: true, formLoading: false })
+        if (e === 'Error: concurrent user') {
+            this.setState({ formError: true, formLoading: false, formErrorMsg: 'You have already login in other system.' })
+        }
+        else {
+            this.setState({ formError: true, formLoading: false, formErrorMsg: 'Email address or password are incorrect'})
+        }
     }
 
     successCB = () => {
@@ -63,7 +69,7 @@ class Loginpage extends Component {
                         <Message
                             error
                             header='Action Forbidden'
-                            content='Email address or password are incorrect'
+                            content={this.state.formErrorMsg}
                         />
                         <Button type='submit'>Submit</Button>
                         
