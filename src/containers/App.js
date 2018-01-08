@@ -63,7 +63,7 @@ class App extends Component {
 
     ClickLogout = () => {
         // user log out
-        this.props.dispatch(reqLogout_act())
+        this.props.dispatch(reqLogout_act(this.props.envReducer.backendUrl))
     }
 
     ClickLogin = async (email, password, successCB, errorCB) => {
