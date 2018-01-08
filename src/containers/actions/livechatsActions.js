@@ -24,7 +24,7 @@ var GetAllLivechatsInfos = (backendurl, jwt) => {
                         }
 
                         for (let i = 0; i < result.result.length; ++i) {
-                            result.result[i].chatbotSocket = new SocketConnect(result.result[i].uuid)
+                            result.result[i].livechatSocket = new SocketConnect(result.result[i].uuid)
                         }
 
                         resolve(result.result)

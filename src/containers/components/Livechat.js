@@ -1,8 +1,47 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
-import { Table, Header } from 'semantic-ui-react'
+import { Table, Header, Button, Form } from 'semantic-ui-react'
+
+class HardcodedSendMsg extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            clientSocketId: '',
+            clientName: '',
+            msg: ''
+        }
+    }
+
+    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+    handleSubmit = () => {
+        const { clientSocketId, clientName, msg } = this.state
+        this.props.sendMsg(clientSocketId, clientName, msg)
+        console.log('send liao')
+    }
+
+    render() {
+
+        return (
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Input required name='clientSocketId' placeholder='Enter clientId' onChange={this.handleChange} />
+                <Form.Input required name='clientName' placeholder='Enter the name' onChange={this.handleChange} />
+                <Form.Input required name='msg' placeholder='Enter the msg' onChange={this.handleChange} />
+                <Button type='submit'>Submit</Button>
+            </Form>
+        )
+    }
+}
+
+
 
 class DisplayLivechat extends Component {
+    sendMsg = (clientSocketId, clientName, msg) => {
+        let livechatUUID = this.props.match.params.topicId
+        this.props.sendClientMsg(livechatUUID, clientSocketId, clientName, msg)
+    }
+
     render() {
         const livechatsReducer = this.props.livechatsReducer
         const livechatUUID = this.props.match.params.topicId
@@ -50,6 +89,7 @@ class DisplayLivechat extends Component {
                     }
 
                 </Table>
+                <HardcodedSendMsg sendMsg={this.sendMsg}/>
             </div>
         )
     }
@@ -66,7 +106,7 @@ class Livechat extends Component {
             <div>
                 <Route
                     path={`${this.props.match.url}/:topicId`}
-                    render={props => <DisplayLivechat {...props} livechatsReducer={this.props.livechatsReducer} />}
+                    render={props => <DisplayLivechat {...props} livechatsReducer={this.props.livechatsReducer} sendClientMsg={this.props.sendClientMsg}/>}
                 />
             </div>
         )
