@@ -83,7 +83,7 @@ class Console extends Component {
         let userReducer = this.props.userReducer
 
         for (let i = 0; i < livechatsReducer.length; ++i) {
-            let livechatSocket = livechatsReducer[i].chatbotSocket
+            let livechatSocket = livechatsReducer[i].livechatSocket
             let roomId = livechatsReducer[i].uuid
 
             // connect to my socket server
@@ -97,7 +97,6 @@ class Console extends Component {
 
                 // waiting for confirmation for joining room
                 livechatSocket.subscribe('admin_joined', (data) => {
-                    console.log('successfully joined the room liao')
                 })
 
                 // admin constantly listening for new update of client list
@@ -113,6 +112,30 @@ class Console extends Component {
 
             })
         }
+    }
+
+    LivechatSendClientMsg = (livechatUUID, clientSocketId, clientUsername, msg) => {
+
+        let userReducer = this.props.userReducer
+        let livechatsReducer = this.props.livechatReducer
+        let livechatSocket = ''
+
+        for (let i = 0; i < livechatsReducer.length; ++i) {
+            if (livechatsReducer[i].uuid === livechatUUID) {
+                livechatSocket = livechatsReducer[i].livechatSocket
+            }
+        }
+
+        if (livechatSocket) {
+            livechatSocket.socketEmit('admin_send_client_msg', {
+                clientSocketId: clientSocketId,
+                clientUsername: clientUsername,
+                username: userReducer.username,
+                userid: userReducer.userid,
+                msg: msg
+            })
+        }
+
     }
 
     updateChatbotMLData = () => {
@@ -142,7 +165,7 @@ class Console extends Component {
                 />
                 <Route
                     path={`${match.url}/livechat`}
-                    render={props => <Livechat {...props} changeTitle={this.changeTitle} livechatsReducer={livechatReducer}/>}
+                    render={props => <Livechat {...props} changeTitle={this.changeTitle} livechatsReducer={livechatReducer} sendClientMsg={this.LivechatSendClientMsg}/>}
                 />
             </Container>
         )
