@@ -34,7 +34,39 @@ var UserRequestLogin = (backendurl, email, password) => {
                             throw new Error('no body msg')
                         }
 
+                        if (result.hasLoginBefore) {
+                            // prevent concurrent user login
+                            throw new Error('this user has login in other places')
+                        }
+
                         resolve(result.jwt)
+                    }
+                } catch (e) {
+                    reject(e.toString())
+                }
+
+            })
+    })
+}
+
+// user request logout
+var UserRequestLogout = (backendurl) => {
+    let jwt = localStorage.getItem('token')
+    return new Promise((resolve, reject) => {
+        request
+            .get(backendurl + '/user/v1/logout')
+            .query({
+                token: jwt
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        resolve(true)
                     }
                 } catch (e) {
                     reject(e.toString())
@@ -100,10 +132,10 @@ export function reqLogin_act(backendurl, email, password) {
 }
 
 // request logout action
-export function reqLogout_act() {
+export function reqLogout_act(backendurl) {
     return {
         type: 'USR_REQ_LOGOUT',
-        payload: true
+        payload: UserRequestLogout(backendurl)
     }
 }
 

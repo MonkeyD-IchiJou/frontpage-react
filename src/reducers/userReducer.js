@@ -35,7 +35,7 @@ const userReducer = (
 
         case "REQ_CHECKTOKEN_STORAGE_REJECTED":
         case "USR_REQ_LOGIN_REJECTED":
-        case "USR_REQ_LOGOUT":
+        case "USR_REQ_LOGOUT_FULFILLED":
         case "USR_REQ_INFO_REJECTED":
 
             // rm the jwt in my localStorage
