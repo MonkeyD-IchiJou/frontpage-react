@@ -7,6 +7,7 @@ import Homepage from './components/Homepage'
 import Loginpage from './components/Loginpage'
 import Signuppage from './components/Signuppage'
 import Console from './Console'
+import Uploadpage from './components/Uploadpage'
 
 const PrivateRoute = ({ component: Component, confirmLogin: loginornot, compProps: ComponentProps, ...rest }) => {
 
@@ -126,6 +127,12 @@ class App extends Component {
                             exact
                             path='/signup'
                             render={props => <Signuppage {...props} />}
+                        />
+
+                        <Route
+                            exact
+                            path='/upload'
+                            render={props => <Uploadpage {...props} />}
                         />
 
                         <PrivateRoute
