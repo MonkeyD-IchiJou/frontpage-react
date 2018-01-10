@@ -25,7 +25,7 @@ class Uploadpage extends Component {
 
         // post it to my server pls
         request
-            .post('https://localhost/filestorage/upload')
+            .post(this.props.backendUrl + '/filestorage/upload')
             .set('enctype', 'multipart/form-data')
             .send(data)
             .end((err, res) => {
@@ -39,7 +39,7 @@ class Uploadpage extends Component {
 
     requestAllFilesInfo() {
         request
-            .get('https://localhost/filestorage/infos')
+            .get(this.props.backendUrl + '/filestorage/infos')
             .end((err, res) => {
                 if (err) {
                     console.log('error', err)
@@ -51,7 +51,7 @@ class Uploadpage extends Component {
 
     removeFileRequest(filename) {
         request
-            .delete('https://localhost/filestorage/remove')
+            .delete(this.props.backendUrl + '/filestorage/remove')
             .query({filename: filename})
             .end((err, res) => {
                 if (err) {

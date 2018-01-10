@@ -106,6 +106,7 @@ class App extends Component {
 
             // whether this user has really logged in before
             let confirmLogin = this.props.userReducer.uservalidate
+            let envReducer = this.props.envReducer
 
             return (
                 <BrowserRouter basename="/homepage/">
@@ -132,14 +133,14 @@ class App extends Component {
                         <Route
                             exact
                             path='/upload'
-                            render={props => <Uploadpage {...props} />}
+                            render={props => <Uploadpage {...props} backendUrl={envReducer.backendUrl}/>}
                         />
 
                         <PrivateRoute
                             path='/console'
                             component={Console}
                             confirmLogin={confirmLogin}
-                            compProps={{ ClickLogout: this.ClickLogout, userReducer: this.props.userReducer, backendUrl: this.props.envReducer.backendUrl }}
+                            compProps={{ ClickLogout: this.ClickLogout, userReducer: this.props.userReducer, backendUrl: envReducer.backendUrl }}
                         />
 
                     </Switch>
