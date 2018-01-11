@@ -45,6 +45,45 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             result.result[i].domain = {}
                             result.result[i].nlu_data = {}
                             result.result[i].stories = []
+
+                            // tmp delete later
+                            result.result[i].entities = [
+                                {
+                                    value: 'Chinese', synonyms: ['Chines', 'chines', 'chin']
+                                },
+                                {
+                                    value: 'Outlook', synonyms: ['outlook', 'OUTLOOK', 'Microsoft Outlook']
+                                }
+                            ]
+
+                            result.result[i].intents = [
+                                {
+                                    intent: 'greet', 
+                                    usersay: [
+                                        {
+                                            text: 'hello',
+                                            entities: []
+                                        },
+                                        {
+                                            text: 'hi',
+                                            entities: []
+                                        }
+                                    ]
+                                },
+                                {
+                                    intent: 'goodbye',
+                                    usersay: [
+                                        {
+                                            text: 'goodbye',
+                                            entities: []
+                                        },
+                                        {
+                                            text: 'see you again',
+                                            entities: []
+                                        }
+                                    ]
+                                }
+                            ]
                         }
 
                         resolve(result.result)
