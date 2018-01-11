@@ -8,56 +8,60 @@ class DisplayChatbot extends Component {
     render() {
 
         const chatbotsReducer = this.props.chatbotsReducer
-        const chatbotUUID = this.props.match.params.topicId
-        let chatbotInfo = {}
-        for (let i = 0; i < chatbotsReducer.length; ++i) {
-            if (chatbotsReducer[i].uuid === chatbotUUID) {
-                chatbotInfo = chatbotsReducer[i]
+
+        if (chatbotsReducer.length > 0) {
+            // if there are any chatbots
+
+            const chatbotIndex = this.props.match.params.topicId
+            let chatbotInfo = chatbotsReducer[chatbotIndex]
+
+            let clientsList = ''
+
+            if (chatbotInfo.clientsList) {
+                clientsList = chatbotInfo.clientsList.map((clients) =>
+                    <div key={clients.clientSocketId}>
+                        {clients.clientSocketId}
+                    </div>
+                )
             }
-        }
 
-        let clientsList = ''
+            return (
+                <Grid stackable columns='equal'>
+                    <Grid.Row columns='equal'>
+                        <Grid.Column>
+                            <h3>Domain</h3>
+                            <ReactJson src={chatbotInfo.domain} />
+                        </Grid.Column>
 
-        if (chatbotInfo.clientsList) {
-            clientsList = chatbotInfo.clientsList.map((clients) =>
-                <div key={clients.clientSocketId}>
-                    {clients.clientSocketId}
-                </div>
+                        <Grid.Column>
+                            <h3>Intents</h3>
+                            <ReactJson src={chatbotInfo.nlu_data} />
+                        </Grid.Column>
+
+                        <Grid.Column>
+                            <h3>Stories</h3>
+                            <ReactJson src={chatbotInfo.stories} />
+                        </Grid.Column>
+                    </Grid.Row>
+
+                    <Grid.Row columns='equal'>
+                        <Grid.Column>
+                            <h3>Chatbot public token: </h3>
+                            {chatbotInfo.uuid}
+                        </Grid.Column>
+
+                        <Grid.Column>
+                            <h3>Total Chatbots Online: </h3>
+                            {clientsList}
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
             )
         }
+        else {
+            return(<div>loading chatbot info</div>)
+        }
 
-        return(
-            <Grid stackable columns='equal'>
-                <Grid.Row columns='equal'>
-                    <Grid.Column>
-                        <h3>Domain</h3>
-                        <ReactJson src={chatbotInfo.domain} />
-                    </Grid.Column>
-
-                    <Grid.Column>
-                        <h3>Intents</h3>
-                        <ReactJson src={chatbotInfo.nlu_data} />
-                    </Grid.Column>
-
-                    <Grid.Column>
-                        <h3>Stories</h3>
-                        <ReactJson src={chatbotInfo.stories} />
-                    </Grid.Column>
-                </Grid.Row>
-
-                <Grid.Row columns='equal'>
-                    <Grid.Column>
-                        <h3>Chatbot public token: </h3>
-                        {chatbotInfo.uuid}
-                    </Grid.Column>
-
-                    <Grid.Column>
-                        <h3>Total Chatbots Online: </h3>
-                        {clientsList}
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-        )
     }
 
 }
