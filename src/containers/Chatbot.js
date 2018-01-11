@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 //import ReactJson from 'react-json-view'
-import ChatbotConsole from './ChatbotConsole'
+import ChatbotConsole from './components/ChatbotConsole'
 import { Grid, Segment } from 'semantic-ui-react'
 
-class DisplayChatbot extends Component {
+class DisplayChatbotPage extends Component {
 
     render() {
 
@@ -45,19 +46,24 @@ class Chatbot extends Component {
     }
 
     render() {
-
         return (
             <div>
                 <Route 
                     path={`${this.props.match.url}/:topicId`} 
-                    render={props => <DisplayChatbot {...props} chatbotsReducer={this.props.chatbotsReducer}/>}
+                    render={props => <DisplayChatbotPage {...props} chatbotsReducer={this.props.chatbotsReducer}/>}
                 />
             </div>
         )
     }
 }
 
-export default Chatbot
+const mapStateToProps = (state) => {
+    return {
+        chatbotsReducer: state.chatbotsReducer
+    }
+}
+
+export default connect(mapStateToProps)(Chatbot)
 
 /*
 <Grid stackable columns='equal'>
