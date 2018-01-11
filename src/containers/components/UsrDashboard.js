@@ -49,7 +49,7 @@ class UsrDashboard extends Component {
                                 <Feed.Content>
                                     <Feed.Date content='1 day ago' />
                                     <Feed.Summary>
-                                        You created <a>a chatbot project</a> named <a>coworker</a>
+                                        You created <a>a chatbot project</a> named <a>AVA</a>
                                     </Feed.Summary>
                                 </Feed.Content>
                             </Feed.Event>
@@ -59,7 +59,7 @@ class UsrDashboard extends Component {
                                 <Feed.Content>
                                     <Feed.Date content='1 day ago' />
                                     <Feed.Summary>
-                                        You created <a>a livechat project</a> named <a>blah blah</a>
+                                        You created <a>a livechat project</a> named <a>EVA</a>
                                     </Feed.Summary>
                                 </Feed.Content>
                             </Feed.Event>
