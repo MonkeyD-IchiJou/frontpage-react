@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
-import ReactJson from 'react-json-view'
-import { Grid } from 'semantic-ui-react'
+//import ReactJson from 'react-json-view'
+import ChatbotConsole from './ChatbotConsole'
+import { Grid, Segment } from 'semantic-ui-react'
 
 class DisplayChatbot extends Component {
 
@@ -13,48 +14,18 @@ class DisplayChatbot extends Component {
             // if there are any chatbots
 
             const chatbotIndex = this.props.match.params.topicId
-            let chatbotInfo = chatbotsReducer[chatbotIndex]
-
-            let clientsList = ''
-
-            if (chatbotInfo.clientsList) {
-                clientsList = chatbotInfo.clientsList.map((clients) =>
-                    <div key={clients.clientSocketId}>
-                        {clients.clientSocketId}
-                    </div>
-                )
-            }
 
             return (
-                <Grid stackable columns='equal'>
-                    <Grid.Row columns='equal'>
-                        <Grid.Column>
-                            <h3>Domain</h3>
-                            <ReactJson src={chatbotInfo.domain} />
-                        </Grid.Column>
+                <Grid columns={2} stackable divided>
 
-                        <Grid.Column>
-                            <h3>Intents</h3>
-                            <ReactJson src={chatbotInfo.nlu_data} />
-                        </Grid.Column>
+                    <Grid.Column width={11}>
+                        <ChatbotConsole match={this.props.match} history={this.props.history} chatbotInfo={chatbotsReducer[chatbotIndex]}/>
+                    </Grid.Column>
 
-                        <Grid.Column>
-                            <h3>Stories</h3>
-                            <ReactJson src={chatbotInfo.stories} />
-                        </Grid.Column>
-                    </Grid.Row>
+                    <Grid.Column width={5}>
+                        <Segment>kekek</Segment>
+                    </Grid.Column>
 
-                    <Grid.Row columns='equal'>
-                        <Grid.Column>
-                            <h3>Chatbot public token: </h3>
-                            {chatbotInfo.uuid}
-                        </Grid.Column>
-
-                        <Grid.Column>
-                            <h3>Total Chatbots Online: </h3>
-                            {clientsList}
-                        </Grid.Column>
-                    </Grid.Row>
                 </Grid>
             )
         }
@@ -87,3 +58,36 @@ class Chatbot extends Component {
 }
 
 export default Chatbot
+
+/*
+<Grid stackable columns='equal'>
+                        <Grid.Row columns='equal'>
+                            <Grid.Column>
+                                <h3>Domain</h3>
+                                <ReactJson src={chatbotInfo.domain} />
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <h3>Intents</h3>
+                                <ReactJson src={chatbotInfo.nlu_data} />
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <h3>Stories</h3>
+                                <ReactJson src={chatbotInfo.stories} />
+                            </Grid.Column>
+                        </Grid.Row>
+
+                        <Grid.Row columns='equal'>
+                            <Grid.Column>
+                                <h3>Chatbot public token: </h3>
+                                {chatbotInfo.uuid}
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <h3>Total Chatbots Online: </h3>
+                                {clientsList}
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+*/
