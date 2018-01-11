@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
-//import ReactJson from 'react-json-view'
 import ChatbotConsole from './components/ChatbotConsole'
 import { Grid, Segment } from 'semantic-ui-react'
 
@@ -42,7 +41,7 @@ class Chatbot extends Component {
    
     componentDidMount() {
         // change the header title to dashboard
-        this.props.changeTitle('Chatbot')
+        this.props.changeTitle('Chatbot Console')
     }
 
     render() {
