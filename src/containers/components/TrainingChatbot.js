@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
+import Entities from './Entities'
+import Intents from './Intents'
 import { Menu, Segment } from 'semantic-ui-react'
 
 class TrainingChatbot extends Component {
@@ -17,6 +19,7 @@ class TrainingChatbot extends Component {
 
     render() {
         const { menuItems } = this.state
+        const { chatbotInfo } = this.props
         let gs = this.props.history.location.pathname.split("/")
         let pathname = gs[5] // hardcoded magic number here.. whatever
 
@@ -34,34 +37,32 @@ class TrainingChatbot extends Component {
                     <Menu.Item name={menuItems[3]} active={pathname === menuItems[3]} onClick={this.handleItemClick} />
                 </Menu>
 
-                <Segment>
-                    <Route
-                        exact
-                        path={`${this.props.match.url}/`}
-                        render={props => <Segment>Intents</Segment>}
-                    />
+                <Route
+                    exact
+                    path={`${this.props.match.url}/`}
+                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents}/>}
+                />
 
-                    <Route
-                        exact
-                        path={`${this.props.match.url}/${menuItems[0]}`}
-                        render={props => <Segment>Intents</Segment>}
-                    />
+                <Route
+                    exact
+                    path={`${this.props.match.url}/${menuItems[0]}`}
+                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents}/>}
+                />
 
-                    <Route
-                        path={`${this.props.match.url}/${menuItems[1]}`}
-                        render={props => <Segment>Entities</Segment>}
-                    />
+                <Route
+                    path={`${this.props.match.url}/${menuItems[1]}`}
+                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities}/>}
+                />
 
-                    <Route
-                        path={`${this.props.match.url}/${menuItems[2]}`}
-                        render={props => <Segment>Actions</Segment>}
-                    />
+                <Route
+                    path={`${this.props.match.url}/${menuItems[2]}`}
+                    render={props => <Segment>Actions</Segment>}
+                />
 
-                    <Route
-                        path={`${this.props.match.url}/${menuItems[3]}`}
-                        render={props => <Segment>Stories</Segment>}
-                    />
-                </Segment>
+                <Route
+                    path={`${this.props.match.url}/${menuItems[3]}`}
+                    render={props => <Segment>Stories</Segment>}
+                />
 
             </div>
         )

@@ -55,7 +55,7 @@ class ChatbotConsole extends Component {
 
                     <Route
                         path={`${this.props.match.url}/${menuItems[1]}`}
-                        render={props => <TrainingChatbot {...props} />}
+                        render={props => <TrainingChatbot {...props} chatbotInfo={chatbotInfo}/>}
                     />
 
                     <Route
