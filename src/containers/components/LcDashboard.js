@@ -7,12 +7,12 @@ class LcDashboard extends Component {
         let listLivechats = ''
         if (livechatsReducer) {
             listLivechats = livechatsReducer.map((livechat) =>
-                <Table.Row key={livechat.uuid} textAlign='center'>
-                    <Table.Cell selectable>
+                <Table.Row key={livechat.uuid}>
+                    <Table.Cell>
                         <a href={'/homepage/console/livechat/' + livechat.uuid}>{livechat.name}</a>
                     </Table.Cell>
-                    <Table.Cell selectable>
-                        <a href={'/homepage/console/livechat/' + livechat.uuid}>{livechat.description}</a>
+                    <Table.Cell>
+                        {livechat.description}
                     </Table.Cell>
                 </Table.Row>
             )
@@ -21,10 +21,13 @@ class LcDashboard extends Component {
         return (
             <Segment>
 
-                <Table striped>
+                <Header>Livechat Projects</Header>
+
+                <Table striped selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell colSpan='2'><Header>Livechats</Header></Table.HeaderCell>
+                            <Table.HeaderCell><Header>name</Header></Table.HeaderCell>
+                            <Table.HeaderCell><Header>description</Header></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
 
