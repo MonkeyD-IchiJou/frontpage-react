@@ -28,10 +28,11 @@ class Console extends Component {
     }
 
     getAllChatbotsInfo = () => {
-        let userReducer = this.props.userReducer
-        this.props.dispatch(reqChatbotsInfos_act(this.props.backendUrl, userReducer.jwt)).then((result) => {
-            this.connectChatbots()
-            this.updateChatbotMLData()
+        const { userReducer, backendUrl } = this.props
+        const jwt = userReducer.jwt
+        this.props.dispatch(reqChatbotsInfos_act(backendUrl, jwt)).then((result) => {
+            this.connectChatbots(backendUrl)
+            this.updateChatbotMLData(backendUrl, jwt)
         }).catch((e) => {
             console.log(e)
         })
@@ -46,12 +47,16 @@ class Console extends Component {
         })
     }
 
-    connectChatbots = () => {
-        let backendUrl = this.props.backendUrl
+    connectChatbots = (backendUrl) => {
+        // get all the chatbots infos
         let chatbotsReducer = this.props.chatbotsReducer
 
         for(let i = 0; i < chatbotsReducer.length; ++i) {
+
+            // get this chatbot socket
             let chatbotSocket = chatbotsReducer[i].chatbotSocket
+
+            // trying to join a room by its uuid
             let roomId = chatbotsReducer[i].uuid
 
             // connect to my socket server
@@ -59,6 +64,7 @@ class Console extends Component {
 
             // my chatbot socket server subscription
             chatbotSocket.subscribe('connect', () => {
+
                 // first, asking to join my chatbot room
                 chatbotSocket.socketEmit('admin_join_room', {
                     roomId: roomId
@@ -138,11 +144,11 @@ class Console extends Component {
 
     }
 
-    updateChatbotMLData = () => {
-        let userReducer = this.props.userReducer
+    updateChatbotMLData = (backendUrl, jwt) => {
         const chatbotsReducer = this.props.chatbotsReducer
         for (let i = 0; i < chatbotsReducer.length; ++i) {
-            this.props.dispatch(reqChatbotMLData_act(this.props.backendUrl, chatbotsReducer[i].uuid, userReducer.jwt, i))
+            // get all the training datas from each chatbot
+            this.props.dispatch(reqChatbotMLData_act(backendUrl, chatbotsReducer[i].uuid, jwt, i))
         }
     }
 
@@ -175,8 +181,7 @@ class Console extends Component {
 const mapStateToProps = (state) => {
     return {
         chatbotsReducer: state.chatbotsReducer,
-        livechatReducer: state.livechatReducer,
-        cbclients: state.chatbotsReducer.clientsList
+        livechatReducer: state.livechatReducer
     }
 }
 

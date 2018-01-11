@@ -33,8 +33,15 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                         }
 
                         for(let i = 0; i < result.result.length; ++i) {
+                            // init setting for the chatbot object
+
+                            // setup the chatbot socket
                             result.result[i].chatbotSocket = new SocketConnect(result.result[i].uuid)
+
+                            // first init the client list
                             result.result[i].clientsList = []
+
+                            // chatbot ml data related stuff
                             result.result[i].domain = {}
                             result.result[i].nlu_data = {}
                             result.result[i].stories = []

@@ -1,5 +1,5 @@
 const chatbotsReducer = (
-    state = [],
+    state = [], // array of chatbots
     action
 ) => {
     switch (action.type) {
@@ -8,6 +8,7 @@ const chatbotsReducer = (
             state = [
                 ...state
             ]
+            // straight away = to the payload
             state = action.payload
             break
 
@@ -15,6 +16,7 @@ const chatbotsReducer = (
             state = [
                 ...state
             ]
+            // update the online client list for this chatbot
             state[action.payload.cbindex].clientsList = action.payload.clientsList
             break
 

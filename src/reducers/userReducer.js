@@ -1,5 +1,12 @@
 const userReducer = (
-    state = { userid: 0, username: '', email: '', userjoindate: '', jwt: '', uservalidate: false },
+    state = { 
+        userid: 0, 
+        username: '', 
+        email: '', 
+        userjoindate: '', 
+        jwt: '', 
+        uservalidate: false 
+    },
     action
 ) => {
 
