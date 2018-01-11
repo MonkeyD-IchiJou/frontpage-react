@@ -5,23 +5,26 @@ class CbDashboard extends Component {
     render() {
 
         const chatbotsReducer = this.props.chatbotsReducer
-        const listChatbots = chatbotsReducer.map((chatbot) =>
-            <Table.Row key={chatbot.uuid} textAlign='center'>
-                <Table.Cell selectable>
-                    <a href={'/homepage/console/chatbot/' + chatbot.uuid}>{chatbot.name}</a>
+        const listChatbots = chatbotsReducer.map((chatbot, index) =>
+            <Table.Row key={index}>
+                <Table.Cell>
+                    <a href={'/homepage/console/chatbot/' + index}>{chatbot.name}</a>
                 </Table.Cell>
-                <Table.Cell selectable>
-                    <a href={'/homepage/console/chatbot/' + chatbot.uuid}>{chatbot.description}</a>
+                <Table.Cell>
+                    {chatbot.description}
                 </Table.Cell>
             </Table.Row>
         )
         return (
             <Segment>
 
-                <Table striped>
+                <Header>Chatbot Projects</Header>
+
+                <Table striped selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell colSpan='2'><Header>Chatbots</Header></Table.HeaderCell>
+                            <Table.HeaderCell><Header>name</Header></Table.HeaderCell>
+                            <Table.HeaderCell><Header>description</Header></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
 
