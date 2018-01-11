@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import Dashboard from './components/Dashboard'
-import Chatbot from './components/Chatbot'
+import Chatbot from './Chatbot'
 import Livechat from './components/Livechat'
 import ConsoleHeader from './components/ConsoleHeader'
 import { reqChatbotsInfos_act, chatbotClientsListUpdate_act, reqChatbotMLData_act } from './actions/chatbotsActions'
@@ -167,7 +167,7 @@ class Console extends Component {
                 />
                 <Route
                     path={`${match.url}/chatbot`}
-                    render={props => <Chatbot {...props} changeTitle={this.changeTitle} chatbotsReducer={chatbotsReducer} />}
+                    render={props => <Chatbot {...props} changeTitle={this.changeTitle}/>}
                 />
                 <Route
                     path={`${match.url}/livechat`}
