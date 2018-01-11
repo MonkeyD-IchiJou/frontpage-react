@@ -20,8 +20,8 @@ class ChatbotConsole extends Component {
 
     render() {
         const { menuItems } = this.state
-        const chatbotInfo = this.props.chatbotInfo
-        let gs = this.props.history.location.pathname.split("/")
+        const { chatbotInfo, history } = this.props
+        let gs = history.location.pathname.split("/")
         let pathname = gs[4] // hardcoded magic number here.. whatever
 
         if (!pathname) {
