@@ -84,6 +84,80 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                                     ]
                                 }
                             ]
+
+                            result.result[i].actions = [
+                                {
+                                    name: 'greeting',
+                                    allActions: [ // will random choose 1 of it
+                                        {
+                                            actions: [
+                                                {
+                                                    text: 'hey bye'
+                                                }, 
+                                                {
+                                                    buttons: [
+                                                        {
+                                                            text: 'button name',
+                                                            payload: 'button payload'
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    image: 'kek.png'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: 'goodbye',
+                                    allActions: [ // will random choose 1 of it
+                                        {
+                                            actions: [
+                                                {
+                                                    text: 'hey bye'
+                                                },
+                                                {
+                                                    buttons: [
+                                                        {
+                                                            text: 'button name',
+                                                            payload: 'button payload'
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            actions: [
+                                                {
+                                                    text: 'k bye'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+
+                            result.result[i].cbstories = [
+                                {
+                                    name: 'story 1',
+                                    path: [
+                                        {
+                                            intent: 'intent name',
+                                            actions: ['action 1', 'action 2']
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: 'story 2',
+                                    path: [
+                                        {
+                                            intent: 'intent name',
+                                            actions: ['action 1']
+                                        }
+                                    ]
+                                }
+                            ]
                         }
 
                         resolve(result.result)
