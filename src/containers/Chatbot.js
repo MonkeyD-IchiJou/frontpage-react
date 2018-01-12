@@ -23,7 +23,7 @@ class DisplayChatbotPage extends Component {
                     </Grid.Column>
 
                     <Grid.Column width={5}>
-                        <Segment>kekek</Segment>
+                        <Segment>Chatbot Testing</Segment>
                     </Grid.Column>
 
                 </Grid>
