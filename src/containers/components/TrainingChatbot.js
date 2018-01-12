@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import Entities from './Entities'
 import Intents from './Intents'
-import { Menu, Segment } from 'semantic-ui-react'
+import Actions from './Actions'
+import Stories from './Stories'
+import { Menu } from 'semantic-ui-react'
 
 class TrainingChatbot extends Component {
 
@@ -56,12 +58,12 @@ class TrainingChatbot extends Component {
 
                 <Route
                     path={`${this.props.match.url}/${menuItems[2]}`}
-                    render={props => <Segment>Actions</Segment>}
+                    render={props => <Actions {...props} cbActions={chatbotInfo.actions}/>}
                 />
 
                 <Route
                     path={`${this.props.match.url}/${menuItems[3]}`}
-                    render={props => <Segment>Stories</Segment>}
+                    render={props => <Stories {...props} cbStories={chatbotInfo.cbstories} />}
                 />
 
             </div>
