@@ -6,6 +6,7 @@
 
 import request from 'superagent'
 import SocketConnect from './../socketapi'
+import Entity from './../../classes/Entity'
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -41,19 +42,10 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             // first init the client list
                             result.result[i].clientsList = []
 
-                            // chatbot ml data related stuff
-                            result.result[i].domain = {}
-                            result.result[i].nlu_data = {}
-                            result.result[i].stories = []
-
                             // tmp delete later
                             result.result[i].entities = [
-                                {
-                                    value: 'Chinese', synonyms: ['Chines', 'chines', 'chin']
-                                },
-                                {
-                                    value: 'Outlook', synonyms: ['outlook', 'OUTLOOK', 'Microsoft Outlook']
-                                }
+                                new Entity('Chinese', ['Chines', 'chines', 'chin']),
+                                new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
                             ]
 
                             result.result[i].intents = [
@@ -138,7 +130,7 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                                 }
                             ]
 
-                            result.result[i].cbstories = [
+                            result.result[i].stories = [
                                 {
                                     name: 'story 1',
                                     path: [
@@ -298,6 +290,14 @@ export function chatbotClientsListUpdate_act(cbindex, clientsList) {
     return {
         type: 'CHATBOT_UPDATE_CLIENTS',
         payload: { cbindex: cbindex, clientsList: clientsList }
+    }
+}
+
+// chatbot entities update
+export function chatbotEntitiesUpdate_act(cbindex, entities) {
+    return {
+        type: 'USR_UPDATE_CHATBOT_ENTITIES',
+        payload: { cbindex: cbindex, entities: entities }
     }
 }
 
