@@ -20,13 +20,11 @@ const chatbotsReducer = (
             state[action.payload.cbindex].clientsList = action.payload.clientsList
             break
 
-        case "USR_REQ_CHATBOT_ML_DATA_FULFILLED":
+        case "USR_UPDATE_CHATBOT_ENTITIES":
             state = [
                 ...state
             ]
-            state[action.payload.cbindex].domain = action.payload.domain
-            state[action.payload.cbindex].nlu_data = action.payload.nlu_data
-            state[action.payload.cbindex].stories = action.payload.stories
+            state[action.payload.cbindex].entities = action.payload.entities
             break
 
         default:
