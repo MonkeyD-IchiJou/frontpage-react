@@ -3,8 +3,14 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import ChatbotConsole from './components/ChatbotConsole'
 import { Grid, Segment } from 'semantic-ui-react'
+import { chatbotEntitiesUpdate_act } from './actions/chatbotsActions'
 
 class DisplayChatbotPage extends Component {
+
+    updateEntities = (entities) => {
+        // this is the chatbot that want to update the entities
+        this.props.updateEntities(this.props.match.params.topicId, entities)
+    }
 
     render() {
 
@@ -20,7 +26,12 @@ class DisplayChatbotPage extends Component {
                 <Grid columns={2} stackable divided>
 
                     <Grid.Column width={11}>
-                        <ChatbotConsole match={this.props.match} history={this.props.history} chatbotInfo={chosenChatbot}/>
+                        <ChatbotConsole
+                            match={this.props.match}
+                            history={this.props.history}
+                            chatbotInfo={chosenChatbot}
+                            updateEntities={this.updateEntities}
+                        />
                     </Grid.Column>
 
                     <Grid.Column width={5}>
@@ -45,12 +56,17 @@ class Chatbot extends Component {
         this.props.changeTitle('Chatbot Console')
     }
 
+    updateEntities = (cbindex, entities) => {
+        // there is a chatbot want to update its entities
+        this.props.dispatch(chatbotEntitiesUpdate_act(cbindex, entities))
+    }
+
     render() {
         return (
             <div>
                 <Route 
                     path={`${this.props.match.url}/:topicId`} 
-                    render={props => <DisplayChatbotPage {...props} chatbotsReducer={this.props.chatbotsReducer}/>}
+                    render={props => <DisplayChatbotPage {...props} chatbotsReducer={this.props.chatbotsReducer} updateEntities={this.updateEntities}/>}
                 />
             </div>
         )
