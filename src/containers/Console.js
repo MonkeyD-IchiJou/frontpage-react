@@ -51,13 +51,12 @@ class Console extends Component {
         // get all the chatbots infos
         let chatbotsReducer = this.props.chatbotsReducer
 
-        for(let i = 0; i < chatbotsReducer.length; ++i) {
-
+        chatbotsReducer.forEach((chatbot, index)=>{
             // get this chatbot socket
-            let chatbotSocket = chatbotsReducer[i].chatbotSocket
+            let chatbotSocket = chatbot.chatbotSocket
 
             // trying to join a room by its uuid
-            let roomId = chatbotsReducer[i].uuid
+            let roomId = chatbot.uuid
 
             // connect to my socket server
             chatbotSocket.connectSocket(backendUrl + '/cbIO')
@@ -76,11 +75,11 @@ class Console extends Component {
 
                 chatbotSocket.subscribe('clientlist_update', (data) => {
                     // when there are someone connect to this chatbot, admin will get notified
-                    this.props.dispatch(chatbotClientsListUpdate_act(i, data.clientsInfo))
+                    this.props.dispatch(chatbotClientsListUpdate_act(index, data.clientsInfo))
                 })
 
             })
-        }
+        })
     }
 
     connectLivechats = () => {
@@ -88,7 +87,43 @@ class Console extends Component {
         let livechatsReducer = this.props.livechatReducer
         let userReducer = this.props.userReducer
 
-        for (let i = 0; i < livechatsReducer.length; ++i) {
+        livechatsReducer.forEach((livechat, index)=>{
+            let livechatSocket = livechat.livechatSocket
+            let roomId = livechat.uuid
+
+            // connect to my socket server
+            livechatSocket.connectSocket(backendUrl + '/lcIO')
+
+            // my livechat socket server subscription
+            livechatSocket.subscribe('connect', () => {
+
+                // first, asking to join my chatbot room
+                livechatSocket.socketEmit('admin_join_room', { 
+                    roomId: roomId,
+                    username: userReducer.username,
+                    userid: userReducer.userid
+                })
+
+                // waiting for confirmation for joining room
+                livechatSocket.subscribe('admin_joined', (data) => {
+
+                })
+
+                // admin constantly listening for new update of client list
+                livechatSocket.subscribe('clientlist_update', (data) => {
+                    // when there are someone connect to this chatbot, admin will get notified
+                    this.props.dispatch(livechatsClientsListUpdate_act(index, data.clientsInfo))
+                })
+
+                // waiting for any clients to send me some msg
+                livechatSocket.subscribe('admin_receiving_msg', (data) => {
+                    console.log(data)
+                })
+
+            })
+        })
+
+        /*for (let i = 0; i < livechatsReducer.length; ++i) {
             let livechatSocket = livechatsReducer[i].livechatSocket
             let roomId = livechatsReducer[i].uuid
 
@@ -117,7 +152,7 @@ class Console extends Component {
                 })
 
             })
-        }
+        }*/
     }
 
     LivechatSendClientMsg = (livechatUUID, clientSocketId, clientUsername, msg) => {
@@ -153,26 +188,56 @@ class Console extends Component {
     }
 
     render() {
-        const { match, ClickLogout, history, userReducer, chatbotsReducer, livechatReducer } = this.props
+        const { 
+            match,
+            ClickLogout,
+            history,
+            userReducer,
+            chatbotsReducer,
+            livechatReducer
+        } = this.props
 
         return (
             <Container>
-                
+
                 <ConsoleHeader ClickLogout={ClickLogout} history={history} title={this.state.title}/>
-                
-                <Route 
-                    exact 
-                    path={`${match.url}/`} 
-                    render={props => <Dashboard {...props} changeTitle={this.changeTitle} userReducer={userReducer} chatbotsReducer={chatbotsReducer} livechatsReducer={livechatReducer}/>}
+
+                <Route
+                    exact
+                    path={`${match.url}/`}
+                    render={
+                        props => <Dashboard
+                            {...props}
+                            changeTitle={this.changeTitle}
+                            userReducer={userReducer}
+                            chatbotsReducer={chatbotsReducer}
+                            livechatsReducer={livechatReducer}
+                        />
+                    }
                 />
+
                 <Route
                     path={`${match.url}/chatbot`}
-                    render={props => <Chatbot {...props} changeTitle={this.changeTitle}/>}
+                    render={
+                        props => <Chatbot
+                            {...props}
+                            changeTitle={this.changeTitle}
+                        />
+                    }
                 />
+
                 <Route
                     path={`${match.url}/livechat`}
-                    render={props => <Livechat {...props} changeTitle={this.changeTitle} livechatsReducer={livechatReducer} sendClientMsg={this.LivechatSendClientMsg}/>}
+                    render={
+                        props => <Livechat
+                            {...props}
+                            changeTitle={this.changeTitle}
+                            livechatsReducer={livechatReducer}
+                            sendClientMsg={this.LivechatSendClientMsg}
+                        />
+                    }
                 />
+
             </Container>
         )
     }

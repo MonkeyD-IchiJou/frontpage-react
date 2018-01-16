@@ -14,12 +14,13 @@ class DisplayChatbotPage extends Component {
             // if there are any chatbots
 
             const chatbotIndex = this.props.match.params.topicId
+            let chosenChatbot = chatbotsReducer[chatbotIndex]
 
             return (
                 <Grid columns={2} stackable divided>
 
                     <Grid.Column width={11}>
-                        <ChatbotConsole match={this.props.match} history={this.props.history} chatbotInfo={chatbotsReducer[chatbotIndex]}/>
+                        <ChatbotConsole match={this.props.match} history={this.props.history} chatbotInfo={chosenChatbot}/>
                     </Grid.Column>
 
                     <Grid.Column width={5}>

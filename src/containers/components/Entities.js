@@ -30,7 +30,7 @@ class Entities extends Component {
                                 </Label>
                             )
                         })}
-                        
+
                     </Table.Cell>
 
                     <Table.Cell>
