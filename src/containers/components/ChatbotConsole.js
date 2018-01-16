@@ -39,7 +39,7 @@ class ChatbotConsole extends Component {
 
                 <Segment attached='bottom' style={{
                     minHeight: '650px',
-                    maxHeight: '650px'
+                    maxHeight: '1050px'
                 }}>
                     <Route
                         exact
@@ -55,7 +55,7 @@ class ChatbotConsole extends Component {
 
                     <Route
                         path={`${this.props.match.url}/${menuItems[1]}`}
-                        render={props => <TrainingChatbot {...props} chatbotInfo={chatbotInfo}/>}
+                        render={props => <TrainingChatbot {...props} chatbotInfo={chatbotInfo} updateEntities={this.props.updateEntities}/>}
                     />
 
                     <Route
