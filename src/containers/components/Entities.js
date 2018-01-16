@@ -1,18 +1,38 @@
 import React, { Component } from 'react'
-import { Table, Label, Icon, Button } from 'semantic-ui-react'
+import EditEntity from './EditEntity'
+import ConfirmRemove from './ConfirmRemove'
+import Entity from './../../classes/Entity'
+import { Table, Label, Icon, Button, Pagination } from 'semantic-ui-react'
 
 class Entities extends Component {
+
     constructor(props) {
         super(props)
-
-        // init my state at the very begining
-        this.state = {
-            entities: this.props.cbEntities
+        this.state= {
+            activePage: 1
         }
     }
 
+    handlePaginationChange = (e, { activePage }) => this.setState({ activePage })
+
     render() {
-        let displayEntities = this.state.entities.map((entity, index)=>{
+        let entities = [...this.props.cbEntities]
+        let updateEntities = this.props.updateEntities
+        const { activePage } = this.state
+
+        // first see how many pages
+        let totalpages = Math.ceil(entities.length / 10.0)
+        let displayPagination = ''
+        if(totalpages > 1) {
+            displayPagination = (<Pagination activePage={activePage} onPageChange={this.handlePaginationChange} totalPages={totalpages} />)
+        }
+
+        const sliceStartId = (activePage - 1) * 10
+        const sliceEndId = activePage * 10
+
+        let displayEntities = entities.slice(sliceStartId, sliceEndId).map((entity, index)=>{
+            // the real index
+            index += sliceStartId
             return(
                 <Table.Row key={index}>
 
@@ -21,22 +41,28 @@ class Entities extends Component {
                     </Table.Cell>
 
                     <Table.Cell>
-
                         {entity.synonyms.map((synonym, index)=>{
                             return(
                                 <Label key={index}>
                                     {synonym}
-                                    <Icon name='delete' />
                                 </Label>
                             )
                         })}
-
                     </Table.Cell>
 
                     <Table.Cell>
-                        <Button icon basic floated='right' size='small'>
-                            <Icon name='write' />
-                        </Button>
+                        <ConfirmRemove confirmAction={()=>{
+                            // remove this entity
+                            entities.splice(index, 1)
+                            // then update my redux store
+                            updateEntities(entities)
+                        }}/>
+                        <EditEntity entity={entity} updateEntity={(newentity)=>{
+                            // update this specific entity
+                            entities[index] = newentity
+                            // then update my redux store
+                            updateEntities(entities)
+                        }}/>
                     </Table.Cell>
 
                 </Table.Row>
@@ -60,9 +86,17 @@ class Entities extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Button floated='right' icon labelPosition='left' primary size='small'>
+                            <Button floated='right' icon labelPosition='left' primary size='small' onClick={() => {
+                                // create a default new entity
+                                entities.push(new Entity('Default', ['Default']))
+                                // then update my redux store
+                                updateEntities(entities)
+                            }}>
                                 <Icon name='plus' /> Add Entity
                             </Button>
+
+                            {displayPagination}
+
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
