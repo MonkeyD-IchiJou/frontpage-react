@@ -53,7 +53,7 @@ class TrainingChatbot extends Component {
 
                 <Route
                     path={`${this.props.match.url}/${menuItems[1]}`}
-                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities}/>}
+                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={this.props.updateEntities}/>}
                 />
 
                 <Route
@@ -63,7 +63,7 @@ class TrainingChatbot extends Component {
 
                 <Route
                     path={`${this.props.match.url}/${menuItems[3]}`}
-                    render={props => <Stories {...props} cbStories={chatbotInfo.cbstories} />}
+                    render={props => <Stories {...props} cbStories={chatbotInfo.stories} />}
                 />
 
             </div>
