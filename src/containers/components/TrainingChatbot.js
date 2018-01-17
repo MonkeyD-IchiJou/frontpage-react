@@ -58,7 +58,7 @@ class TrainingChatbot extends Component {
 
                 <Route
                     path={`${this.props.match.url}/${menuItems[2]}`}
-                    render={props => <Actions {...props} cbActions={chatbotInfo.actions}/>}
+                    render={props => <Actions {...props} cbActions={chatbotInfo.actions} updateActions={this.props.updateActions}/>}
                 />
 
                 <Route

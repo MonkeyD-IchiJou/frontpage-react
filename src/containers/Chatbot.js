@@ -3,7 +3,11 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import ChatbotConsole from './components/ChatbotConsole'
 import { Grid, Segment } from 'semantic-ui-react'
-import { chatbotEntitiesUpdate_act, chatbotIntentsUpdate_act } from './actions/chatbotsActions'
+import {
+    chatbotEntitiesUpdate_act,
+    chatbotIntentsUpdate_act,
+    chatbotActionsUpdate_act
+} from './actions/chatbotsActions'
 
 class DisplayChatbotPage extends Component {
 
@@ -15,6 +19,11 @@ class DisplayChatbotPage extends Component {
     updateIntents = (intents) => {
         // this is the chatbot that want to update the intents
         this.props.updateIntents(this.props.match.params.topicId, intents)
+    }
+
+    updateActions = (actions) => {
+        // this is the chatbot that want to update the actions
+        this.props.updateActions(this.props.match.params.topicId, actions)
     }
 
     render() {
@@ -37,6 +46,7 @@ class DisplayChatbotPage extends Component {
                             chatbotInfo={chosenChatbot}
                             updateEntities={this.updateEntities}
                             updateIntents={this.updateIntents}
+                            updateActions={this.updateActions}
                         />
                     </Grid.Column>
 
@@ -72,12 +82,25 @@ class Chatbot extends Component {
         this.props.dispatch(chatbotIntentsUpdate_act(cbindex, intents))
     }
 
+    updateActions = (cbindex, actions) => {
+        // there is a chatbot want to update its actions
+        this.props.dispatch(chatbotActionsUpdate_act(cbindex, actions))
+    }
+
     render() {
         return (
             <div>
                 <Route 
                     path={`${this.props.match.url}/:topicId`} 
-                    render={props => <DisplayChatbotPage {...props} chatbotsReducer={this.props.chatbotsReducer} updateEntities={this.updateEntities} updateIntents={this.updateIntents}/>}
+                    render= { 
+                        props => <DisplayChatbotPage
+                            {...props}
+                            chatbotsReducer={this.props.chatbotsReducer}
+                            updateEntities={this.updateEntities}
+                            updateIntents={this.updateIntents}
+                            updateActions={this.updateActions}
+                        />
+                    }
                 />
             </div>
         )
