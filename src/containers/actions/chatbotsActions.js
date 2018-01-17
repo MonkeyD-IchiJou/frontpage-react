@@ -8,6 +8,7 @@ import request from 'superagent'
 import SocketConnect from './../socketapi'
 import Intent from './../../classes/Intent'
 import Entity from './../../classes/Entity'
+import Action from './../../classes/Action'
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -55,56 +56,44 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             ]
 
                             result.result[i].actions = [
-                                {
-                                    name: 'greeting',
-                                    allActions: [ // will random choose 1 of it
+                                new Action('restaurant_search_response', [
+                                    [
+                                        { 
+                                            text: 'hey bye' 
+                                        },
                                         {
-                                            actions: [
+                                            buttons: [
                                                 {
-                                                    text: 'hey bye'
-                                                }, 
-                                                {
-                                                    buttons: [
-                                                        {
-                                                            text: 'button name',
-                                                            payload: 'button payload'
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    image: 'kek.png'
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    name: 'goodbye',
-                                    allActions: [ // will random choose 1 of it
-                                        {
-                                            actions: [
-                                                {
-                                                    text: 'hey bye'
-                                                },
-                                                {
-                                                    buttons: [
-                                                        {
-                                                            text: 'button name',
-                                                            payload: 'button payload'
-                                                        }
-                                                    ]
+                                                    text: 'button name',
+                                                    payload: 'button payload'
                                                 }
                                             ]
                                         },
+                                        { 
+                                            image: 'kek.png' 
+                                        }
+                                    ]
+                                ]),
+                                new Action('outlook_search_response', [
+                                    [
                                         {
-                                            actions: [
+                                            text: 'yo look'
+                                        },
+                                        {
+                                            image: 'kek.png'
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            buttons: [
                                                 {
-                                                    text: 'k bye'
+                                                    text: 'button name',
+                                                    payload: 'button payload'
                                                 }
                                             ]
                                         }
                                     ]
-                                }
+                                ])
                             ]
 
                             result.result[i].stories = [
@@ -283,6 +272,14 @@ export function chatbotIntentsUpdate_act(cbindex, intents) {
     return {
         type: 'USR_UPDATE_CHATBOT_INTENTS',
         payload: { cbindex: cbindex, intents: intents }
+    }
+}
+
+// chatbot actions update
+export function chatbotActionsUpdate_act(cbindex, actions) {
+    return {
+        type: 'USR_UPDATE_CHATBOT_ACTIONS',
+        payload: { cbindex: cbindex, actions: actions }
     }
 }
 

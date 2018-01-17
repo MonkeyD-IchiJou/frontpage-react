@@ -34,6 +34,13 @@ const chatbotsReducer = (
             state[action.payload.cbindex].intents = action.payload.intents
             break
 
+        case "USR_UPDATE_CHATBOT_ACTIONS":
+            state = [
+                ...state
+            ]
+            state[action.payload.cbindex].actions = action.payload.actions
+            break
+
         default:
             break
     }
