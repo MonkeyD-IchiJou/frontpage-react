@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import Intent from './../../classes/Intent'
 import EditIntent from './EditIntent'
 import ConfirmRemove from './ConfirmRemove'
-import { Table, Pagination, Form } from 'semantic-ui-react'
+import FooterForm from './FooterForm'
+import { Table, Pagination } from 'semantic-ui-react'
 
 class Intents extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            activePage: 1,
-            newintent: ''
+            activePage: 1
         }
     }
 
@@ -23,7 +23,7 @@ class Intents extends Component {
         // deep clone the intents
         let intents = JSON.parse(JSON.stringify(this.props.cbIntents))
         let updateIntents = this.props.updateIntents
-        const { activePage, newintent } = this.state
+        const { activePage } = this.state
 
         // first see how many pages
         let totalpages = Math.ceil(intents.length / 10.0)
@@ -84,15 +84,10 @@ class Intents extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Form onSubmit={() => {
-                                // create a default new entity
-                                intents.push(new Intent(newintent, [], []))
-                                // then update my redux store
+                            <FooterForm placeholder='Create New Intent' formSubmit={(formvalue) => {
+                                intents.push(new Intent(formvalue, [], []))
                                 updateIntents(intents)
-                                this.setState({ newintent: '' })
-                            }}>
-                                <Form.Input required placeholder='Create New Intent' name='newintent' value={newintent} onChange={this.handleChange} />
-                            </Form>
+                            }} />
                             {displayPagination}
                         </Table.HeaderCell>
                     </Table.Row>

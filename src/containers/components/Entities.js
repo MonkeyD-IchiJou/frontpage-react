@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import EditEntity from './EditEntity'
 import ConfirmRemove from './ConfirmRemove'
 import Entity from './../../classes/Entity'
-import { Table, Label, Pagination, Form } from 'semantic-ui-react'
+import FooterForm from './FooterForm'
+import { Table, Label, Pagination } from 'semantic-ui-react'
 
 class Entities extends Component {
 
     constructor(props) {
         super(props)
         this.state= {
-            activePage: 1,
-            newentity: ''
+            activePage: 1
         }
     }
 
@@ -21,7 +21,7 @@ class Entities extends Component {
     render() {
         let entities = [...this.props.cbEntities]
         let updateEntities = this.props.updateEntities
-        const { activePage, newentity } = this.state
+        const { activePage } = this.state
 
         // first see how many pages
         let totalpages = Math.ceil(entities.length / 10.0)
@@ -89,18 +89,11 @@ class Entities extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Form onSubmit={() => {
-                                // create a default new entity
-                                entities.push(new Entity(newentity, []))
-                                // then update my redux store
+                            <FooterForm placeholder='Create New Entity' formSubmit={(formvalue) => {
+                                entities.push(new Entity(formvalue, []))
                                 updateEntities(entities)
-                                this.setState({ newentity: '' })
-                            }}>
-                                <Form.Input required placeholder='Create New Entity' name='newentity' value={newentity} onChange={this.handleChange} />
-                            </Form>
-
+                            }} />
                             {displayPagination}
-
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
