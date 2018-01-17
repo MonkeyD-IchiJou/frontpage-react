@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Action from './../../classes/Action'
 import EditAction from './EditAction'
-import ConfirmRemove from './ConfirmRemove'
 import FooterForm from './FooterForm'
 import { Table, Pagination } from 'semantic-ui-react'
 
@@ -33,53 +32,32 @@ class Actions extends Component {
         const sliceStartId = (activePage - 1) * 10
         const sliceEndId = activePage * 10
 
-        let displayActions = actions.slice(sliceStartId, sliceEndId).map((action, index) => {
-            // the real index
-            index += sliceStartId
-            return (
-                <Table.Row key={index}>
-
-                    <Table.Cell>
-                        {action.name}
-                    </Table.Cell>
-
-                    <Table.Cell>
-
-                        <ConfirmRemove confirmAction={() => {
-                            // remove this intent
-                            actions.splice(index, 1)
-                            // then update my redux store
-                            updateActions(actions)
-                        }} />
-
-                        <EditAction action={action} updateActions={(newAction)=>{
-                            actions[index] = newAction
-                            updateActions(actions)
-                        }}/>
-
-                    </Table.Cell>
-
-                </Table.Row>
-            )
-        })
-
         return (
             <Table selectable>
 
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Actions</Table.HeaderCell>
-                        <Table.HeaderCell></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-
                 <Table.Body>
-                    {displayActions}
+                    {actions.slice(sliceStartId, sliceEndId).map((action, index) => {
+                        // the real index
+                        index += sliceStartId
+                        return (
+                            <Table.Row key={index}>
+                                <Table.Cell>
+                                    <EditAction action={action} removeActions={() => {
+                                        actions.splice(index, 1)
+                                        updateActions(actions)
+                                    }} updateActions={(newAction) => {
+                                        actions[index] = newAction
+                                        updateActions(actions)
+                                    }} />
+                                </Table.Cell >
+                            </Table.Row>
+                        )
+                    })}
                 </Table.Body>
 
                 <Table.Footer fullWidth>
                     <Table.Row>
-                        <Table.HeaderCell colSpan='4'>
+                        <Table.HeaderCell>
                             <FooterForm placeholder='Create New Action' formSubmit={(formvalue)=>{
                                 actions.push(new Action(formvalue, []))
                                 updateActions(actions)

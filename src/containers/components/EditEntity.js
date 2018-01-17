@@ -10,16 +10,25 @@ class EditEntity extends Component {
         this.state = {
             modalOpen: false,
             value: this.props.entity.value,
-            synonyms: [...this.props.entity.synonyms],
+            synonyms: JSON.parse(JSON.stringify(this.props.entity.synonyms)),
             newsynonym: ''
         }
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            modalOpen: false,
+            value: nextProps.entity.value,
+            synonyms: JSON.parse(JSON.stringify(nextProps.entity.synonyms)),
+            newsynonym: ''
+        })
     }
 
     resetState = () => {
         this.setState({
             modalOpen: false,
             value: this.props.entity.value,
-            synonyms: [...this.props.entity.synonyms],
+            synonyms: JSON.parse(JSON.stringify(this.props.entity.synonyms)),
             newsynonym: ''
         })
     }
@@ -39,9 +48,9 @@ class EditEntity extends Component {
         return(
             <Modal
                 trigger={
-                    <Button icon basic floated='right' size='small' primary onClick={this.handleOpen}>
-                        <Icon name='write' />
-                    </Button>
+                    <div>
+                        <Header style={{ padding: '5px', paddingBottom: '10px', cursor: 'pointer' }} onClick={this.handleOpen}>{value}</Header>
+                    </div>
                 }
                 open={this.state.modalOpen}
                 onClose={this.handleClose}

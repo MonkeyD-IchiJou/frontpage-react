@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Intent from './../../classes/Intent'
 import EditIntent from './EditIntent'
-import ConfirmRemove from './ConfirmRemove'
 import FooterForm from './FooterForm'
 import { Table, Pagination } from 'semantic-ui-react'
 
@@ -35,55 +34,41 @@ class Intents extends Component {
         const sliceStartId = (activePage - 1) * 10
         const sliceEndId = activePage * 10
 
-        let displayIntents = intents.slice(sliceStartId, sliceEndId).map((intent, index) => {
-            // the real index
-            index += sliceStartId
-            return (
-                <Table.Row key={index}>
-
-                    <Table.Cell>
-                        {intent.intent}
-                    </Table.Cell>
-
-                    <Table.Cell>
-
-                        <ConfirmRemove confirmAction={() => {
-                            // remove this intent
-                            intents.splice(index, 1)
-                            // then update my redux store
-                            updateIntents(intents)
-                        }}/>
-
-                        <EditIntent intent={intent} availableEntities= {this.props.cbEntities} updateIntent={(newintent) => {
-                            // update this specific intent
-                            intents[index] = newintent
-                            // then update my redux store
-                            updateIntents(intents)
-                        }} />
-
-                    </Table.Cell>
-
-                </Table.Row>
-            )
-        })
-
         return (
             <Table selectable>
 
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Intents</Table.HeaderCell>
-                        <Table.HeaderCell></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-
                 <Table.Body>
-                    {displayIntents}
+                    {intents.slice(sliceStartId, sliceEndId).map((intent, index) => {
+                        // the real index
+                        index += sliceStartId
+                        return (
+                            <Table.Row key={index}>
+                                <Table.Cell>
+                                    <EditIntent
+                                        intent={intent}
+                                        availableEntities={this.props.cbEntities}
+                                        removeIntents={() => {
+                                            // remove this intent
+                                            intents.splice(index, 1)
+                                            // then update my redux store
+                                            updateIntents(intents)
+                                        }}
+                                        updateIntent={(newintent) => {
+                                            // update this specific intent
+                                            intents[index] = newintent
+                                            // then update my redux store
+                                            updateIntents(intents)
+                                        }}
+                                    />
+                                </Table.Cell>
+                            </Table.Row>
+                        )
+                    })}
                 </Table.Body>
 
                 <Table.Footer fullWidth>
                     <Table.Row>
-                        <Table.HeaderCell colSpan='4'>
+                        <Table.HeaderCell>
                             <FooterForm placeholder='Create New Intent' formSubmit={(formvalue) => {
                                 intents.push(new Intent(formvalue, [], []))
                                 updateIntents(intents)

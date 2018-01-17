@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ModalActions from './ModalActions'
+import ConfirmRemove from './ConfirmRemove'
 import { Modal, Button, Icon, Header, Input, Segment, Label, Popup } from 'semantic-ui-react'
 
 class EditAction extends Component {
@@ -11,6 +12,14 @@ class EditAction extends Component {
             actionName: this.props.action.name,
             allActions: JSON.parse(JSON.stringify(this.props.action.allActions))
         }
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            modalOpen: false,
+            actionName: nextProps.action.name,
+            allActions: JSON.parse(JSON.stringify(nextProps.action.allActions))
+        })
     }
 
     resetState = () => {
@@ -32,9 +41,10 @@ class EditAction extends Component {
         return(
             <Modal
                 trigger={
-                    < Button icon basic floated='right' size='small' primary onClick={this.handleOpen} >
-                        <Icon name='write' />
-                    </Button>
+                    <div>
+                        <ConfirmRemove confirmAction={()=>{this.props.removeActions()}} />
+                        <span style={{ cursor: 'pointer' }} onClick={this.handleOpen}>{actionName}</span>
+                    </div>
                 }
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
@@ -103,3 +113,9 @@ class EditAction extends Component {
 }
 
 export default EditAction
+
+/*
+< Button icon basic floated='right' size='small' primary onClick={this.handleOpen} >
+                        <Icon name='write' />
+                    </Button>
+*/

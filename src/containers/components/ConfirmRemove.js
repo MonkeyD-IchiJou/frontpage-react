@@ -16,7 +16,7 @@ class ConfirmRemove extends Component {
     render() {
         return (
             <div>
-                <Button icon basic negative floated='right' size='small' onClick={this.show}>
+                <Button icon basic negative floated='right' size='mini' onClick={this.show}>
                     <Icon name='minus' />
                 </Button>
                 <Confirm

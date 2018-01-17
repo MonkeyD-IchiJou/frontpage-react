@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Intent from './../../classes/Intent'
 import ModalActions from './ModalActions'
+import ConfirmRemove from './ConfirmRemove'
 import { Icon, Button, Modal, Input, Header, Table, Accordion, Form, Dropdown } from 'semantic-ui-react'
 import Highlighter from 'react-highlight-words'
 
@@ -29,6 +30,17 @@ class EditIntent extends Component {
         })
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            modalOpen: false,
+            intent: nextProps.intent.intent,
+            entities: JSON.parse(JSON.stringify(nextProps.intent.entities)),
+            texts: JSON.parse(JSON.stringify(nextProps.intent.texts)),
+            activeIndex: -1,
+            newusersay: ''
+        })
+    }
+
     handleOpen = () => this.setState({ modalOpen: true })
 
     handleClose = () => this.setState({ modalOpen: false })
@@ -44,6 +56,8 @@ class EditIntent extends Component {
 
     // for create intent form
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+
 
     render() {
 
@@ -75,9 +89,10 @@ class EditIntent extends Component {
         return (
             <Modal
                 trigger={
-                    < Button icon basic floated='right' size='small' primary onClick={this.handleOpen} >
-                        <Icon name='write' />
-                    </Button>
+                    <div>
+                        <ConfirmRemove confirmAction={() => { this.props.removeIntents() }} />
+                        <span style={{ cursor: 'pointer' }} onClick={this.handleOpen}>{intent}</span>
+                    </div>
                 }
                 open={this.state.modalOpen}
                 onClose={this.handleClose}

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import EditEntity from './EditEntity'
-import ConfirmRemove from './ConfirmRemove'
 import Entity from './../../classes/Entity'
 import FooterForm from './FooterForm'
+import ConfirmRemove from './ConfirmRemove'
 import { Table, Label, Pagination } from 'semantic-ui-react'
 
 class Entities extends Component {
@@ -33,62 +33,49 @@ class Entities extends Component {
         const sliceStartId = (activePage - 1) * 10
         const sliceEndId = activePage * 10
 
-        let displayEntities = entities.slice(sliceStartId, sliceEndId).map((entity, index)=>{
-            // the real index
-            index += sliceStartId
-            return(
-                <Table.Row key={index}>
-
-                    <Table.Cell>
-                        {entity.value}
-                    </Table.Cell>
-
-                    <Table.Cell>
-                        {entity.synonyms.map((synonym, index)=>{
-                            return(
-                                <Label key={index}>
-                                    {synonym}
-                                </Label>
-                            )
-                        })}
-                    </Table.Cell>
-
-                    <Table.Cell>
-                        <ConfirmRemove confirmAction={()=>{
-                            // remove this entity
-                            entities.splice(index, 1)
-                            // then update my redux store
-                            updateEntities(entities)
-                        }}/>
-                        <EditEntity entity={entity} updateEntity={(newentity)=>{
-                            // update this specific entity
-                            entities[index] = newentity
-                            // then update my redux store
-                            updateEntities(entities)
-                        }}/>
-                    </Table.Cell>
-
-                </Table.Row>
-            )
-        })
         return(
             <Table selectable>
 
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Value</Table.HeaderCell>
-                        <Table.HeaderCell>Synonyms</Table.HeaderCell>
-                        <Table.HeaderCell></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-
                 <Table.Body>
-                    {displayEntities}
+                    {entities.slice(sliceStartId, sliceEndId).map((entity, index) => {
+                        // the real index
+                        index += sliceStartId
+                        return (
+                            <Table.Row key={index}>
+
+                                <Table.Cell>
+                                    <EditEntity
+                                        entity={entity}
+                                        updateEntity={(newentity) => {
+                                            // update this specific entity
+                                            entities[index] = newentity
+                                            // then update my redux store
+                                            updateEntities(entities)
+                                        }}
+                                    />
+                                    <ConfirmRemove confirmAction={() => {
+                                        // remove this entity
+                                        entities.splice(index, 1)
+                                        // then update my redux store
+                                        updateEntities(entities)
+                                    }} />
+                                    {entity.synonyms.map((synonym, index) => {
+                                        return (
+                                            <Label key={index}>
+                                                {synonym}
+                                            </Label>
+                                        )
+                                    })}
+                                </Table.Cell>
+
+                            </Table.Row>
+                        )
+                    })}
                 </Table.Body>
 
                 <Table.Footer fullWidth>
                     <Table.Row>
-                        <Table.HeaderCell colSpan='4'>
+                        <Table.HeaderCell>
                             <FooterForm placeholder='Create New Entity' formSubmit={(formvalue) => {
                                 entities.push(new Entity(formvalue, []))
                                 updateEntities(entities)

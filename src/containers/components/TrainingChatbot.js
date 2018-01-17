@@ -11,7 +11,7 @@ class TrainingChatbot extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            menuItems: ['Intents', 'Entities', 'Actions', 'Stories']
+            menuItems: ['Entities', 'Intents', 'Actions', 'Stories']
         }
     }
 
@@ -27,7 +27,7 @@ class TrainingChatbot extends Component {
 
         if (!pathname) {
             // if is undefined
-            pathname = 'Intents'
+            pathname = 'Entities'
         }
 
         return (
@@ -42,18 +42,18 @@ class TrainingChatbot extends Component {
                 <Route
                     exact
                     path={`${this.props.match.url}/`}
-                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} updateIntents={this.props.updateIntents}/>}
+                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={this.props.updateEntities} />}
                 />
 
                 <Route
                     exact
                     path={`${this.props.match.url}/${menuItems[0]}`}
-                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} cbEntities={chatbotInfo.entities} updateIntents={this.props.updateIntents}/>}
+                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={this.props.updateEntities} />}
                 />
 
                 <Route
                     path={`${this.props.match.url}/${menuItems[1]}`}
-                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={this.props.updateEntities}/>}
+                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} cbEntities={chatbotInfo.entities} updateIntents={this.props.updateIntents} />}
                 />
 
                 <Route
