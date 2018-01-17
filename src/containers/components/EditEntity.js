@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Entity from './../../classes/Entity'
+import ModalActions from './ModalActions'
 import { Icon, Button, Modal, Input, Header, Grid, Table, Form } from 'semantic-ui-react'
 
 class EditEntity extends Component {
@@ -12,6 +13,15 @@ class EditEntity extends Component {
             synonyms: [...this.props.entity.synonyms],
             newsynonym: ''
         }
+    }
+
+    resetState = () => {
+        this.setState({
+            modalOpen: false,
+            value: this.props.entity.value,
+            synonyms: [...this.props.entity.synonyms],
+            newsynonym: ''
+        })
     }
 
     handleOpen = () => this.setState({ modalOpen: true })
@@ -105,27 +115,15 @@ class EditEntity extends Component {
                 </Modal.Content>
 
                 <Modal.Actions>
-
-                    <Button color={'green'} onClick={()=>{
-                        // update the entity to my redux store
-                        this.props.updateEntity(new Entity(value, synonyms))
-                        this.setState({modalOpen: false})
-                    }}>
-                        <Icon name='checkmark' /> Done
-                    </Button>
-
-                    <Button onClick={()=>{
-                        // go back to default state
-                        this.setState({
-                            modalOpen: false,
-                            value: this.props.entity.value,
-                            synonyms: [...this.props.entity.synonyms],
-                            newsynonym: ''
-                        })
-                    }}>
-                        <Icon name='close' /> Cancel
-                    </Button>
-
+                    <ModalActions
+                        clickDone={() => {
+                            this.props.updateEntity(new Entity(value, synonyms))
+                            this.setState({ modalOpen: false })
+                        }}
+                        clickCancel={() => {
+                            this.resetState()
+                        }}
+                    />
                 </Modal.Actions>
 
             </Modal>

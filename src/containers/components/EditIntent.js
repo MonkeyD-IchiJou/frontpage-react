@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Intent from './../../classes/Intent'
+import ModalActions from './ModalActions'
 import { Icon, Button, Modal, Input, Header, Table, Accordion, Form, Dropdown } from 'semantic-ui-react'
 import Highlighter from 'react-highlight-words'
 
@@ -87,26 +88,18 @@ class EditIntent extends Component {
 
                     <Header>Associate Entities</Header>
 
-                    <Table striped selectable>
-                        <Table.Body>
-                            <Table.Row>
-                                <Table.Cell>
-                                    <Dropdown
-                                        value={entities}
-                                        placeholder='Select Entity'
-                                        fluid
-                                        search
-                                        multiple
-                                        selection
-                                        options={availableEntitiesValue}
-                                        onChange={(e, { value }) => {
-                                            this.setState({ entities: value })
-                                        }}
-                                    />
-                                </Table.Cell>
-                            </Table.Row>
-                        </Table.Body>
-                    </Table>
+                    <Dropdown
+                        value={entities}
+                        placeholder='Select Entity'
+                        fluid
+                        search
+                        multiple
+                        selection
+                        options={availableEntitiesValue}
+                        onChange={(e, { value }) => {
+                            this.setState({ entities: value })
+                        }}
+                    />
 
                     <Header>Common Examples</Header>
 
@@ -170,17 +163,15 @@ class EditIntent extends Component {
                 </Modal.Content>
 
                 <Modal.Actions>
-
-                    <Button color={'green'} onClick={() => {
-                        // update the entity to my redux store
-                        this.props.updateIntent(new Intent(intent, entities, texts))
-                        this.setState({ modalOpen: false })
-                    }}>
-                        <Icon name='checkmark' /> Done
-                    </Button>
-
-                    <Button onClick={() => {this.resetState()}}><Icon name='close' />Cancel</Button>
-
+                    <ModalActions
+                        clickDone={() => {
+                            this.props.updateIntent(new Intent(intent, entities, texts))
+                            this.setState({ modalOpen: false })
+                        }}
+                        clickCancel={() => {
+                            this.resetState()
+                        }}
+                    />
                 </Modal.Actions>
 
             </Modal>
