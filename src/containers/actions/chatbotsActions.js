@@ -6,6 +6,7 @@
 
 import request from 'superagent'
 import SocketConnect from './../socketapi'
+import Intent from './../../classes/Intent'
 import Entity from './../../classes/Entity'
 
 // ignore my self-signed ssl
@@ -44,37 +45,24 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
 
                             // tmp delete later
                             result.result[i].entities = [
-                                new Entity('Chinese', ['Chines', 'chines', 'chin']),
+                                new Entity('cuisine', ['Chinese', 'chinese']),
                                 new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
                             ]
 
+                            /*result.result[i].intents = [
+                                new Intent('greet', [new UserSay('hello', []), new UserSay('hi', [])]),
+                                new Intent('goodbye', [new UserSay('goodbye', []), new UserSay('see you again', [])]),
+                                new Intent('restaurant_search', [new UserSay('show me chinese restaurants', [{
+                                    start: 8,
+                                    end: 15,
+                                    value: "chinese",
+                                    entity: "cuisine"
+                                }])])
+                            ]*/
+
                             result.result[i].intents = [
-                                {
-                                    intent: 'greet', 
-                                    usersay: [
-                                        {
-                                            text: 'hello',
-                                            entities: []
-                                        },
-                                        {
-                                            text: 'hi',
-                                            entities: []
-                                        }
-                                    ]
-                                },
-                                {
-                                    intent: 'goodbye',
-                                    usersay: [
-                                        {
-                                            text: 'goodbye',
-                                            entities: []
-                                        },
-                                        {
-                                            text: 'see you again',
-                                            entities: []
-                                        }
-                                    ]
-                                }
+                                new Intent('restaurant_search', ['cuisine'], ['show me chinese restaurants', 'chinese restaurant']),
+                                new Intent('outlook related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),
                             ]
 
                             result.result[i].actions = [
@@ -298,6 +286,14 @@ export function chatbotEntitiesUpdate_act(cbindex, entities) {
     return {
         type: 'USR_UPDATE_CHATBOT_ENTITIES',
         payload: { cbindex: cbindex, entities: entities }
+    }
+}
+
+// chatbot intents update
+export function chatbotIntentsUpdate_act(cbindex, intents) {
+    return {
+        type: 'USR_UPDATE_CHATBOT_INTENTS',
+        payload: { cbindex: cbindex, intents: intents }
     }
 }
 
