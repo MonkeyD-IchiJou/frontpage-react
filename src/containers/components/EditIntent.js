@@ -97,8 +97,9 @@ class EditIntent extends Component {
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 closeOnDimmerClick={false}
+                size="large"
             >
-                <Modal.Content>
+                <Modal.Content scrolling>
 
                     <Header>Intent Name</Header>
 
@@ -124,19 +125,6 @@ class EditIntent extends Component {
                     <Header>Common Examples</Header>
 
                     <Table striped selectable>
-
-                        <Table.Header fullWidth>
-                            <Table.Row>
-                                <Table.HeaderCell colSpan='2'>
-                                    <Form onSubmit={() => {
-                                        texts.push(newusersay)
-                                        this.setState({ texts: texts, newusersay: '' })
-                                    }}>
-                                        <Form.Input required placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
-                                    </Form>
-                                </Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
 
                         <Table.Body>
                             {texts.map((text, index)=>{
@@ -177,6 +165,19 @@ class EditIntent extends Component {
                                 )
                             })}
                         </Table.Body>
+
+                        <Table.Footer fullWidth>
+                            <Table.Row>
+                                <Table.HeaderCell colSpan='2'>
+                                    <Form onSubmit={() => {
+                                        texts.push(newusersay)
+                                        this.setState({ texts: texts, newusersay: '' })
+                                    }}>
+                                        <Form.Input required placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
+                                    </Form>
+                                </Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Footer>
 
                     </Table>
 

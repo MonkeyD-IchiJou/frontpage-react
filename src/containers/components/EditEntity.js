@@ -55,9 +55,10 @@ class EditEntity extends Component {
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 closeOnDimmerClick={false}
+                size="large"
             >
-                <Modal.Content>
-                    <Grid columns='equal'>
+                <Modal.Content scrolling>
+                    <Grid columns='equal' stackable>
 
                         <Grid.Column>
                             <Header>Value</Header>

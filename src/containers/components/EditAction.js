@@ -49,9 +49,10 @@ class EditAction extends Component {
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 closeOnDimmerClick={false}
+                size="large"
             >
 
-                <Modal.Content>
+                <Modal.Content scrolling>
 
                     <Header>Action Name</Header>
 

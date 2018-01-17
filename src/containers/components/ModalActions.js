@@ -6,14 +6,12 @@ class ModalActions extends Component {
 
         const { clickDone, clickCancel } = this.props
 
-        return (
-            <div>
-                <Button color={'green'} onClick={() => { clickDone() }}>
-                    <Icon name='checkmark' /> Done
-                </Button>
-                <Button onClick={() => { clickCancel() }}><Icon name='close' />Cancel</Button>
-            </div>
-        )
+        return [
+            <Button color={'green'} onClick={() => { clickDone() }} key={1}>
+                <Icon name='checkmark' /> Done
+            </Button>,
+            <Button key={2} onClick={() => { clickCancel() }}><Icon name='close' />Cancel</Button>
+        ]
     }
 }
 
