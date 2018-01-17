@@ -1,20 +1,40 @@
 import React, { Component } from 'react'
-import { Table, Icon, Button } from 'semantic-ui-react'
+import Action from './../../classes/Action'
+import ConfirmRemove from './ConfirmRemove'
+import FooterForm from './FooterForm'
+import { Table, Pagination } from 'semantic-ui-react'
 
 class Actions extends Component {
 
     constructor(props) {
         super(props)
-
-        // init my state at the very begining
         this.state = {
-            actions: this.props.cbActions
+            activePage: 1
         }
     }
 
+    handlePaginationChange = (e, { activePage }) => this.setState({ activePage })
+
     render() {
 
-        let displayActions = this.state.actions.map((action, index) => {
+        // deep clone the actions
+        let actions = JSON.parse(JSON.stringify(this.props.cbActions))
+        let updateActions = this.props.updateActions
+        const { activePage } = this.state
+
+        // first see how many pages
+        let totalpages = Math.ceil(actions.length / 10.0)
+        let displayPagination = ''
+        if (totalpages > 1) {
+            displayPagination = (<Pagination activePage={activePage} onPageChange={this.handlePaginationChange} totalPages={totalpages} />)
+        }
+
+        const sliceStartId = (activePage - 1) * 10
+        const sliceEndId = activePage * 10
+
+        let displayActions = actions.slice(sliceStartId, sliceEndId).map((action, index) => {
+            // the real index
+            index += sliceStartId
             return (
                 <Table.Row key={index}>
 
@@ -23,9 +43,14 @@ class Actions extends Component {
                     </Table.Cell>
 
                     <Table.Cell>
-                        <Button icon basic floated='right' size='small'>
-                            <Icon name='write' />
-                        </Button>
+
+                        <ConfirmRemove confirmAction={() => {
+                            // remove this intent
+                            actions.splice(index, 1)
+                            // then update my redux store
+                            updateActions(actions)
+                        }} />
+
                     </Table.Cell>
 
                 </Table.Row>
@@ -49,9 +74,11 @@ class Actions extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Button floated='right' icon labelPosition='left' primary size='small'>
-                                <Icon name='plus' /> Add Actions
-                            </Button>
+                            <FooterForm placeholder='Create New Action' formSubmit={(formvalue)=>{
+                                actions.push(new Action(formvalue, []))
+                                updateActions(actions)
+                            }} />
+                            {displayPagination}
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
