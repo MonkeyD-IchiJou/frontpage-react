@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Entity from './../../classes/Entity'
-import { Icon, Button, Modal, Input, Header, Grid, Table } from 'semantic-ui-react'
+import { Icon, Button, Modal, Input, Header, Grid, Table, Form } from 'semantic-ui-react'
 
 class EditEntity extends Component {
 
@@ -9,7 +9,8 @@ class EditEntity extends Component {
         this.state = {
             modalOpen: false,
             value: this.props.entity.value,
-            synonyms: [...this.props.entity.synonyms]
+            synonyms: [...this.props.entity.synonyms],
+            newsynonym: ''
         }
     }
 
@@ -17,10 +18,13 @@ class EditEntity extends Component {
 
     handleClose = () => this.setState({ modalOpen: false })
 
+    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
     render() {
 
         let value = this.state.value
         let synonyms = [...this.state.synonyms]
+        let newsynonym = this.state.newsynonym
 
         return(
             <Modal
@@ -33,8 +37,6 @@ class EditEntity extends Component {
                 onClose={this.handleClose}
                 closeOnDimmerClick={false}
             >
-                <Modal.Header>Edit Entity</Modal.Header>
-
                 <Modal.Content>
                     <Grid columns='equal'>
 
@@ -84,11 +86,13 @@ class EditEntity extends Component {
                                 <Table.Footer fullWidth>
                                     <Table.Row>
                                         <Table.HeaderCell colSpan='2'>
-                                            <Button icon='plus' floated='right' primary compact content='new' position='top right' onClick={() => {
+                                            <Form onSubmit={() => {
                                                 // add a new synonym
-                                                synonyms.push('default')
-                                                this.setState({ synonyms: synonyms })
-                                            }}/>
+                                                synonyms.push(newsynonym)
+                                                this.setState({ synonyms: synonyms, newsynonym: '' })
+                                            }}>
+                                                <Form.Input placeholder='Create New Synonym' name='newsynonym' value={newsynonym} onChange={this.handleChange} />
+                                            </Form>
                                         </Table.HeaderCell>
                                     </Table.Row>
                                 </Table.Footer>
@@ -115,7 +119,8 @@ class EditEntity extends Component {
                         this.setState({
                             modalOpen: false,
                             value: this.props.entity.value,
-                            synonyms: [...this.props.entity.synonyms]
+                            synonyms: [...this.props.entity.synonyms],
+                            newsynonym: ''
                         })
                     }}>
                         <Icon name='close' /> Cancel

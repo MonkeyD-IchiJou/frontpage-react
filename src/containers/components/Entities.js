@@ -2,23 +2,26 @@ import React, { Component } from 'react'
 import EditEntity from './EditEntity'
 import ConfirmRemove from './ConfirmRemove'
 import Entity from './../../classes/Entity'
-import { Table, Label, Icon, Button, Pagination } from 'semantic-ui-react'
+import { Table, Label, Pagination, Form } from 'semantic-ui-react'
 
 class Entities extends Component {
 
     constructor(props) {
         super(props)
         this.state= {
-            activePage: 1
+            activePage: 1,
+            newentity: ''
         }
     }
 
     handlePaginationChange = (e, { activePage }) => this.setState({ activePage })
 
+    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
     render() {
         let entities = [...this.props.cbEntities]
         let updateEntities = this.props.updateEntities
-        const { activePage } = this.state
+        const { activePage, newentity } = this.state
 
         // first see how many pages
         let totalpages = Math.ceil(entities.length / 10.0)
@@ -86,14 +89,15 @@ class Entities extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Button floated='right' icon labelPosition='left' primary size='small' onClick={() => {
+                            <Form onSubmit={() => {
                                 // create a default new entity
-                                entities.push(new Entity('Default', ['Default']))
+                                entities.push(new Entity(newentity, []))
                                 // then update my redux store
                                 updateEntities(entities)
+                                this.setState({ newentity: '' })
                             }}>
-                                <Icon name='plus' /> Add Entity
-                            </Button>
+                                <Form.Input placeholder='Create New Entity' name='newentity' value={newentity} onChange={this.handleChange} />
+                            </Form>
 
                             {displayPagination}
 
