@@ -52,7 +52,7 @@ class Actions extends Component {
                             updateActions(actions)
                         }} />
 
-                        <EditAction />
+                        <EditAction action={action}/>
 
                     </Table.Cell>
 

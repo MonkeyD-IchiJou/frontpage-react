@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
 import ModalActions from './ModalActions'
-import { Modal, Button, Icon, Header } from 'semantic-ui-react'
+import { Modal, Button, Icon, Header, Input, Segment, Label, Popup } from 'semantic-ui-react'
 
 class EditAction extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            modalOpen: false
+            modalOpen: false,
+            actionName: this.props.action.name,
+            allActions: JSON.parse(JSON.stringify(this.props.action.allActions))
         }
     }
 
     resetState = () => {
         this.setState({
-            modalOpen: false
+            modalOpen: false,
+            actionName: this.props.action.name,
+            allActions: JSON.parse(JSON.stringify(this.props.action.allActions))
         })
     }
 
@@ -22,6 +26,9 @@ class EditAction extends Component {
     handleClose = () => this.setState({ modalOpen: false })
 
     render() {
+
+        let { actionName, allActions } = this.state
+
         return(
             <Modal
                 trigger={
@@ -35,7 +42,37 @@ class EditAction extends Component {
             >
 
                 <Modal.Content>
+
                     <Header>Action Name</Header>
+
+                    <Input value={actionName} fluid onChange={(event, data) => {
+                        this.setState({ actionName: data.value })
+                    }} />
+
+                    <Header>Actions</Header>
+
+                    {allActions.map((actions, index)=>{
+                        return (
+                            <Segment key={index}>
+                                <Label attached='top'>
+                                    <Popup
+                                        trigger={
+                                            <Icon name='close' onClick={() => { console.log('adf') }} color='red' />
+                                        }
+                                        content='Remove Action'
+                                    />
+                                </Label>
+                                {actions.map((action, aindex)=>{
+                                    return (
+                                        <Segment key={aindex}>
+                                            daf
+                                        </Segment>
+                                    )
+                                })}
+                            </Segment>
+                        )
+                    })}
+
                 </Modal.Content>
 
                 <Modal.Actions>
