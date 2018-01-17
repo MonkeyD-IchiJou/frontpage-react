@@ -52,7 +52,10 @@ class Actions extends Component {
                             updateActions(actions)
                         }} />
 
-                        <EditAction action={action}/>
+                        <EditAction action={action} updateActions={(newAction)=>{
+                            actions[index] = newAction
+                            updateActions(actions)
+                        }}/>
 
                     </Table.Cell>
 

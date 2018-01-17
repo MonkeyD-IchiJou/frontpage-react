@@ -57,7 +57,10 @@ class EditAction extends Component {
                                 <Label attached='top'>
                                     <Popup
                                         trigger={
-                                            <Icon name='close' onClick={() => { console.log('adf') }} color='red' />
+                                            <Icon name='close' color='red' onClick={() => { 
+                                                allActions.splice(index, 1)
+                                                this.setState({ allActions: allActions })
+                                            }}/>
                                         }
                                         content='Remove Action'
                                     />
@@ -73,11 +76,19 @@ class EditAction extends Component {
                         )
                     })}
 
+                    <Button primary onClick={()=>{
+                        allActions.push([{text: 'default'}])
+                        this.setState({ allActions: allActions })
+                    }}>
+                        <Icon name='plus'/>Create New Action
+                    </Button>
+
                 </Modal.Content>
 
                 <Modal.Actions>
                     <ModalActions 
                         clickDone={()=>{
+                            this.props.updateActions({ name: actionName, allActions: allActions })
                             this.setState({ modalOpen: false })
                         }}
                         clickCancel={()=>{

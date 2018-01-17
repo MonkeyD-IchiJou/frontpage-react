@@ -51,21 +51,26 @@ class EditIntent extends Component {
 
         // all the available entities in this chatbot
         const availableEntities = this.props.availableEntities
-
-        // simple mapping value only
-        let availableEntitiesValue = availableEntities.map((val, index) => {
-            return { text: val.value, value: val.value }
-        })
-
-        // for highlighting words
+        let availableEntitiesValue = []
         let allsynonyms = []
-        entities.forEach((entity, index)=>{
-            availableEntities.forEach((ae, aindex)=>{
-                if(ae.value === entity) {
-                    allsynonyms.push(...ae.synonyms)
-                }
+
+        if (availableEntities) {
+
+            // simple mapping value only
+            availableEntitiesValue = availableEntities.map((val, index) => {
+                return { text: val.value, value: val.value }
             })
-        })
+
+            // for highlighting words
+            entities.forEach((entity, index) => {
+                availableEntities.forEach((ae, aindex) => {
+                    if (ae.value === entity) {
+                        allsynonyms.push(...ae.synonyms)
+                    }
+                })
+            })
+    
+        }
 
         return (
             <Modal
