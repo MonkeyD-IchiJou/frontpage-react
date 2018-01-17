@@ -3,13 +3,18 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import ChatbotConsole from './components/ChatbotConsole'
 import { Grid, Segment } from 'semantic-ui-react'
-import { chatbotEntitiesUpdate_act } from './actions/chatbotsActions'
+import { chatbotEntitiesUpdate_act, chatbotIntentsUpdate_act } from './actions/chatbotsActions'
 
 class DisplayChatbotPage extends Component {
 
     updateEntities = (entities) => {
         // this is the chatbot that want to update the entities
         this.props.updateEntities(this.props.match.params.topicId, entities)
+    }
+
+    updateIntents = (intents) => {
+        // this is the chatbot that want to update the intents
+        this.props.updateIntents(this.props.match.params.topicId, intents)
     }
 
     render() {
@@ -31,6 +36,7 @@ class DisplayChatbotPage extends Component {
                             history={this.props.history}
                             chatbotInfo={chosenChatbot}
                             updateEntities={this.updateEntities}
+                            updateIntents={this.updateIntents}
                         />
                     </Grid.Column>
 
@@ -61,12 +67,17 @@ class Chatbot extends Component {
         this.props.dispatch(chatbotEntitiesUpdate_act(cbindex, entities))
     }
 
+    updateIntents = (cbindex, intents) => {
+        // there is a chatbot want to update its intents
+        this.props.dispatch(chatbotIntentsUpdate_act(cbindex, intents))
+    }
+
     render() {
         return (
             <div>
                 <Route 
                     path={`${this.props.match.url}/:topicId`} 
-                    render={props => <DisplayChatbotPage {...props} chatbotsReducer={this.props.chatbotsReducer} updateEntities={this.updateEntities}/>}
+                    render={props => <DisplayChatbotPage {...props} chatbotsReducer={this.props.chatbotsReducer} updateEntities={this.updateEntities} updateIntents={this.updateIntents}/>}
                 />
             </div>
         )

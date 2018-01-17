@@ -42,13 +42,13 @@ class TrainingChatbot extends Component {
                 <Route
                     exact
                     path={`${this.props.match.url}/`}
-                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents}/>}
+                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} updateIntents={this.props.updateIntents}/>}
                 />
 
                 <Route
                     exact
                     path={`${this.props.match.url}/${menuItems[0]}`}
-                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents}/>}
+                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} cbEntities={chatbotInfo.entities} updateIntents={this.props.updateIntents}/>}
                 />
 
                 <Route
