@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Action from './../../classes/Action'
+import EditAction from './EditAction'
 import ConfirmRemove from './ConfirmRemove'
 import FooterForm from './FooterForm'
 import { Table, Pagination } from 'semantic-ui-react'
@@ -50,6 +51,8 @@ class Actions extends Component {
                             // then update my redux store
                             updateActions(actions)
                         }} />
+
+                        <EditAction />
 
                     </Table.Cell>
 
