@@ -49,17 +49,6 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                                 new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
                             ]
 
-                            /*result.result[i].intents = [
-                                new Intent('greet', [new UserSay('hello', []), new UserSay('hi', [])]),
-                                new Intent('goodbye', [new UserSay('goodbye', []), new UserSay('see you again', [])]),
-                                new Intent('restaurant_search', [new UserSay('show me chinese restaurants', [{
-                                    start: 8,
-                                    end: 15,
-                                    value: "chinese",
-                                    entity: "cuisine"
-                                }])])
-                            ]*/
-
                             result.result[i].intents = [
                                 new Intent('restaurant_search', ['cuisine'], ['show me chinese restaurants', 'chinese restaurant']),
                                 new Intent('outlook related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),

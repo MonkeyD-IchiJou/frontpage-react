@@ -20,7 +20,8 @@ class Intents extends Component {
 
     render() {
 
-        let intents = [...this.props.cbIntents]
+        // deep clone the intents
+        let intents = JSON.parse(JSON.stringify(this.props.cbIntents))
         let updateIntents = this.props.updateIntents
         const { activePage, newintent } = this.state
 
@@ -45,18 +46,21 @@ class Intents extends Component {
                     </Table.Cell>
 
                     <Table.Cell>
+
                         <ConfirmRemove confirmAction={() => {
                             // remove this intent
                             intents.splice(index, 1)
                             // then update my redux store
                             updateIntents(intents)
                         }}/>
+
                         <EditIntent intent={intent} availableEntities= {this.props.cbEntities} updateIntent={(newintent) => {
                             // update this specific intent
                             intents[index] = newintent
                             // then update my redux store
                             updateIntents(intents)
                         }} />
+
                     </Table.Cell>
 
                 </Table.Row>
@@ -87,7 +91,7 @@ class Intents extends Component {
                                 updateIntents(intents)
                                 this.setState({ newintent: '' })
                             }}>
-                                <Form.Input placeholder='Create New Intent' name='newintent' value={newintent} onChange={this.handleChange} />
+                                <Form.Input required placeholder='Create New Intent' name='newintent' value={newintent} onChange={this.handleChange} />
                             </Form>
                             {displayPagination}
                         </Table.HeaderCell>

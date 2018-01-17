@@ -17,6 +17,22 @@ class EditIntent extends Component {
         }
     }
 
+    resetState = () => {
+        this.setState({
+            modalOpen: false,
+            intent: this.props.intent.intent,
+            entities: JSON.parse(JSON.stringify(this.props.intent.entities)),
+            texts: JSON.parse(JSON.stringify(this.props.intent.texts)),
+            activeIndex: -1,
+            newusersay: ''
+        })
+    }
+
+    handleOpen = () => this.setState({ modalOpen: true })
+
+    handleClose = () => this.setState({ modalOpen: false })
+
+    // for accordian
     handleClick = (e, titleProps) => {
         const { index } = titleProps
         const { activeIndex } = this.state
@@ -25,22 +41,22 @@ class EditIntent extends Component {
         this.setState({ activeIndex: newIndex })
     }
 
-    handleOpen = () => this.setState({ modalOpen: true })
-
-    handleClose = () => this.setState({ modalOpen: false })
-
+    // for create intent form
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
     render() {
 
         let { intent, entities, texts, activeIndex, newusersay } = this.state
 
+        // all the available entities in this chatbot
         const availableEntities = this.props.availableEntities
 
+        // simple mapping value only
         let availableEntitiesValue = availableEntities.map((val, index) => {
             return { text: val.value, value: val.value }
         })
 
+        // for highlighting words
         let allsynonyms = []
         entities.forEach((entity, index)=>{
             availableEntities.forEach((ae, aindex)=>{
@@ -72,10 +88,8 @@ class EditIntent extends Component {
                     <Header>Associate Entities</Header>
 
                     <Table striped selectable>
-
                         <Table.Body>
                             <Table.Row>
-
                                 <Table.Cell>
                                     <Dropdown
                                         value={entities}
@@ -90,10 +104,8 @@ class EditIntent extends Component {
                                         }}
                                     />
                                 </Table.Cell>
-
                             </Table.Row>
                         </Table.Body>
-
                     </Table>
 
                     <Header>Common Examples</Header>
@@ -107,7 +119,7 @@ class EditIntent extends Component {
                                         texts.push(newusersay)
                                         this.setState({ texts: texts, newusersay: '' })
                                     }}>
-                                        <Form.Input placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
+                                        <Form.Input required placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
                                     </Form>
                                 </Table.HeaderCell>
                             </Table.Row>
@@ -140,7 +152,7 @@ class EditIntent extends Component {
 
                                         <Table.Cell>
                                             <Button icon basic floated='right' size='mini' negative onClick={() => {
-                                                // delete this synonym
+                                                // delete this example
                                                 texts.splice(index, 1)
                                                 this.setState({ texts: texts })
                                             }}>
@@ -167,19 +179,7 @@ class EditIntent extends Component {
                         <Icon name='checkmark' /> Done
                     </Button>
 
-                    <Button onClick={() => {
-                        // go back to default state
-                        this.setState({
-                            modalOpen: false,
-                            intent: this.props.intent.intent,
-                            entities: JSON.parse(JSON.stringify(this.props.intent.entities)),
-                            texts: JSON.parse(JSON.stringify(this.props.intent.texts)),
-                            activeIndex: -1,
-                            newusersay: ''
-                        })
-                    }}>
-                        <Icon name='close' /> Cancel
-                    </Button>
+                    <Button onClick={() => {this.resetState()}}><Icon name='close' />Cancel</Button>
 
                 </Modal.Actions>
 
@@ -190,10 +190,3 @@ class EditIntent extends Component {
 }
 
 export default EditIntent
-
-/*
-<EditIntentEntities text={usersay.text} entities={usersay.entities} updateEntities={(entities)=>{
-    usersays[index].entities = entities
-    this.setState({ usersays: usersays })
-}}/>
-*/

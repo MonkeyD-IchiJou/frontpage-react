@@ -96,7 +96,7 @@ class Entities extends Component {
                                 updateEntities(entities)
                                 this.setState({ newentity: '' })
                             }}>
-                                <Form.Input placeholder='Create New Entity' name='newentity' value={newentity} onChange={this.handleChange} />
+                                <Form.Input required placeholder='Create New Entity' name='newentity' value={newentity} onChange={this.handleChange} />
                             </Form>
 
                             {displayPagination}
