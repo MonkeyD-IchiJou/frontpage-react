@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import Entities from './Entities'
 import Intents from './Intents'
 import Actions from './Actions'
@@ -42,11 +42,14 @@ class TrainingChatbot extends Component {
                 <Route
                     exact
                     path={`${match.url}/`}
-                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={updateEntities} />}
+                    render={props => {
+                        return (
+                            <Redirect to={`${match.url}/${menuItems[0]}`} />
+                        )
+                    }}
                 />
 
                 <Route
-                    exact
                     path={`${match.url}/${menuItems[0]}`}
                     render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={updateEntities} />}
                 />

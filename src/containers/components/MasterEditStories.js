@@ -4,7 +4,7 @@ import EditStory from './EditStory'
 class MasterEditStories extends Component {
 
     render() {
-        const { cbStories, match, updateStories, allActionNames, allIntentNames } = this.props
+        const { cbStories, match, updateStories, allAvailableActions, allAvailableIntents } = this.props
 
         let stories = JSON.parse(JSON.stringify(cbStories))
         let index = match.params.topicId
@@ -13,8 +13,8 @@ class MasterEditStories extends Component {
         return (
             <EditStory
                 story={story}
-                allActionNames={allActionNames}
-                allIntentNames={allIntentNames}
+                allAvailableActions={allAvailableActions}
+                allAvailableIntents={allAvailableIntents}
                 updateStories={(newStory) => {
                     stories[index] = newStory
                     updateStories(stories)

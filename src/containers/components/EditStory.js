@@ -22,8 +22,7 @@ class EditStory extends Component {
 
     render() {
         let { storyName, paths } = this.state
-        const { allActionNames, allIntentNames } = this.props
-
+        const { allAvailableActions, allAvailableIntents } = this.props
         return (
             <div style={{ padding: '10px' }}>
 
@@ -65,7 +64,7 @@ class EditStory extends Component {
                                 fluid
                                 search
                                 selection
-                                options={allIntentNames}
+                                options={allAvailableIntents}
                                 onChange={(e, { value }) => {
                                     paths[index].intent = value
                                     this.setState({ paths: paths })
@@ -83,7 +82,7 @@ class EditStory extends Component {
                                         fluid
                                         search
                                         selection
-                                        options={allActionNames}
+                                        options={allAvailableActions}
                                         onChange={(e, { value }) => {
                                             paths[index].actions[aindex] = value
                                             this.setState({ paths: paths })
