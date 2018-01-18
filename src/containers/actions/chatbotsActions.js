@@ -9,6 +9,9 @@ import SocketConnect from './../socketapi'
 import Intent from './../../classes/Intent'
 import Entity from './../../classes/Entity'
 import Action from './../../classes/Action'
+import TextResponse from './../../classes/TextResponse'
+import ImageResponse from './../../classes/ImageResponse'
+import QuickReplies from './../../classes/QuickReplies'
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -58,40 +61,28 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             result.result[i].actions = [
                                 new Action('restaurant_search_response', [
                                     [
-                                        { 
-                                            text: 'hey bye' 
-                                        },
-                                        {
-                                            buttons: [
-                                                {
-                                                    text: 'button name',
-                                                    payload: 'button payload'
-                                                }
-                                            ]
-                                        },
-                                        { 
-                                            image: 'kek.png' 
-                                        }
+                                        new TextResponse('hey bye'),
+                                        new QuickReplies([
+                                            {
+                                                text: 'button name',
+                                                payload: 'button payload'
+                                            }
+                                        ]),
+                                        new ImageResponse('kek.png')
                                     ]
                                 ]),
                                 new Action('outlook_search_response', [
                                     [
-                                        {
-                                            text: 'yo look'
-                                        },
-                                        {
-                                            image: 'kek.png'
-                                        }
+                                        new TextResponse('yo look'),
+                                        new ImageResponse('kek.png')
                                     ],
                                     [
-                                        {
-                                            buttons: [
-                                                {
-                                                    text: 'button name',
-                                                    payload: 'button payload'
-                                                }
-                                            ]
-                                        }
+                                        new QuickReplies([
+                                            {
+                                                text: 'button name',
+                                                payload: 'button payload'
+                                            }
+                                        ])
                                     ]
                                 ])
                             ]
