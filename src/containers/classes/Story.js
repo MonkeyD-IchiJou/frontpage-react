@@ -1,7 +1,7 @@
 class Story {
-    constructor(name, path) {
+    constructor(name, paths) {
         this.name = name
-        this.path = path
+        this.paths = paths
     }
 }
 
