@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import ProgressSave from './ProgressSave'
-import { Button, Icon, Header, Input, Segment, Label, Popup, Divider } from 'semantic-ui-react'
+import EditSingleAction from './EditSingleAction'
+import TextResponse from './../../classes/TextResponse'
+import { Button, Icon, Header, Input, Divider } from 'semantic-ui-react'
 
 class EditAction extends Component {
 
@@ -43,26 +45,18 @@ class EditAction extends Component {
 
                 {allActions.map((actions, index)=>{
                     return (
-                        <Segment key={index}>
-                            <Label attached='top'>
-                                <Popup
-                                    trigger={
-                                        <Icon name='close' color='red' onClick={() => { 
-                                            allActions.splice(index, 1)
-                                            this.setState({ allActions: allActions })
-                                        }}/>
-                                    }
-                                    content='Remove Action'
-                                />
-                            </Label>
-                            {actions.map((action, aindex)=>{
-                                return (
-                                    <Segment key={aindex} raised>
-                                        daf
-                                    </Segment>
-                                )
-                            })}
-                        </Segment>
+                        <EditSingleAction
+                            actions={actions}
+                            removeAction={() => {
+                                allActions.splice(index, 1)
+                                this.setState({ allActions: allActions })
+                            }}
+                            updateActions={(actions)=>{
+                                allActions[index] = actions
+                                this.setState({ allActions: allActions })
+                            }}
+                            key={index} 
+                        />
                     )
                 })}
 
@@ -71,7 +65,7 @@ class EditAction extends Component {
                 <Divider />
 
                 <Button primary onClick={()=>{
-                    allActions.push([{text: 'default'}])
+                    allActions.push([new TextResponse('')])
                     this.setState({ allActions: allActions })
                 }}>
                     <Icon name='plus'/>Create New Action
