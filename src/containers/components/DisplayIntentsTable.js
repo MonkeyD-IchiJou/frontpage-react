@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import Entity from './../classes/Entity'
+import Intent from './../classes/Intent'
 import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
-import { Table, Label, Pagination, Header } from 'semantic-ui-react'
+import { Table, Pagination } from 'semantic-ui-react'
 
-class DisplayEntitiesTable extends Component {
+class DisplayIntentsTable extends Component {
 
     constructor(props) {
         super(props)
@@ -16,12 +16,13 @@ class DisplayEntitiesTable extends Component {
     handlePaginationChange = (e, { activePage }) => this.setState({ activePage })
 
     render() {
-        const { updateEntities, cbEntities, history, match, } = this.props
-        let entities = JSON.parse(JSON.stringify(cbEntities))
+
+        const { updateIntents, cbIntents, history, match, } = this.props
+        let intents = JSON.parse(JSON.stringify(cbIntents))
         const { activePage } = this.state
 
         // first see how many pages
-        let totalpages = Math.ceil(entities.length / 10.0)
+        let totalpages = Math.ceil(intents.length / 10.0)
         let displayPagination = ''
         if (totalpages > 1) {
             displayPagination = (<Pagination activePage={activePage} onPageChange={this.handlePaginationChange} totalPages={totalpages} />)
@@ -34,26 +35,19 @@ class DisplayEntitiesTable extends Component {
             <Table selectable>
 
                 <Table.Body>
-                    {entities.slice(sliceStartId, sliceEndId).map((entity, index) => {
+                    {intents.slice(sliceStartId, sliceEndId).map((intent, index) => {
                         // the real index
                         index += sliceStartId
                         return (
                             <Table.Row key={index}>
                                 <Table.Cell>
-                                    <Header style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{entity.value}</Header>
                                     <ConfirmRemove confirmAction={() => {
-                                        // remove this entity
-                                        entities.splice(index, 1)
+                                        // remove this intent
+                                        intents.splice(index, 1)
                                         // then update my redux store
-                                        updateEntities(entities)
+                                        updateIntents(intents)
                                     }} />
-                                    {entity.synonyms.map((synonym, index) => {
-                                        return (
-                                            <Label key={index}>
-                                                {synonym}
-                                            </Label>
-                                        )
-                                    })}
+                                    <span style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{intent.intent}</span>
                                 </Table.Cell>
                             </Table.Row>
                         )
@@ -63,9 +57,9 @@ class DisplayEntitiesTable extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell>
-                            <FooterForm placeholder='Create New Entity' formSubmit={(formvalue) => {
-                                entities.push(new Entity(formvalue, []))
-                                updateEntities(entities)
+                            <FooterForm placeholder='Create New Intent' formSubmit={(formvalue) => {
+                                intents.push(new Intent(formvalue, [], []))
+                                updateIntents(intents)
                             }} />
                             {displayPagination}
                         </Table.HeaderCell>
@@ -75,6 +69,7 @@ class DisplayEntitiesTable extends Component {
             </Table>
         )
     }
+
 }
 
-export default DisplayEntitiesTable
+export default DisplayIntentsTable
