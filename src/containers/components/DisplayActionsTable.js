@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Action from './../../classes/Action'
 import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
+import TextResponse from './../../classes/TextResponse'
 import { Table, Pagination } from 'semantic-ui-react'
 
 class DisplayActionsTable extends Component {
@@ -58,7 +59,7 @@ class DisplayActionsTable extends Component {
                     <Table.Row>
                         <Table.HeaderCell>
                             <FooterForm placeholder='Create New Action' formSubmit={(formvalue) => {
-                                actions.push(new Action(formvalue, []))
+                                actions.push(new Action(formvalue, [[new TextResponse(formvalue)]]))
                                 updateActions(actions)
                             }} />
                             {displayPagination}
