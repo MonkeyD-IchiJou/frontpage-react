@@ -1,62 +1,34 @@
 import React, { Component } from 'react'
-import { Table, Icon, Button } from 'semantic-ui-react'
+import { Route } from 'react-router-dom'
+import DisplayStoriesTable from './DisplayStoriesTable'
+import MasterEditStories from './MasterEditStories'
 
 class Stories extends Component {
 
-    constructor(props) {
-        super(props)
-
-        // init my state at the very begining
-        this.state = {
-            stories: this.props.cbStories
-        }
-    }
-
     render() {
+        const { cbStories, updateStories, cbIntents, cbActions } = this.props
 
-        let displayStories = this.state.stories.map((story, index) => {
-            return (
-                <Table.Row key={index}>
+        const allActionNames = cbActions.map((action)=>{
+            return { text: action.name, value: action.name }
+        })
 
-                    <Table.Cell>
-                        {story.name}
-                    </Table.Cell>
-
-                    <Table.Cell>
-                        <Button icon basic floated='right' size='small'>
-                            <Icon name='write' />
-                        </Button>
-                    </Table.Cell>
-
-                </Table.Row>
-            )
+        const allIntentNames = cbIntents.map((intent)=>{
+            return { text: intent.intent, value: intent.intent }
         })
 
         return (
-            <Table selectable>
-
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Stories</Table.HeaderCell>
-                        <Table.HeaderCell></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                    {displayStories}
-                </Table.Body>
-
-                <Table.Footer fullWidth>
-                    <Table.Row>
-                        <Table.HeaderCell colSpan='4'>
-                            <Button floated='right' icon labelPosition='left' primary size='small'>
-                                <Icon name='plus' /> Add Story
-                            </Button>
-                        </Table.HeaderCell>
-                    </Table.Row>
-                </Table.Footer>
-
-            </Table>
+            <div>
+                <Route
+                    exact
+                    path={`${this.props.match.url}/`}
+                    render={props => <DisplayStoriesTable {...props} cbStories={cbStories} updateStories={updateStories} />}
+                />
+                <Route
+                    exact
+                    path={`${this.props.match.url}/:topicId`}
+                    render={props => <MasterEditStories {...props} cbStories={cbStories} updateStories={updateStories} allActionNames={allActionNames} allIntentNames={allIntentNames}/>}
+                />
+            </div>
         )
     }
 

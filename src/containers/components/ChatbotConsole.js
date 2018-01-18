@@ -20,7 +20,7 @@ class ChatbotConsole extends Component {
 
     render() {
         const { menuItems } = this.state
-        const { chatbotInfo, history } = this.props
+        const { chatbotInfo, history, updateEntities, updateIntents, updateActions, updateStories, match } = this.props
         let gs = history.location.pathname.split("/")
         let pathname = gs[4] // hardcoded magic number here.. whatever
 
@@ -44,31 +44,32 @@ class ChatbotConsole extends Component {
                 }}>
                     <Route
                         exact
-                        path={`${this.props.match.url}/`}
+                        path={`${match.url}/`}
                         render={props => <SettingChatbot {...props} />}
                     />
 
                     <Route
                         exact
-                        path={`${this.props.match.url}/${menuItems[0]}`}
+                        path={`${match.url}/${menuItems[0]}`}
                         render={props => <SettingChatbot {...props} />}
                     />
 
                     <Route
-                        path={`${this.props.match.url}/${menuItems[1]}`}
+                        path={`${match.url}/${menuItems[1]}`}
                         render={
                             props => <TrainingChatbot
                                 {...props}
                                 chatbotInfo={chatbotInfo}
-                                updateEntities={this.props.updateEntities}
-                                updateIntents={this.props.updateIntents}
-                                updateActions={this.props.updateActions}
+                                updateEntities={updateEntities}
+                                updateIntents={updateIntents}
+                                updateActions={updateActions}
+                                updateStories={updateStories}
                             />
                         }
                     />
 
                     <Route
-                        path={`${this.props.match.url}/${menuItems[2]}`}
+                        path={`${match.url}/${menuItems[2]}`}
                         render={props => <MonitorChatbot {...props} clientsOnlineList={chatbotInfo.clientsList}/>}
                     />
 

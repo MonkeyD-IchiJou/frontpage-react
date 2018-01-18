@@ -6,7 +6,8 @@ import { Grid, Segment } from 'semantic-ui-react'
 import {
     chatbotEntitiesUpdate_act,
     chatbotIntentsUpdate_act,
-    chatbotActionsUpdate_act
+    chatbotActionsUpdate_act,
+    chatbotStoriesUpdate_act
 } from './actions/chatbotsActions'
 
 class DisplayChatbotPage extends Component {
@@ -24,6 +25,11 @@ class DisplayChatbotPage extends Component {
     updateActions = (actions) => {
         // this is the chatbot that want to update the actions
         this.props.updateActions(this.props.match.params.topicId, actions)
+    }
+
+    updateStories = (stories) => {
+        // this is the chatbot that want to update the actions
+        this.props.updateStories(this.props.match.params.topicId, stories)
     }
 
     render() {
@@ -47,6 +53,7 @@ class DisplayChatbotPage extends Component {
                             updateEntities={this.updateEntities}
                             updateIntents={this.updateIntents}
                             updateActions={this.updateActions}
+                            updateStories={this.updateStories}
                         />
                     </Grid.Column>
 
@@ -87,6 +94,11 @@ class Chatbot extends Component {
         this.props.dispatch(chatbotActionsUpdate_act(cbindex, actions))
     }
 
+    updateStories = (cbindex, stories) => {
+        // there is a chatbot want to update its stories
+        this.props.dispatch(chatbotStoriesUpdate_act(cbindex, stories))
+    }
+
     render() {
         return (
             <div>
@@ -99,6 +111,7 @@ class Chatbot extends Component {
                             updateEntities={this.updateEntities}
                             updateIntents={this.updateIntents}
                             updateActions={this.updateActions}
+                            updateStories={this.updateStories}
                         />
                     }
                 />

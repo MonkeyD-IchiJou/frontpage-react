@@ -21,8 +21,8 @@ class TrainingChatbot extends Component {
 
     render() {
         const { menuItems } = this.state
-        const { chatbotInfo } = this.props
-        let gs = this.props.history.location.pathname.split("/")
+        const { chatbotInfo, updateStories, updateIntents, updateEntities, updateActions, match, history } = this.props
+        let gs = history.location.pathname.split("/")
         let pathname = gs[5] // hardcoded magic number here.. whatever
 
         if (!pathname) {
@@ -41,29 +41,29 @@ class TrainingChatbot extends Component {
 
                 <Route
                     exact
-                    path={`${this.props.match.url}/`}
-                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={this.props.updateEntities} />}
+                    path={`${match.url}/`}
+                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={updateEntities} />}
                 />
 
                 <Route
                     exact
-                    path={`${this.props.match.url}/${menuItems[0]}`}
-                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={this.props.updateEntities} />}
+                    path={`${match.url}/${menuItems[0]}`}
+                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={updateEntities} />}
                 />
 
                 <Route
-                    path={`${this.props.match.url}/${menuItems[1]}`}
-                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} cbEntities={chatbotInfo.entities} updateIntents={this.props.updateIntents} />}
+                    path={`${match.url}/${menuItems[1]}`}
+                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} cbEntities={chatbotInfo.entities} updateIntents={updateIntents} />}
                 />
 
                 <Route
-                    path={`${this.props.match.url}/${menuItems[2]}`}
-                    render={props => <Actions {...props} cbActions={chatbotInfo.actions} updateActions={this.props.updateActions}/>}
+                    path={`${match.url}/${menuItems[2]}`}
+                    render={props => <Actions {...props} cbActions={chatbotInfo.actions} updateActions={updateActions}/>}
                 />
 
                 <Route
-                    path={`${this.props.match.url}/${menuItems[3]}`}
-                    render={props => <Stories {...props} cbStories={chatbotInfo.stories} cbIntents={chatbotInfo.intents} cbActions={chatbotInfo.actions} />}
+                    path={`${match.url}/${menuItems[3]}`}
+                    render={props => <Stories {...props} cbStories={chatbotInfo.stories} cbIntents={chatbotInfo.intents} cbActions={chatbotInfo.actions} updateStories={updateStories}/>}
                 />
 
             </div>
