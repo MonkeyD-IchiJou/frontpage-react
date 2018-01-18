@@ -41,6 +41,13 @@ const chatbotsReducer = (
             state[action.payload.cbindex].actions = action.payload.actions
             break
 
+        case "USR_UPDATE_CHATBOT_STORIES":
+            state = [
+                ...state
+            ]
+            state[action.payload.cbindex].stories = action.payload.stories
+            break
+
         default:
             break
     }
