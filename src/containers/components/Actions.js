@@ -1,73 +1,27 @@
 import React, { Component } from 'react'
-import Action from './../../classes/Action'
-import EditAction from './EditAction'
-import FooterForm from './FooterForm'
-import { Table, Pagination } from 'semantic-ui-react'
+import { Route } from 'react-router-dom'
+import MasterEditAction from './MasterEditAction'
+import DisplayActionsTable from './DisplayActionsTable'
 
 class Actions extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            activePage: 1
-        }
-    }
-
-    handlePaginationChange = (e, { activePage }) => this.setState({ activePage })
-
     render() {
 
-        // deep clone the actions
-        let actions = JSON.parse(JSON.stringify(this.props.cbActions))
-        let updateActions = this.props.updateActions
-        const { activePage } = this.state
-
-        // first see how many pages
-        let totalpages = Math.ceil(actions.length / 10.0)
-        let displayPagination = ''
-        if (totalpages > 1) {
-            displayPagination = (<Pagination activePage={activePage} onPageChange={this.handlePaginationChange} totalPages={totalpages} />)
-        }
-
-        const sliceStartId = (activePage - 1) * 10
-        const sliceEndId = activePage * 10
+        const { cbActions, updateActions } = this.props
 
         return (
-            <Table selectable>
-
-                <Table.Body>
-                    {actions.slice(sliceStartId, sliceEndId).map((action, index) => {
-                        // the real index
-                        index += sliceStartId
-                        return (
-                            <Table.Row key={index}>
-                                <Table.Cell>
-                                    <EditAction action={action} removeActions={() => {
-                                        actions.splice(index, 1)
-                                        updateActions(actions)
-                                    }} updateActions={(newAction) => {
-                                        actions[index] = newAction
-                                        updateActions(actions)
-                                    }} />
-                                </Table.Cell >
-                            </Table.Row>
-                        )
-                    })}
-                </Table.Body>
-
-                <Table.Footer fullWidth>
-                    <Table.Row>
-                        <Table.HeaderCell>
-                            <FooterForm placeholder='Create New Action' formSubmit={(formvalue)=>{
-                                actions.push(new Action(formvalue, []))
-                                updateActions(actions)
-                            }} />
-                            {displayPagination}
-                        </Table.HeaderCell>
-                    </Table.Row>
-                </Table.Footer>
-
-            </Table>
+            <div>
+                <Route
+                    exact
+                    path={`${this.props.match.url}/`}
+                    render={props => <DisplayActionsTable {...props} cbActions={cbActions} updateActions={updateActions}/>}
+                />
+                <Route
+                    exact
+                    path={`${this.props.match.url}/:topicId`}
+                    render={props => <MasterEditAction {...props} cbActions={cbActions} updateActions={updateActions}/>}
+                />
+            </div>
         )
     }
 
