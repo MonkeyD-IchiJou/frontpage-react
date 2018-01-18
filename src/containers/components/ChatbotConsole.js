@@ -39,7 +39,8 @@ class ChatbotConsole extends Component {
 
                 <Segment attached='bottom' style={{
                     minHeight: '650px',
-                    maxHeight: '1050px'
+                    maxHeight: '1050px',
+                    overflow: 'auto'
                 }}>
                     <Route
                         exact
