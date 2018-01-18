@@ -6,12 +6,14 @@
 
 import request from 'superagent'
 import SocketConnect from './../socketapi'
-import Intent from './../../classes/Intent'
-import Entity from './../../classes/Entity'
-import Action from './../../classes/Action'
-import TextResponse from './../../classes/TextResponse'
-import ImageResponse from './../../classes/ImageResponse'
-import QuickReplies from './../../classes/QuickReplies'
+import Intent from './../classes/Intent'
+import Entity from './../classes/Entity'
+import Action from './../classes/Action'
+import TextResponse from './../classes/TextResponse'
+import ImageResponse from './../classes/ImageResponse'
+import QuickReplies from './../classes/QuickReplies'
+import Story from './../classes/Story'
+import Path from './../classes/Path'
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -55,7 +57,7 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
 
                             result.result[i].intents = [
                                 new Intent('restaurant_search', ['cuisine'], ['show me chinese restaurants', 'chinese restaurant']),
-                                new Intent('outlook related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),
+                                new Intent('outlook_related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),
                             ]
 
                             result.result[i].actions = [
@@ -88,24 +90,13 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             ]
 
                             result.result[i].stories = [
-                                {
-                                    name: 'story 1',
-                                    path: [
-                                        {
-                                            intent: 'intent name',
-                                            actions: ['action 1', 'action 2']
-                                        }
-                                    ]
-                                },
-                                {
-                                    name: 'story 2',
-                                    path: [
-                                        {
-                                            intent: 'intent name',
-                                            actions: ['action 1']
-                                        }
-                                    ]
-                                }
+                                new Story('story 1', [
+                                    new Path('restaurant_search', ['restaurant_search_response'])
+                                ]),
+                                new Story('story 2', [
+                                    new Path('restaurant_search', ['restaurant_search_response']),
+                                    new Path('outlook_related', ['outlook_search_response'])
+                                ])
                             ]
                         }
 
@@ -271,6 +262,14 @@ export function chatbotActionsUpdate_act(cbindex, actions) {
     return {
         type: 'USR_UPDATE_CHATBOT_ACTIONS',
         payload: { cbindex: cbindex, actions: actions }
+    }
+}
+
+// chatbot stories update
+export function chatbotStoriesUpdate_act(cbindex, stories) {
+    return {
+        type: 'USR_UPDATE_CHATBOT_STORIES',
+        payload: { cbindex: cbindex, stories: stories }
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Intent from './../../classes/Intent'
+import Intent from './../classes/Intent'
 import EditIntent from './EditIntent'
 import FooterForm from './FooterForm'
 import { Table, Pagination } from 'semantic-ui-react'

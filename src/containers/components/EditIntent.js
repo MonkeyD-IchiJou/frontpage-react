@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Intent from './../../classes/Intent'
+import Intent from './../classes/Intent'
 import ModalActions from './ModalActions'
 import ConfirmRemove from './ConfirmRemove'
 import { Icon, Button, Modal, Input, Header, Table, Accordion, Form, Dropdown } from 'semantic-ui-react'

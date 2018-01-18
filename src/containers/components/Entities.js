@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import EditEntity from './EditEntity'
-import Entity from './../../classes/Entity'
+import Entity from './../classes/Entity'
 import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
 import { Table, Label, Pagination } from 'semantic-ui-react'

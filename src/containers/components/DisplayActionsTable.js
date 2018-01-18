@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Action from './../../classes/Action'
+import Action from './../classes/Action'
 import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
-import TextResponse from './../../classes/TextResponse'
+import TextResponse from './../classes/TextResponse'
 import { Table, Pagination } from 'semantic-ui-react'
 
 class DisplayActionsTable extends Component {

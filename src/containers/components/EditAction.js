@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ProgressSave from './ProgressSave'
 import EditSingleAction from './EditSingleAction'
-import TextResponse from './../../classes/TextResponse'
+import TextResponse from './../classes/TextResponse'
 import { Button, Icon, Header, Input, Divider } from 'semantic-ui-react'
 
 class EditAction extends Component {

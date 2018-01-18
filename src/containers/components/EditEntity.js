@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Entity from './../../classes/Entity'
+import Entity from './../classes/Entity'
 import ModalActions from './ModalActions'
 import { Icon, Button, Modal, Input, Header, Grid, Table, Form } from 'semantic-ui-react'
 
