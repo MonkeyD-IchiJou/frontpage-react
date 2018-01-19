@@ -110,6 +110,43 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
     })
 }
 
+// post my datas back to mongodb
+var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
+    return new Promise((resolve, reject) => {
+        request
+            .post(backendurl + '/chatbot/v1/CBDatas')
+            .set('contentType', 'application/json; charset=utf-8')
+            .set('dataType', 'json')
+            .send({
+                token: jwt,
+                uuid: cbuuid,
+                cbdatas: cbdatas
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        let result = res.body
+
+                        if (!result || !result.success) {
+                            throw new Error('no body msg')
+                        }
+
+                        console.log(result)
+                        resolve(result)
+                    }
+                } catch (e) {
+                    reject(e.toString())
+                }
+
+            })
+    })
+} 
+
 // get chatbot domain info
 var GetChatbotDomain = (backendurl, cbuuid, jwt) => {
     return new Promise((resolve, reject) => {
@@ -270,6 +307,14 @@ export function chatbotStoriesUpdate_act(cbindex, stories) {
     return {
         type: 'USR_UPDATE_CHATBOT_STORIES',
         payload: { cbindex: cbindex, stories: stories }
+    }
+}
+
+// load cbdatas back to my server
+export function SaveChatbotDatas_act(backendurl, cbuuid, cbdatas, jwt) {
+    return {
+        type: 'SAVE_CB_DATAS',
+        payload: SaveChatbotData(backendurl, cbuuid, cbdatas, jwt)
     }
 }
 
