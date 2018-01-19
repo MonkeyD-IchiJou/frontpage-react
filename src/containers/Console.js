@@ -32,7 +32,7 @@ class Console extends Component {
         const jwt = userReducer.jwt
         this.props.dispatch(reqChatbotsInfos_act(backendUrl, jwt)).then((result) => {
             this.connectChatbots(backendUrl)
-            //this.updateChatbotMLData(backendUrl, jwt)
+            this.updateChatbotMLData(backendUrl, jwt)
         }).catch((e) => {
             console.log(e)
         })

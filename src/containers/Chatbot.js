@@ -10,8 +10,17 @@ import {
     chatbotStoriesUpdate_act,
     SaveChatbotDatas_act
 } from './actions/chatbotsActions'
+import FooterForm from './components/FooterForm'
+import request from 'superagent'
 
 class DisplayChatbotPage extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            displayTmpRes: {}
+        }
+    }
 
     updateEntities = (entities) => {
         // this is the chatbot that want to update the entities
@@ -31,59 +40,6 @@ class DisplayChatbotPage extends Component {
     updateStories = (stories) => {
         // this is the chatbot that want to update the actions
         this.props.updateStories(this.props.match.params.topicId, stories)
-    }
-
-    convertToNluDataFormat = (intents, entities) => {
-
-        let rasa_nlu_data = {
-            common_examples: [],
-            entity_synonyms: [],
-            regex_features: []
-        }
-
-        // preparing entity_synonyms
-        rasa_nlu_data.entity_synonyms = entities.map((entity, index) => {
-            return {
-                value: entity.value,
-                synonyms: [...entity.synonyms]
-            }
-        })
-
-        // preparing common_examples
-        intents.forEach((intent) => {
-            let intentName = intent.intent
-            let entitiesToSearch = [...intent.entities]
-
-            rasa_nlu_data.common_examples.push(...intent.texts.map((text)=>{
-
-                let entitiesIn = []
-
-                // find out all the synonyms first
-                entitiesToSearch.forEach((entityToSearch, eindex)=>{
-                    for(let i = 0; i < entities.length; ++i) {
-                        if(entityToSearch === entities[i].value) {
-                            const sns = entities[i].synonyms
-                            sns.forEach((sn)=>{
-                                let start = text.indexOf(sn)
-                                if(start >= 0) {
-                                    let end = start + sn.length
-                                    entitiesIn.push({ start: start, end: end, value: sn, entity: entityToSearch} )
-                                }
-                            })
-                        }
-                    }
-                })
-
-                return {
-                    text: text,
-                    intent: intentName,
-                    entities: entitiesIn
-                }
-            }))
-
-        })
-
-        console.log(rasa_nlu_data)
     }
 
     SaveChatbotDatas = (chosenChatbot) => {
@@ -118,11 +74,19 @@ class DisplayChatbotPage extends Component {
                             updateActions={this.updateActions}
                             updateStories={this.updateStories}
                         />
-                        <Button onClick={() => { this.SaveChatbotDatas(chosenChatbot); this.convertToNluDataFormat(chosenChatbot.intents, chosenChatbot.entities) }} />
+                        <Button onClick={() => { this.SaveChatbotDatas(chosenChatbot) }} />
                     </Grid.Column>
 
                     <Grid.Column width={5}>
                         <Segment>Chatbot Testing</Segment>
+                        <FooterForm placeholder='Check cb' formSubmit={(formvalue) => {
+                            this.props.checkNLU(chosenChatbot, formvalue, (displayTmpRes) => {
+                                this.setState({ displayTmpRes: displayTmpRes })
+                            })
+                        }} />
+                        <div>{JSON.stringify(this.state.displayTmpRes.intent)}</div>
+                        <div>{JSON.stringify(this.state.displayTmpRes.intent_ranking)}</div>
+                        <div>{JSON.stringify(this.state.displayTmpRes.entities)}</div>
                     </Grid.Column>
 
                 </Grid>
@@ -168,6 +132,40 @@ class Chatbot extends Component {
         this.props.dispatch(SaveChatbotDatas_act(backendUrl, cbuuid, cbdatas, jwt))
     }
 
+    checkNLU = (chosenChatbot, textmsg, cb) => {
+        const { jwt, backendUrl } = this.props
+        request
+            .post(backendUrl + '/chatbot/v1/nlucheck')
+            .set('contentType', 'application/json; charset=utf-8')
+            .set('dataType', 'json')
+            .send({
+                token: jwt,
+                uuid: chosenChatbot.uuid,
+                text_message: textmsg
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        let result = res.body
+
+                        if (!result) {
+                            throw new Error('no body msg')
+                        }
+
+                        cb(result.allres)
+                    }
+                } catch (e) {
+                    console.log(e.toString())
+                }
+
+            })
+    }
+
     render() {
         return (
             <div>
@@ -182,6 +180,7 @@ class Chatbot extends Component {
                             updateActions={this.updateActions}
                             updateStories={this.updateStories}
                             SaveChatbotDatas={this.SaveChatbotDatas}
+                            checkNLU={this.checkNLU}
                         />
                     }
                 />
