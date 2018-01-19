@@ -61,6 +61,20 @@ const chatbotsReducer = (
             state[action.payload.cbindex].stories = action.payload.stories
             break
 
+        case "SAVE_CB_DATAS_FULFILLED":
+            state = [
+                ...state
+            ]
+            state[action.payload.cbindex].isTraining = false
+            break
+
+        case "SET_CHATBOT_TRAINING_STATUS":
+            state = [
+                ...state
+            ]
+            state[action.payload.cbindex].isTraining = action.payload.isTraining
+            break
+
         default:
             break
     }

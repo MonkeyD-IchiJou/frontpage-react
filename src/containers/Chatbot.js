@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import ChatbotConsole from './components/ChatbotConsole'
-import { Grid, Segment, Button } from 'semantic-ui-react'
+import { Grid, Segment, Button, Header, Icon } from 'semantic-ui-react'
 import {
     chatbotEntitiesUpdate_act,
     chatbotIntentsUpdate_act,
     chatbotActionsUpdate_act,
     chatbotStoriesUpdate_act,
-    SaveChatbotDatas_act
+    SaveChatbotDatas_act,
+    setChatbotTrainingStatus_act
 } from './actions/chatbotsActions'
 import FooterForm from './components/FooterForm'
 import request from 'superagent'
@@ -18,7 +19,7 @@ class DisplayChatbotPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            displayTmpRes: {}
+            displayTmpJson: {}
         }
     }
 
@@ -38,17 +39,22 @@ class DisplayChatbotPage extends Component {
     }
 
     updateStories = (stories) => {
-        // this is the chatbot that want to update the actions
+        // this is the chatbot that want to update the stories
         this.props.updateStories(this.props.match.params.topicId, stories)
     }
 
-    SaveChatbotDatas = (chosenChatbot) => {
-        this.props.SaveChatbotDatas(chosenChatbot.uuid, {
-            entities: chosenChatbot.entities,
-            intents: chosenChatbot.intents,
-            actions: chosenChatbot.actions,
-            stories: chosenChatbot.stories
-        })
+    // save chatbot datas and Train
+    SaveChatbotDatas = (chosenChatbot, cbid) => {
+        this.props.SaveChatbotDatas(
+            chosenChatbot.uuid, 
+            {
+                entities: chosenChatbot.entities,
+                intents: chosenChatbot.intents,
+                actions: chosenChatbot.actions,
+                stories: chosenChatbot.stories
+            }, 
+            cbid
+        )
     }
 
     render() {
@@ -74,19 +80,28 @@ class DisplayChatbotPage extends Component {
                             updateActions={this.updateActions}
                             updateStories={this.updateStories}
                         />
-                        <Button onClick={() => { this.SaveChatbotDatas(chosenChatbot) }} />
                     </Grid.Column>
 
                     <Grid.Column width={5}>
+
+                        <Button primary circular disabled={chosenChatbot.isTraining} loading={chosenChatbot.isTraining} onClick={() => { this.SaveChatbotDatas(chosenChatbot, chatbotIndex) }} >
+                            <Icon name='configure' />Start Training
+                        </Button>
+
                         <Segment>Chatbot Testing</Segment>
                         <FooterForm placeholder='Check cb' formSubmit={(formvalue) => {
-                            this.props.checkNLU(chosenChatbot, formvalue, (displayTmpRes) => {
-                                this.setState({ displayTmpRes: displayTmpRes })
+                            this.props.checkNLU(chosenChatbot.uuid, formvalue, (displayTmpJson) => {
+                                this.setState({ displayTmpJson: displayTmpJson })
                             })
                         }} />
-                        <div>{JSON.stringify(this.state.displayTmpRes.intent)}</div>
-                        <div>{JSON.stringify(this.state.displayTmpRes.intent_ranking)}</div>
-                        <div>{JSON.stringify(this.state.displayTmpRes.entities)}</div>
+                        <Header>Predicted User Intention: </Header>
+                        <div>{JSON.stringify(this.state.displayTmpJson.intent)}</div>
+
+                        <Header>Intents Ranking: </Header>
+                        <div>{JSON.stringify(this.state.displayTmpJson.intent_ranking)}</div>
+
+                        <Header>Entities Found: </Header>
+                        <div>{JSON.stringify(this.state.displayTmpJson.entities)}</div>
                     </Grid.Column>
 
                 </Grid>
@@ -127,12 +142,15 @@ class Chatbot extends Component {
         this.props.dispatch(chatbotStoriesUpdate_act(cbindex, stories))
     }
 
-    SaveChatbotDatas = (cbuuid, cbdatas) => {
+    // save the chatbot datas, need give uuid for knowing which cb is it
+    SaveChatbotDatas = (cbuuid, cbdatas, cbid) => {
         const { jwt, backendUrl } = this.props
-        this.props.dispatch(SaveChatbotDatas_act(backendUrl, cbuuid, cbdatas, jwt))
+        this.props.dispatch(setChatbotTrainingStatus_act(cbid, true))
+        this.props.dispatch(SaveChatbotDatas_act(backendUrl, cbuuid, cbdatas, jwt, cbid))
     }
 
-    checkNLU = (chosenChatbot, textmsg, cb) => {
+    // simple testing with my nlu engine, uuid for knowing which cb to communicate to
+    checkNLU = (cbuuid, textmsg, callback) => {
         const { jwt, backendUrl } = this.props
         request
             .post(backendUrl + '/chatbot/v1/nlucheck')
@@ -140,7 +158,7 @@ class Chatbot extends Component {
             .set('dataType', 'json')
             .send({
                 token: jwt,
-                uuid: chosenChatbot.uuid,
+                uuid: cbuuid,
                 text_message: textmsg
             })
             .end((err, res) => {
@@ -157,7 +175,7 @@ class Chatbot extends Component {
                             throw new Error('no body msg')
                         }
 
-                        cb(result.allres)
+                        callback(result.allres)
                     }
                 } catch (e) {
                     console.log(e.toString())

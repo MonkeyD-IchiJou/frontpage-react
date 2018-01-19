@@ -6,14 +6,14 @@
 
 import request from 'superagent'
 import SocketConnect from './../socketapi'
-import Intent from './../classes/Intent'
+/*import Intent from './../classes/Intent'
 import Entity from './../classes/Entity'
 import Action from './../classes/Action'
 import TextResponse from './../classes/TextResponse'
 import ImageResponse from './../classes/ImageResponse'
 import QuickReplies from './../classes/QuickReplies'
 import Story from './../classes/Story'
-import Path from './../classes/Path'
+import Path from './../classes/Path'*/
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -46,11 +46,16 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             // setup the chatbot socket
                             result.result[i].chatbotSocket = new SocketConnect(result.result[i].uuid)
 
-                            // first init the client list
+                            // first init the variables
                             result.result[i].clientsList = []
+                            result.result[i].entities = []
+                            result.result[i].intents = []
+                            result.result[i].actions = []
+                            result.result[i].stories = []
+                            result.result[i].isTraining = false
 
                             // tmp delete later
-                            result.result[i].entities = [
+                            /*result.result[i].entities = [
                                 new Entity('cuisine', ['Chinese', 'chinese']),
                                 new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
                             ]
@@ -97,7 +102,7 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                                     new Path('restaurant_search', ['restaurant_search_response']),
                                     new Path('outlook_related', ['outlook_search_response'])
                                 ])
-                            ]
+                            ]*/
                         }
 
                         resolve(result.result)
@@ -111,7 +116,7 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
 }
 
 // post my datas back to mongodb
-var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
+var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt, cbid) => {
     return new Promise((resolve, reject) => {
         request
             .post(backendurl + '/chatbot/v1/CBDatas')
@@ -136,40 +141,7 @@ var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
                             throw new Error('no body msg')
                         }
 
-                        resolve(result)
-                    }
-                } catch (e) {
-                    reject(e.toString())
-                }
-
-            })
-    })
-} 
-
-// get chatbot domain info
-/*var GetChatbotDomain = (backendurl, cbuuid, jwt) => {
-    return new Promise((resolve, reject) => {
-        request
-            .get(backendurl + '/chatbot/v1/domain')
-            .query({
-                token: jwt,
-                uuid: cbuuid
-            })
-            .end((err, res) => {
-
-                try {
-                    if (err || !res.ok) {
-                        let errormsg = res.body.errors
-                        throw errormsg
-                    }
-                    else {
-                        let result = res.body
-
-                        if (!result || !result.success) {
-                            throw new Error('no body msg')
-                        }
-
-                        resolve(result.result.domain)
+                        resolve({cbindex: cbid})
                     }
                 } catch (e) {
                     reject(e.toString())
@@ -179,82 +151,10 @@ var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
     })
 }
 
-// get chatbot nlu data
-var GetChatbotNLUData = (backendurl, cbuuid, jwt) => {
-    return new Promise((resolve, reject) => {
-        request
-            .get(backendurl + '/chatbot/v1/NLUData')
-            .query({
-                token: jwt,
-                uuid: cbuuid
-            })
-            .end((err, res) => {
-
-                try {
-                    if (err || !res.ok) {
-                        let errormsg = res.body.errors
-                        throw errormsg
-                    }
-                    else {
-                        let result = res.body
-
-                        if (!result || !result.success) {
-                            throw new Error('no body msg')
-                        }
-
-                        resolve(result.result.rasa_nlu_data)
-                    }
-                } catch (e) {
-                    reject(e.toString())
-                }
-
-            })
-    })
-}
-
-// get chatbot stories data
-var GetChatbotStories = (backendurl, cbuuid, jwt) => {
-    return new Promise((resolve, reject) => {
-        request
-            .get(backendurl + '/chatbot/v1/stories')
-            .query({
-                token: jwt,
-                uuid: cbuuid
-            })
-            .end((err, res) => {
-
-                try {
-                    if (err || !res.ok) {
-                        let errormsg = res.body.errors
-                        throw errormsg
-                    }
-                    else {
-                        let result = res.body
-
-                        if (!result || !result.success) {
-                            throw new Error('no body msg')
-                        }
-
-                        resolve(result.result.stories)
-                    }
-                } catch (e) {
-                    reject(e.toString())
-                }
-
-            })
-    })
-}*/
-
-// get query domain, nlu data, stories all at the same time
+// get chatbot datas
 var GetChatbotMLData = (backendurl, cbuuid, jwt, cbid) => {
     return new Promise(async (resolve, reject) => {
         try {
-            /*let mldata = await Promise.all([
-                GetChatbotDomain(backendurl, cbuuid, jwt),
-                GetChatbotNLUData(backendurl, cbuuid, jwt),
-                GetChatbotStories(backendurl, cbuuid, jwt)
-            ])*/
-
             request
                 .get(backendurl + '/chatbot/v1/CBDatas')
                 .query({
@@ -262,7 +162,6 @@ var GetChatbotMLData = (backendurl, cbuuid, jwt, cbid) => {
                     uuid: cbuuid
                 })
                 .end((err, res) => {
-
                     try {
                         if (err || !res.ok) {
                             let errormsg = res.body.errors
@@ -280,16 +179,14 @@ var GetChatbotMLData = (backendurl, cbuuid, jwt, cbid) => {
                     } catch (e) {
                         reject(e.toString())
                     }
-
                 })
-
         } catch(e) {
             reject(e.toString())
         }
     })
 }
 
-// request login action
+// request chatbot info action
 export function reqChatbotsInfos_act(backendurl, jwt) {
     return {
         type: 'USR_REQ_CHATBOTS',
@@ -302,6 +199,22 @@ export function chatbotClientsListUpdate_act(cbindex, clientsList) {
     return {
         type: 'CHATBOT_UPDATE_CLIENTS',
         payload: { cbindex: cbindex, clientsList: clientsList }
+    }
+}
+
+// load cbdatas back to my server
+export function SaveChatbotDatas_act(backendurl, cbuuid, cbdatas, jwt, cbid) {
+    return {
+        type: 'SAVE_CB_DATAS',
+        payload: SaveChatbotData(backendurl, cbuuid, cbdatas, jwt, cbid)
+    }
+}
+
+// request to get domain, nlu data, stories of this chatbot
+export function reqChatbotMLData_act(backendurl, cbuuid, jwt, cbid) {
+    return {
+        type: 'USR_REQ_CHATBOT_ML_DATA',
+        payload: GetChatbotMLData(backendurl, cbuuid, jwt, cbid)
     }
 }
 
@@ -337,18 +250,10 @@ export function chatbotStoriesUpdate_act(cbindex, stories) {
     }
 }
 
-// load cbdatas back to my server
-export function SaveChatbotDatas_act(backendurl, cbuuid, cbdatas, jwt) {
+// chatbot is traing status update
+export function setChatbotTrainingStatus_act(cbindex, isTraining) {
     return {
-        type: 'SAVE_CB_DATAS',
-        payload: SaveChatbotData(backendurl, cbuuid, cbdatas, jwt)
-    }
-}
-
-// request to get domain, nlu data, stories of this chatbot
-export function reqChatbotMLData_act(backendurl, cbuuid, jwt, cbid) {
-    return {
-        type: 'USR_REQ_CHATBOT_ML_DATA',
-        payload: GetChatbotMLData(backendurl, cbuuid, jwt, cbid)
+        type: 'SET_CHATBOT_TRAINING_STATUS',
+        payload: { cbindex: cbindex, isTraining: isTraining }
     }
 }
