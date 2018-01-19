@@ -194,8 +194,11 @@ class Console extends Component {
             history,
             userReducer,
             chatbotsReducer,
-            livechatReducer
+            livechatReducer,
+            backendUrl
         } = this.props
+
+        const jwt = userReducer.jwt
 
         return (
             <Container>
@@ -221,6 +224,8 @@ class Console extends Component {
                     render={
                         props => <Chatbot
                             {...props}
+                            jwt={jwt}
+                            backendUrl={backendUrl}
                             changeTitle={this.changeTitle}
                         />
                     }

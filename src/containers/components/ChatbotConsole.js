@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import TrainingChatbot from './TrainingChatbot'
 import MonitorChatbot from './MonitorChatbot'
 import SettingChatbot from './SettingChatbot'
@@ -45,7 +45,11 @@ class ChatbotConsole extends Component {
                     <Route
                         exact
                         path={`${match.url}/`}
-                        render={props => <SettingChatbot {...props} />}
+                        render={props => {
+                            return (
+                                <Redirect to={`${match.url}/${menuItems[0]}`} />
+                            )
+                        }}
                     />
 
                     <Route

@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import ChatbotConsole from './components/ChatbotConsole'
-import { Grid, Segment } from 'semantic-ui-react'
+import { Grid, Segment, Button } from 'semantic-ui-react'
 import {
     chatbotEntitiesUpdate_act,
     chatbotIntentsUpdate_act,
     chatbotActionsUpdate_act,
-    chatbotStoriesUpdate_act
+    chatbotStoriesUpdate_act,
+    SaveChatbotDatas_act
 } from './actions/chatbotsActions'
 
 class DisplayChatbotPage extends Component {
@@ -30,6 +31,68 @@ class DisplayChatbotPage extends Component {
     updateStories = (stories) => {
         // this is the chatbot that want to update the actions
         this.props.updateStories(this.props.match.params.topicId, stories)
+    }
+
+    convertToNluDataFormat = (intents, entities) => {
+
+        let rasa_nlu_data = {
+            common_examples: [],
+            entity_synonyms: [],
+            regex_features: []
+        }
+
+        // preparing entity_synonyms
+        rasa_nlu_data.entity_synonyms = entities.map((entity, index) => {
+            return {
+                value: entity.value,
+                synonyms: [...entity.synonyms]
+            }
+        })
+
+        // preparing common_examples
+        intents.forEach((intent) => {
+            let intentName = intent.intent
+            let entitiesToSearch = [...intent.entities]
+
+            rasa_nlu_data.common_examples.push(...intent.texts.map((text)=>{
+
+                let entitiesIn = []
+
+                // find out all the synonyms first
+                entitiesToSearch.forEach((entityToSearch, eindex)=>{
+                    for(let i = 0; i < entities.length; ++i) {
+                        if(entityToSearch === entities[i].value) {
+                            const sns = entities[i].synonyms
+                            sns.forEach((sn)=>{
+                                let start = text.indexOf(sn)
+                                if(start >= 0) {
+                                    let end = start + sn.length
+                                    entitiesIn.push({ start: start, end: end, value: sn, entity: entityToSearch} )
+                                }
+                            })
+                        }
+                    }
+                })
+
+                return {
+                    text: text,
+                    intent: intentName,
+                    entities: entitiesIn
+                }
+            }))
+
+        })
+
+        console.log(rasa_nlu_data)
+    }
+
+    SaveChatbotDatas = (chosenChatbot) => {
+        this.props.SaveChatbotDatas(chosenChatbot.uuid, {
+            entities: chosenChatbot.entities,
+            intents: chosenChatbot.intents,
+            actions: chosenChatbot.actions,
+            stories: chosenChatbot.stories
+        })
     }
 
     render() {
@@ -55,6 +118,7 @@ class DisplayChatbotPage extends Component {
                             updateActions={this.updateActions}
                             updateStories={this.updateStories}
                         />
+                        <Button onClick={() => { this.SaveChatbotDatas(chosenChatbot); this.convertToNluDataFormat(chosenChatbot.intents, chosenChatbot.entities) }} />
                     </Grid.Column>
 
                     <Grid.Column width={5}>
@@ -99,6 +163,11 @@ class Chatbot extends Component {
         this.props.dispatch(chatbotStoriesUpdate_act(cbindex, stories))
     }
 
+    SaveChatbotDatas = (cbuuid, cbdatas) => {
+        const { jwt, backendUrl } = this.props
+        this.props.dispatch(SaveChatbotDatas_act(backendUrl, cbuuid, cbdatas, jwt))
+    }
+
     render() {
         return (
             <div>
@@ -112,6 +181,7 @@ class Chatbot extends Component {
                             updateIntents={this.updateIntents}
                             updateActions={this.updateActions}
                             updateStories={this.updateStories}
+                            SaveChatbotDatas={this.SaveChatbotDatas}
                         />
                     }
                 />
