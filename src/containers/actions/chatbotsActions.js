@@ -136,7 +136,6 @@ var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
                             throw new Error('no body msg')
                         }
 
-                        console.log(result)
                         resolve(result)
                     }
                 } catch (e) {
@@ -148,7 +147,7 @@ var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
 } 
 
 // get chatbot domain info
-var GetChatbotDomain = (backendurl, cbuuid, jwt) => {
+/*var GetChatbotDomain = (backendurl, cbuuid, jwt) => {
     return new Promise((resolve, reject) => {
         request
             .get(backendurl + '/chatbot/v1/domain')
@@ -244,18 +243,46 @@ var GetChatbotStories = (backendurl, cbuuid, jwt) => {
 
             })
     })
-}
+}*/
 
 // get query domain, nlu data, stories all at the same time
 var GetChatbotMLData = (backendurl, cbuuid, jwt, cbid) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let mldata = await Promise.all([
+            /*let mldata = await Promise.all([
                 GetChatbotDomain(backendurl, cbuuid, jwt),
                 GetChatbotNLUData(backendurl, cbuuid, jwt),
                 GetChatbotStories(backendurl, cbuuid, jwt)
-            ])
-            resolve({ domain: mldata[0], nlu_data: mldata[1], stories: mldata[2], cbindex: cbid})
+            ])*/
+
+            request
+                .get(backendurl + '/chatbot/v1/CBDatas')
+                .query({
+                    token: jwt,
+                    uuid: cbuuid
+                })
+                .end((err, res) => {
+
+                    try {
+                        if (err || !res.ok) {
+                            let errormsg = res.body.errors
+                            throw errormsg
+                        }
+                        else {
+                            let result = res.body
+
+                            if (!result || !result.success) {
+                                throw new Error('no body msg')
+                            }
+
+                            resolve({result: result.result, cbindex: cbid})
+                        }
+                    } catch (e) {
+                        reject(e.toString())
+                    }
+
+                })
+
         } catch(e) {
             reject(e.toString())
         }

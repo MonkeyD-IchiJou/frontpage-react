@@ -12,6 +12,19 @@ const chatbotsReducer = (
             state = action.payload
             break
 
+        case "USR_REQ_CHATBOT_ML_DATA_FULFILLED":
+            state = [
+                ...state
+            ]
+            let stato = state[action.payload.cbindex]
+            let rrr = action.payload.result
+            stato.entities = rrr.entities
+            stato.intents = rrr.intents
+            stato.actions = rrr.actions
+            stato.stories = rrr.stories
+
+            break
+
         case "CHATBOT_UPDATE_CLIENTS":
             state = [
                 ...state
