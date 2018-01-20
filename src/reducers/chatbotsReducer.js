@@ -17,11 +17,12 @@ const chatbotsReducer = (
                 ...state
             ]
             let stato = state[action.payload.cbindex]
-            let rrr = action.payload.result
-            stato.entities = rrr.entities
-            stato.intents = rrr.intents
-            stato.actions = rrr.actions
-            stato.stories = rrr.stories
+            let payloadres = action.payload.result
+
+            stato.entities = payloadres.entities
+            stato.intents = payloadres.intents
+            stato.actions = payloadres.actions
+            stato.stories = payloadres.stories
 
             break
 
