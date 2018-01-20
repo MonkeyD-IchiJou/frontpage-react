@@ -6,14 +6,6 @@
 
 import request from 'superagent'
 import SocketConnect from './../classes/SocketConnect'
-/*import Intent from './../classes/Intent'
-import Entity from './../classes/Entity'
-import Action from './../classes/Action'
-import TextResponse from './../classes/TextResponse'
-import ImageResponse from './../classes/ImageResponse'
-import QuickReplies from './../classes/QuickReplies'
-import Story from './../classes/Story'
-import Path from './../classes/Path'*/
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -43,66 +35,19 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                         for(let i = 0; i < result.result.length; ++i) {
                             // init setting for the chatbot object
 
+                            let refres = result.result[i]
+
                             // setup the chatbot socket
-                            result.result[i].chatbotSocket = new SocketConnect(result.result[i].uuid)
+                            refres.chatbotSocket = new SocketConnect(result.result[i].uuid)
 
                             // first init the variables
-                            result.result[i].clientsList = []
-                            result.result[i].entities = []
-                            result.result[i].intents = []
-                            result.result[i].actions = []
-                            result.result[i].stories = []
-                            result.result[i].isTraining = false
+                            refres.clientsList = []
+                            refres.entities = []
+                            refres.intents = []
+                            refres.actions = []
+                            refres.stories = []
+                            refres.isTraining = false
 
-                            // tmp delete later
-                            /*result.result[i].entities = [
-                                new Entity('cuisine', ['Chinese', 'chinese']),
-                                new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
-                            ]
-
-                            result.result[i].intents = [
-                                new Intent('restaurant_search', ['cuisine'], ['show me chinese restaurants', 'chinese restaurant']),
-                                new Intent('outlook_related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),
-                            ]
-
-                            result.result[i].actions = [
-                                new Action('restaurant_search_response', [
-                                    [
-                                        new TextResponse('hey bye'),
-                                        new QuickReplies([
-                                            {
-                                                text: 'button name',
-                                                payload: 'button payload'
-                                            }
-                                        ]),
-                                        new ImageResponse('kek.png')
-                                    ]
-                                ]),
-                                new Action('outlook_search_response', [
-                                    [
-                                        new TextResponse('yo look'),
-                                        new ImageResponse('kek.png')
-                                    ],
-                                    [
-                                        new QuickReplies([
-                                            {
-                                                text: 'button name',
-                                                payload: 'button payload'
-                                            }
-                                        ])
-                                    ]
-                                ])
-                            ]
-
-                            result.result[i].stories = [
-                                new Story('story 1', [
-                                    new Path('restaurant_search', ['restaurant_search_response'])
-                                ]),
-                                new Story('story 2', [
-                                    new Path('restaurant_search', ['restaurant_search_response']),
-                                    new Path('outlook_related', ['outlook_search_response'])
-                                ])
-                            ]*/
                         }
 
                         resolve(result.result)
@@ -257,3 +202,57 @@ export function setChatbotTrainingStatus_act(cbindex, isTraining) {
         payload: { cbindex: cbindex, isTraining: isTraining }
     }
 }
+
+
+
+/**
+ * // tmp delete later
+/*result.result[i].entities = [
+    new Entity('cuisine', ['Chinese', 'chinese']),
+    new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
+]
+
+result.result[i].intents = [
+    new Intent('restaurant_search', ['cuisine'], ['show me chinese restaurants', 'chinese restaurant']),
+    new Intent('outlook_related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),
+]
+
+result.result[i].actions = [
+    new Action('restaurant_search_response', [
+        [
+            new TextResponse('hey bye'),
+            new QuickReplies([
+                {
+                    text: 'button name',
+                    payload: 'button payload'
+                }
+            ]),
+            new ImageResponse('kek.png')
+        ]
+    ]),
+    new Action('outlook_search_response', [
+        [
+            new TextResponse('yo look'),
+            new ImageResponse('kek.png')
+        ],
+        [
+            new QuickReplies([
+                {
+                    text: 'button name',
+                    payload: 'button payload'
+                }
+            ])
+        ]
+    ])
+]
+
+result.result[i].stories = [
+    new Story('story 1', [
+        new Path('restaurant_search', ['restaurant_search_response'])
+    ]),
+    new Story('story 2', [
+        new Path('restaurant_search', ['restaurant_search_response']),
+        new Path('outlook_related', ['outlook_search_response'])
+    ])
+]
+*/

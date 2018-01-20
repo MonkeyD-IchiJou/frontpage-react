@@ -20,7 +20,15 @@ class ChatbotConsole extends Component {
 
     render() {
         const { menuItems } = this.state
-        const { chatbotInfo, history, updateEntities, updateIntents, updateActions, updateStories, match } = this.props
+        const {
+            chatbotInfo,
+            history,
+            updateEntities,
+            updateIntents,
+            updateActions,
+            updateStories,
+            match
+        } = this.props
         let gs = history.location.pathname.split("/")
         let pathname = gs[4] // hardcoded magic number here.. whatever
 
