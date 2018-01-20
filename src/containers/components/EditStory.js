@@ -1,31 +1,51 @@
 import React, { Component } from 'react'
-import ProgressSave from './ProgressSave'
-import { Button, Icon, Header, Input, Divider, Segment, Label, Popup, Dropdown } from 'semantic-ui-react'
 import Path from '../classes/Path'
+import ProgressSave from './ProgressSave'
+import { Prompt } from 'react-router-dom'
+import { Button, Icon, Header, Input, Divider, Segment, Label, Popup, Dropdown } from 'semantic-ui-react'
 
 class EditStory extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
-            storyName: this.props.story.name,
-            paths: JSON.parse(JSON.stringify(this.props.story.paths))
+            storyName: '',
+            paths: [],
+            hasSaved: true
+        }
+
+        if (this.props.story) {
+            this.state = {
+                storyName: this.props.story.name,
+                paths: JSON.parse(JSON.stringify(this.props.story.paths)),
+                hasSaved: true
+            }
         }
     }
 
     componentWillReceiveProps = (nextProps) => {
-        this.setState({
-            storyName: nextProps.story.name,
-            paths: JSON.parse(JSON.stringify(nextProps.story.paths))
-        })
+        if(nextProps.story) {
+            this.setState({
+                storyName: nextProps.story.name,
+                paths: JSON.parse(JSON.stringify(nextProps.story.paths)),
+                hasSaved: true
+            })
+        }
+    }
+
+    editChanges = (states) => {
+        this.setState({ ...states, hasSaved: false })
     }
 
     render() {
-        let { storyName, paths } = this.state
+        let { storyName, paths, hasSaved } = this.state
         const { allAvailableActions, allAvailableIntents } = this.props
 
         return (
             <div style={{ padding: '10px' }}>
+
+                <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
                 <ProgressSave
                     clickDone={() => {
@@ -36,7 +56,7 @@ class EditStory extends Component {
                 <Header>Story Name</Header>
 
                 <Input value={storyName} fluid onChange={(event, data) => {
-                    this.setState({ storyName: data.value })
+                    this.editChanges({ storyName: data.value })
                 }} />
 
                 <Header>Paths</Header>
@@ -50,7 +70,7 @@ class EditStory extends Component {
                                     trigger={
                                         <Icon name='close' color='red' style={{ float: 'right' }} onClick={() => {
                                             paths.splice(index, 1)
-                                            this.setState({ paths: paths })
+                                            this.editChanges({ paths: paths })
                                         }}/>
                                     }
                                     content='Remove Action'
@@ -68,7 +88,7 @@ class EditStory extends Component {
                                 options={allAvailableIntents}
                                 onChange={(e, { value }) => {
                                     paths[index].intent = value
-                                    this.setState({ paths: paths })
+                                    this.editChanges({ paths: paths })
                                 }}
                             />
 
@@ -86,7 +106,7 @@ class EditStory extends Component {
                                         options={allAvailableActions}
                                         onChange={(e, { value }) => {
                                             paths[index].actions[aindex] = value
-                                            this.setState({ paths: paths })
+                                            this.editChanges({ paths: paths })
                                         }}
                                     />
                                 )
@@ -96,7 +116,7 @@ class EditStory extends Component {
 
                             <Button onClick={() => {
                                 paths[index].actions.push('')
-                                this.setState({ paths: paths })
+                                this.editChanges({ paths: paths })
                             }}>
                                 <Icon name='plus' />Add New Action
                             </Button>
@@ -111,7 +131,7 @@ class EditStory extends Component {
 
                 <Button primary onClick={() => {
                     paths.push(new Path('', []))
-                    this.setState({ paths: paths })
+                    this.editChanges({ paths: paths })
                 }}>
                     <Icon name='plus' />Create New Path
                 </Button>
