@@ -7,11 +7,11 @@ class ResponseImage extends Component {
         let action = JSON.parse(JSON.stringify(this.props.action))
         return (
             <div>
+                <Image src={action.image} href={action.image} style={{ paddingBottom: '10px', paddingLeft: '5px' }} />
                 <Input value={action.image} fluid onChange={(event, data) => {
                     action.image = data.value
                     this.props.updateAction(action)
                 }} />
-                <Image src={action.image} href={action.image} style={{paddingTop: '10px', paddingLeft: '5px'}}/>
             </div>
         )
     }

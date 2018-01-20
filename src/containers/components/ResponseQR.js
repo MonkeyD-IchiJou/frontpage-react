@@ -20,19 +20,11 @@ class ResponseQR extends Component {
         return (
             <div>
 
-                <Form onSubmit={() => {
-                    buttons.push({ text: newbutton, payload: newbutton })
-                    this.setState({newbutton: ''})
-                    this.props.updateAction(action)
-                }}>
-                    <Form.Input placeholder='New Button' name='newbutton' value={newbutton} onChange={this.handleChange} />
-                </Form>
-
-                <div style={{ paddingTop: '10px' }}>
+                <div style={{ paddingBottom: '10px' }}>
                     {buttons.map((button, index) => {
                         return (
                             <span key={index} style={{ paddingRight: '10px', paddingTop: '10px' }}>
-                                <Label>
+                                <Label size='big'>
                                     {button.text}
                                     <Icon name='delete' onClick={()=>{
                                         buttons.splice(index, 1)
@@ -43,6 +35,14 @@ class ResponseQR extends Component {
                         )
                     })}
                 </div>
+
+                <Form onSubmit={() => {
+                    buttons.push({ text: newbutton, payload: newbutton })
+                    this.setState({ newbutton: '' })
+                    this.props.updateAction(action)
+                }}>
+                    <Form.Input placeholder='New Button' name='newbutton' value={newbutton} onChange={this.handleChange} />
+                </Form>
 
             </div>
         )
