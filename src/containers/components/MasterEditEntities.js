@@ -4,15 +4,14 @@ import EditEntity from './EditEntity'
 class MasterEditEntities extends Component {
     render() {
         const { cbEntities, updateEntities, match } = this.props
-
-        let entities = JSON.parse(JSON.stringify(cbEntities))
         let index = match.params.topicId
-        let entity = entities[match.params.topicId]
 
         return (
             <EditEntity 
-                entity={entity}
+                entity={cbEntities[index]}
                 updateEntities={(newEntity)=>{
+                    // deep clone first
+                    let entities = JSON.parse(JSON.stringify(cbEntities))
                     // update this specific entity
                     entities[index] = newEntity
                     // then update my redux store

@@ -21,7 +21,15 @@ class TrainingChatbot extends Component {
 
     render() {
         const { menuItems } = this.state
-        const { chatbotInfo, updateStories, updateIntents, updateEntities, updateActions, match, history } = this.props
+        const {
+            chatbotInfo,
+            updateStories,
+            updateIntents,
+            updateEntities,
+            updateActions,
+            match,
+            history
+        } = this.props
         let gs = history.location.pathname.split("/")
         let pathname = gs[5] // hardcoded magic number here.. whatever
 
