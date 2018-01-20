@@ -23,6 +23,7 @@ class EditStory extends Component {
     render() {
         let { storyName, paths } = this.state
         const { allAvailableActions, allAvailableIntents } = this.props
+
         return (
             <div style={{ padding: '10px' }}>
 

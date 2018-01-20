@@ -57,7 +57,7 @@ class DisplayStoriesTable extends Component {
                     <Table.Row>
                         <Table.HeaderCell>
                             <FooterForm placeholder='Create New Story' formSubmit={(formvalue) => {
-                                stories.push(new Story(formvalue, new Path('', [])))
+                                stories.push(new Story(formvalue, [new Path('', [])]))
                                 updateStories(stories)
                             }} />
                             {displayPagination}
