@@ -1,5 +1,5 @@
 import request from 'superagent'
-import SocketConnect from './../socketapi'
+import SocketConnect from './../classes/SocketConnect'
 
 // get all chatbots infos
 var GetAllLivechatsInfos = (backendurl, jwt) => {

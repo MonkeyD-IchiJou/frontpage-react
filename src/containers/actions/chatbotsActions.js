@@ -5,7 +5,7 @@
 })*/
 
 import request from 'superagent'
-import SocketConnect from './../socketapi'
+import SocketConnect from './../classes/SocketConnect'
 /*import Intent from './../classes/Intent'
 import Entity from './../classes/Entity'
 import Action from './../classes/Action'
