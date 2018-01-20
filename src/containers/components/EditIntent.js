@@ -2,29 +2,50 @@ import React, { Component } from 'react'
 import Intent from './../classes/Intent'
 import ProgressSave from './ProgressSave'
 import Highlighter from 'react-highlight-words'
+import { Prompt } from 'react-router-dom'
 import { Icon, Button, Input, Header, Table, Accordion, Form, Dropdown } from 'semantic-ui-react'
 
 class EditIntent extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
-            intent: this.props.intent.intent,
-            entities: JSON.parse(JSON.stringify(this.props.intent.entities)),
-            texts: JSON.parse(JSON.stringify(this.props.intent.texts)),
+            intent: '',
+            entities: [],
+            texts: [],
             activeIndex: -1,
-            newusersay: ''
+            newusersay: '',
+            hasSaved: true
+        }
+
+        if(this.props.intent) {
+            this.state = {
+                intent: this.props.intent.intent,
+                entities: JSON.parse(JSON.stringify(this.props.intent.entities)),
+                texts: JSON.parse(JSON.stringify(this.props.intent.texts)),
+                activeIndex: -1,
+                newusersay: '',
+                hasSaved: true
+            }
         }
     }
 
     componentWillReceiveProps = (nextProps) => {
-        this.setState({
-            intent: nextProps.intent.intent,
-            entities: JSON.parse(JSON.stringify(nextProps.intent.entities)),
-            texts: JSON.parse(JSON.stringify(nextProps.intent.texts)),
-            activeIndex: -1,
-            newusersay: ''
-        })
+        if(nextProps.intent) {
+            this.setState({
+                intent: nextProps.intent.intent,
+                entities: JSON.parse(JSON.stringify(nextProps.intent.entities)),
+                texts: JSON.parse(JSON.stringify(nextProps.intent.texts)),
+                activeIndex: -1,
+                newusersay: '',
+                hasSaved: true
+            })
+        }
+    }
+
+    editChanges = (states) => {
+        this.setState({ ...states, hasSaved: false })
     }
 
     // for accordian
@@ -41,7 +62,7 @@ class EditIntent extends Component {
 
     render() {
 
-        let { intent, entities, texts, activeIndex, newusersay } = this.state
+        let { intent, entities, texts, activeIndex, newusersay, hasSaved } = this.state
 
         // all the available entities in this chatbot
         const availableEntities = this.props.availableEntities
@@ -69,6 +90,8 @@ class EditIntent extends Component {
         return (
             <div style={{ padding: '10px' }}>
 
+                <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
+
                 <ProgressSave
                     clickDone={() => {
                         this.props.updateIntents(new Intent(intent, entities, texts))
@@ -78,7 +101,7 @@ class EditIntent extends Component {
                 <Header>Intent Name</Header>
 
                 <Input value={intent} fluid onChange={(event, data) => {
-                    this.setState({ intent: data.value })
+                    this.editChanges({ intent: data.value })
                 }} />
 
                 <Header>Associate Entities</Header>
@@ -92,7 +115,7 @@ class EditIntent extends Component {
                     selection
                     options={availableEntitiesValue}
                     onChange={(e, { value }) => {
-                        this.setState({ entities: value })
+                        this.editChanges({ entities: value })
                     }}
                 />
 
@@ -119,7 +142,7 @@ class EditIntent extends Component {
                                                 <Input value={text} onChange={(event, data) => {
                                                     // update this new usersay example
                                                     texts[index] = data.value
-                                                    this.setState({texts: texts})
+                                                    this.editChanges({texts: texts})
                                                 }} fluid/>
                                             </Accordion.Content>
                                         </Accordion>
@@ -129,7 +152,7 @@ class EditIntent extends Component {
                                         <Button icon basic floated='right' size='mini' negative onClick={() => {
                                             // delete this example
                                             texts.splice(index, 1)
-                                            this.setState({ texts: texts })
+                                            this.editChanges({ texts: texts })
                                         }}>
                                             <Icon name='minus' />
                                         </Button>
@@ -145,7 +168,7 @@ class EditIntent extends Component {
                             <Table.HeaderCell colSpan='2'>
                                 <Form onSubmit={() => {
                                     texts.push(newusersay)
-                                    this.setState({ texts: texts, newusersay: '' })
+                                    this.editChanges({ texts: texts, newusersay: '' })
                                 }}>
                                     <Form.Input required placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
                                 </Form>
