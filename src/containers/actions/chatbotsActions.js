@@ -82,7 +82,7 @@ var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt, cbid) => {
                     else {
                         let result = res.body
 
-                        if (!result || !result.success) {
+                        if (!result) {
                             throw new Error('no body msg')
                         }
 

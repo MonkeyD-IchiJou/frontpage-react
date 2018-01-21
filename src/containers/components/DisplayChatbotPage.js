@@ -81,7 +81,7 @@ class DisplayChatbotPage extends Component {
                         <Segment>Chatbot Testing</Segment>
 
                         <FooterForm placeholder='Check cb' formSubmit={(formvalue) => {
-                            this.props.checkNLU(chosenChatbot.uuid, formvalue, (displayTmpJson) => {
+                            this.props.checkQuery(chosenChatbot.uuid, formvalue, (displayTmpJson) => {
                                 this.setState({ displayTmpJson: displayTmpJson })
                             })
                         }} />
