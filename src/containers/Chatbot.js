@@ -47,16 +47,16 @@ class Chatbot extends Component {
     }
 
     // simple testing with my nlu engine, uuid for knowing which cb to communicate to
-    checkNLU = (cbuuid, textmsg, callback) => {
-        const { jwt, backendUrl } = this.props
+    checkQuery = (cbuuid, textmsg, callback) => {
+        const { backendUrl, usremail } = this.props
         request
-            .post(backendUrl + '/chatbot/v1/nlucheck')
+            .post(backendUrl + '/chatbot/v1/query')
             .set('contentType', 'application/json; charset=utf-8')
             .set('dataType', 'json')
             .send({
-                token: jwt,
                 uuid: cbuuid,
-                text_message: textmsg
+                text_message: textmsg,
+                sender_id: usremail
             })
             .end((err, res) => {
 
@@ -72,7 +72,7 @@ class Chatbot extends Component {
                             throw new Error('no body msg')
                         }
 
-                        callback(result.allres)
+                        callback(result)
                     }
                 } catch (e) {
                     console.log(e.toString())
@@ -95,7 +95,7 @@ class Chatbot extends Component {
                             updateActions={this.updateActions}
                             updateStories={this.updateStories}
                             SaveChatbotDatas={this.SaveChatbotDatas}
-                            checkNLU={this.checkNLU}
+                            checkQuery={this.checkQuery}
                         />
                     }
                 />

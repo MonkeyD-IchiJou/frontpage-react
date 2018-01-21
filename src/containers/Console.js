@@ -225,6 +225,7 @@ class Console extends Component {
                         props => <Chatbot
                             {...props}
                             jwt={jwt}
+                            usremail={userReducer.email}
                             backendUrl={backendUrl}
                             changeTitle={this.changeTitle}
                         />
