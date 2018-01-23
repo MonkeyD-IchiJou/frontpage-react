@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import TextResponse from './../classes/TextResponse'
 import ImageResponse from './../classes/ImageResponse'
 import QuickReplies from './../classes/QuickReplies'
+import TmpFormResponse from './../classes/TmpFormResponse'
 import ResponseText from './ResponseText'
 import ResponseImage from './ResponseImage'
 import ResponseQR from './ResponseQR'
+import ResponseTmp from './ResponseTmp'
 import { Segment, Label, Popup, Icon, Button, Divider } from 'semantic-ui-react'
 
 class EditSingleAction extends Component {
@@ -52,6 +54,12 @@ class EditSingleAction extends Component {
                                 <ResponseImage action={action} updateAction={ua}/>
                             )
                             title = 'Image Response'
+                            break
+                        case 'TMP':
+                            torender = (
+                                <ResponseTmp action={action} updateAction={ua} />
+                            )
+                            title = 'Tmp Response'
                             break
                         default:
                             break
@@ -105,6 +113,13 @@ class EditSingleAction extends Component {
                             this.props.updateActions(actions)
                         }}>
                             Image
+                        </Button>
+
+                        <Button onClick={() => {
+                            actions.push(new TmpFormResponse())
+                            this.props.updateActions(actions)
+                        }}>
+                            TmpForm
                         </Button>
 
                     </Button.Group>
