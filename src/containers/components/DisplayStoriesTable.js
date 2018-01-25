@@ -3,7 +3,6 @@ import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
 import { Table, Pagination } from 'semantic-ui-react'
 import Story from '../classes/Story'
-import Path from '../classes/Path'
 
 class DisplayStoriesTable extends Component {
 
@@ -57,7 +56,7 @@ class DisplayStoriesTable extends Component {
                     <Table.Row>
                         <Table.HeaderCell>
                             <FooterForm placeholder='Create New Story' formSubmit={(formvalue) => {
-                                stories.push(new Story(formvalue, [new Path('', [])]))
+                                stories.push(new Story(formvalue, '', '', [], ''))
                                 updateStories(stories)
                             }} />
                             {displayPagination}

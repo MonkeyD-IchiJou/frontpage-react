@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import Path from '../classes/Path'
 import ProgressSave from './ProgressSave'
 import { Prompt } from 'react-router-dom'
-import { Button, Icon, Header, Input, Divider, Segment, Label, Popup, Dropdown } from 'semantic-ui-react'
+import { Button, Icon, Header, Input, Divider, Segment, Dropdown } from 'semantic-ui-react'
 
 class EditStory extends Component {
 
@@ -11,14 +10,20 @@ class EditStory extends Component {
 
         this.state = {
             storyName: '',
-            paths: [],
+            wait_checkpoint: '',
+            intent: '',
+            actions: [],
+            return_checkpoint: '',
             hasSaved: true
         }
 
         if (this.props.story) {
             this.state = {
                 storyName: this.props.story.name,
-                paths: JSON.parse(JSON.stringify(this.props.story.paths)),
+                wait_checkpoint: this.props.story.wait_checkpoint,
+                intent: this.props.story.intent,
+                actions: JSON.parse(JSON.stringify(this.props.story.actions)),
+                return_checkpoint: this.props.story.return_checkpoint,
                 hasSaved: true
             }
         }
@@ -28,7 +33,10 @@ class EditStory extends Component {
         if(nextProps.story) {
             this.setState({
                 storyName: nextProps.story.name,
-                paths: JSON.parse(JSON.stringify(nextProps.story.paths)),
+                wait_checkpoint: nextProps.story.wait_checkpoint,
+                intent: nextProps.story.intent,
+                actions: JSON.parse(JSON.stringify(nextProps.story.actions)),
+                return_checkpoint: nextProps.story.return_checkpoint,
                 hasSaved: true
             })
         }
@@ -39,7 +47,7 @@ class EditStory extends Component {
     }
 
     render() {
-        let { storyName, paths, hasSaved } = this.state
+        let { storyName, wait_checkpoint, intent, actions, return_checkpoint, hasSaved } = this.state
         const { allAvailableActions, allAvailableIntents } = this.props
 
         return (
@@ -49,7 +57,7 @@ class EditStory extends Component {
 
                 <ProgressSave
                     clickDone={() => {
-                        this.props.updateStories({ name: storyName, paths: paths })
+                        this.props.updateStories({ name: storyName, wait_checkpoint, intent, actions, return_checkpoint })
                     }}
                 />
 
@@ -61,80 +69,69 @@ class EditStory extends Component {
 
                 <Header>Paths</Header>
 
-                {paths.map((path, index)=>{
-                    return(
-                        <Segment key={index}>
+                <Segment>
 
-                            <Label attached='top'>
-                                <Popup
-                                    trigger={
-                                        <Icon name='close' color='red' style={{ float: 'right' }} onClick={() => {
-                                            paths.splice(index, 1)
-                                            this.editChanges({ paths: paths })
-                                        }}/>
-                                    }
-                                    content='Remove Action'
-                                />
-                            </Label>
+                    <Header>Checkpoint In</Header>
+                    <Input value={wait_checkpoint} fluid onChange={(event, data) => {
+                        this.editChanges({ wait_checkpoint: data.value })
+                    }} />
 
-                            <Header>Intent</Header>
+                    <Divider hidden />
 
+                    <Header>Intent</Header>
+
+                    <Dropdown
+                        value={intent}
+                        placeholder='Select Intent'
+                        fluid
+                        search
+                        selection
+                        options={allAvailableIntents}
+                        onChange={(e, { value }) => {
+                            this.editChanges({ intent: value })
+                        }}
+                    />
+
+                    <Header>Actions</Header>
+
+                    {actions.map((action, aindex)=>{
+                        return(
                             <Dropdown
-                                value={path.intent}
-                                placeholder='Select Intent'
+                                key={aindex}
+                                value={action}
+                                placeholder='Select Action'
                                 fluid
                                 search
                                 selection
-                                options={allAvailableIntents}
+                                options={allAvailableActions}
                                 onChange={(e, { value }) => {
-                                    paths[index].intent = value
-                                    this.editChanges({ paths: paths })
+                                    actions[aindex] = value
+                                    this.editChanges({ actions: actions })
                                 }}
                             />
+                        )
+                    })}
 
-                            <Header>Actions</Header>
+                    <Divider hidden />
 
-                            {path.actions.map((action, aindex)=>{
-                                return(
-                                    <Dropdown
-                                        key={aindex}
-                                        value={action}
-                                        placeholder='Select Action'
-                                        fluid
-                                        search
-                                        selection
-                                        options={allAvailableActions}
-                                        onChange={(e, { value }) => {
-                                            paths[index].actions[aindex] = value
-                                            this.editChanges({ paths: paths })
-                                        }}
-                                    />
-                                )
-                            })}
+                    <Button onClick={() => {
+                        actions.push('')
+                        this.editChanges({ actions: actions })
+                    }}>
+                        <Icon name='plus' />Add New Action
+                    </Button>
 
-                            <Divider hidden />
+                    <Divider hidden />
 
-                            <Button onClick={() => {
-                                paths[index].actions.push('')
-                                this.editChanges({ paths: paths })
-                            }}>
-                                <Icon name='plus' />Add New Action
-                            </Button>
+                    <Header>Checkpoint Out</Header>
+                    <Input value={return_checkpoint} fluid onChange={(event, data) => {
+                        this.editChanges({ return_checkpoint: data.value })
+                    }} />
 
-                        </Segment>
-                    )
-                })}
+                </Segment>
 
                 <Divider hidden /><Divider hidden />
 
-                <Divider />
-
-                <Button primary onClick={() => {
-                    paths.push(new Path('', []))
-                    this.editChanges({ paths: paths })
-                }}>
-                    <Icon name='plus' />Create New Path
-                </Button>
             </div>
         )
     }
