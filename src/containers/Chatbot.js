@@ -72,13 +72,61 @@ class Chatbot extends Component {
                             throw new Error('no body msg')
                         }
 
-                        callback(result)
+                        this.executeAction(backendUrl, result.next_action, cbuuid, usremail, callback, [result])
+
                     }
                 } catch (e) {
                     console.log(e.toString())
                 }
 
             })
+    }
+
+    executeAction = (backendUrl, next_action, uuid, sender_id, callback, compileActions) => {
+        if (next_action === 'action_listen') {
+            // stop calling execute action liao.. done
+            callback(compileActions)
+        }
+        else {
+
+            // if there is still got next action
+            request
+                .post(backendUrl + '/chatbot/v1/executeAction')
+                .set('contentType', 'application/json; charset=utf-8')
+                .set('dataType', 'json')
+                .send({
+                    uuid: uuid,
+                    action: next_action,
+                    sender_id: sender_id
+                })
+                .end((err, res)=>{
+
+                    try {
+                        if (err || !res.ok) {
+                            let errormsg = res.body.errors
+                            throw errormsg
+                        }
+                        else {
+                            let result = res.body
+
+                            if (!result) {
+                                throw new Error('no body msg')
+                            }
+
+                            // store the action definition
+                            compileActions.push(result.returnAct)
+
+                            // execute again to see whether still got any action need to execute mah
+                            this.executeAction(backendUrl, result.result.next_action, uuid, sender_id, callback, compileActions)
+
+                        }
+                    } catch (e) {
+                        console.log(e.toString())
+                    }
+
+                })
+
+        }
     }
 
     render() {
