@@ -1,7 +1,10 @@
 class Story {
-    constructor(name, paths) {
+    constructor(name, wait_checkpoint, intent, actions, return_checkpoint) {
         this.name = name
-        this.paths = paths
+        this.wait_checkpoint = wait_checkpoint
+        this.intent = intent
+        this.actions = actions
+        this.return_checkpoint = return_checkpoint
     }
 }
 
