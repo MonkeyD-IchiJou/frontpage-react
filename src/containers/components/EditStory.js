@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ProgressSave from './ProgressSave'
 import { Prompt } from 'react-router-dom'
+import EditIntentConditions from './EditIntentConditions'
 import { Button, Icon, Header, Input, Divider, Segment, Dropdown } from 'semantic-ui-react'
 
 class EditStory extends Component {
@@ -12,6 +13,7 @@ class EditStory extends Component {
             storyName: '',
             wait_checkpoint: '',
             intent: '',
+            intentConditions: [],
             actions: [],
             return_checkpoint: '',
             hasSaved: true
@@ -22,6 +24,7 @@ class EditStory extends Component {
                 storyName: this.props.story.name,
                 wait_checkpoint: this.props.story.wait_checkpoint,
                 intent: this.props.story.intent,
+                intentConditions: JSON.parse(JSON.stringify(this.props.story.intentConditions)),
                 actions: JSON.parse(JSON.stringify(this.props.story.actions)),
                 return_checkpoint: this.props.story.return_checkpoint,
                 hasSaved: true
@@ -35,6 +38,7 @@ class EditStory extends Component {
                 storyName: nextProps.story.name,
                 wait_checkpoint: nextProps.story.wait_checkpoint,
                 intent: nextProps.story.intent,
+                intentConditions: JSON.parse(JSON.stringify(nextProps.story.intentConditions)),
                 actions: JSON.parse(JSON.stringify(nextProps.story.actions)),
                 return_checkpoint: nextProps.story.return_checkpoint,
                 hasSaved: true
@@ -47,8 +51,8 @@ class EditStory extends Component {
     }
 
     render() {
-        let { storyName, wait_checkpoint, intent, actions, return_checkpoint, hasSaved } = this.state
-        const { allAvailableActions, allAvailableIntents } = this.props
+        let { storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint, hasSaved } = this.state
+        const { allAvailableActions, allAvailableIntents, allAvailableEntities, allAvailableEntityValues } = this.props
 
         return (
             <div style={{ padding: '10px' }}>
@@ -57,7 +61,7 @@ class EditStory extends Component {
 
                 <ProgressSave
                     clickDone={() => {
-                        this.props.updateStories({ name: storyName, wait_checkpoint, intent, actions, return_checkpoint })
+                        this.props.updateStories({ name: storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint })
                     }}
                 />
 
@@ -76,8 +80,6 @@ class EditStory extends Component {
                         this.editChanges({ wait_checkpoint: data.value })
                     }} />
 
-                    <Divider hidden />
-
                     <Header>Intent</Header>
 
                     <Dropdown
@@ -91,6 +93,20 @@ class EditStory extends Component {
                             this.editChanges({ intent: value })
                         }}
                     />
+
+                    <EditIntentConditions intentConditions={intentConditions} allAvailableEntities={allAvailableEntities} allAvailableEntityValues={allAvailableEntityValues} updateIntentCondition={(intentCondition, iindex)=>{
+                        intentConditions[iindex] = intentCondition
+                        this.editChanges({ intentConditions: intentConditions })
+                    }}/>
+
+                    <Divider hidden />
+
+                    <Button onClick={ ()=>{
+                        intentConditions.push({ entity: '', value: '' })
+                        this.editChanges({ intentConditions: intentConditions })
+                    }}>
+                        <Icon name='plus' />Add Condition
+                    </Button>
 
                     <Header>Actions</Header>
 
