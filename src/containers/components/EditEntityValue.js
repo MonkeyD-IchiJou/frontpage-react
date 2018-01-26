@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Button, Input, Header, Grid, Table, Form } from 'semantic-ui-react'
+import { Segment, Input, Label, Icon, Form, Grid } from 'semantic-ui-react'
 
 class EditEntityValue extends Component {
 
@@ -7,30 +7,55 @@ class EditEntityValue extends Component {
         super(props)
 
         this.state = {
-            name: '',
-            synonyms: []
-        }
-
-        if(this.props.value) {
-            this.state = {
-                name: this.props.value.name,
-                synonyms: JSON.parse(JSON.stringify(this.props.value.synonyms))
-            }
+            newsynonym: ''
         }
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        if (nextProps.value) {
-            this.setState({
-                name: nextProps.value.name,
-                synonyms: JSON.parse(JSON.stringify(nextProps.value.synonyms))
-            })
-        }
-    }
+    handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
     render() {
+        let { name, synonyms } = this.props.value
+        let newsynonym = this.state.newsynonym
+
         return(
-            <div>{this.props.value.name}</div>
+            <Segment>
+
+                <Grid columns='equal'>
+                    <Grid.Column>
+                        <Input fluid value={name} onChange={(event, data) => {
+                            this.props.editValueName(data.value)
+                        }} />
+                    </Grid.Column>
+
+                    <Grid.Column>
+
+                        <Form onSubmit={() => {
+                            this.setState({ newsynonym: '' })
+                            this.props.addNewSynonym(newsynonym)
+                        }}>
+                            <Form.Input placeholder='New Synonyms' name='newsynonym' value={newsynonym} onChange={this.handleChange} />
+                        </Form>
+
+                        <div style={{ paddingBottom: '10px', paddingTop: '10px' }}>
+                            {synonyms.map((synonym, index) => {
+                                return (
+                                    <span key={index} style={{ paddingRight: '10px', paddingTop: '10px' }}>
+                                        <Label size='big'>
+                                            {synonym}
+                                            <Icon name='delete' onClick={() => {
+                                                this.props.deleteSynonym(index)
+                                            }} />
+                                        </Label>
+                                    </span>
+                                )
+                            })}
+                        </div>
+
+                    </Grid.Column>
+
+                </Grid>
+
+            </Segment>
         )
     }
 

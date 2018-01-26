@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import Entity from './../classes/Entity'
+import EntityValues from './../classes/EntityValues'
 import ProgressSave from './ProgressSave'
 import { Prompt } from 'react-router-dom'
 import EditEntityValue from './EditEntityValue'
-import { Input, Header } from 'semantic-ui-react'
+import { Input, Header, Form } from 'semantic-ui-react'
 
 class EditEntity extends Component {
 
@@ -13,14 +14,16 @@ class EditEntity extends Component {
         this.state = {
             name: '',
             values: [],
-            hasSaved: true
+            hasSaved: true,
+            newvalue: ''
         }
 
         if (this.props.entity) {
             this.state = {
                 name: this.props.entity.name,
                 values: JSON.parse(JSON.stringify(this.props.entity.values)),
-                hasSaved: true
+                hasSaved: true,
+                newvalue: ''
             }
         }
     }
@@ -30,7 +33,8 @@ class EditEntity extends Component {
             this.setState({
                 value: nextProps.entity.name,
                 synonyms: JSON.parse(JSON.stringify(nextProps.entity.values)),
-                hasSaved: true
+                hasSaved: true,
+                newvalue: ''
             })
         }
     }
@@ -43,7 +47,7 @@ class EditEntity extends Component {
 
     render() {
 
-        let { name, values, hasSaved } = this.state
+        let { name, values, hasSaved, newvalue } = this.state
 
         return(
             <div style={{ padding: '10px' }}>
@@ -66,10 +70,31 @@ class EditEntity extends Component {
                 <Header>Values</Header>
 
                 {
-                    values.map((value)=>{
-                        return <EditEntityValue value={value} />
+                    values.map((value, vindex)=>{
+                        return <EditEntityValue 
+                        key={vindex} 
+                        value={value} 
+                        editValueName={(valuename)=>{
+                            values[vindex].name = valuename
+                            this.editChanges({ values: values })
+                        }} 
+                        addNewSynonym={(synonym)=>{
+                            values[vindex].synonyms.push(synonym)
+                            this.editChanges({ values: values })
+                        }}
+                        deleteSynonym={(sindex) =>{
+                            values[vindex].synonyms.splice(sindex, 1)
+                            this.editChanges({ values: values })
+                        }}/>
                     })
                 }
+
+                <Form onSubmit={() => {
+                    values.push(new EntityValues(newvalue, []))
+                    this.editChanges({ values: values, newvalue: '' })
+                }}>
+                    <Form.Input placeholder='New Value' name='newvalue' value={newvalue} onChange={this.handleChange} />
+                </Form>
 
             </div>
         )

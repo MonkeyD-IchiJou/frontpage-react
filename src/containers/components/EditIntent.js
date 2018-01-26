@@ -73,14 +73,17 @@ class EditIntent extends Component {
 
             // simple mapping value only
             availableEntitiesValue = availableEntities.map((val, index) => {
-                return { text: val.value, value: val.value }
+                return { text: val.name, value: val.name }
             })
 
             // for highlighting words
             entities.forEach((entity, index) => {
                 availableEntities.forEach((ae, aindex) => {
-                    if (ae.value === entity) {
-                        allsynonyms.push(...ae.synonyms)
+                    if (ae.name === entity) {
+                        ae.values.forEach((evalue, evindex) => {
+                            allsynonyms.push(evalue.name)
+                            allsynonyms.push(...evalue.synonyms)
+                        })
                     }
                 })
             })
