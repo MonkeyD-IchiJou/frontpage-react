@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ChatbotConsole from './ChatbotConsole'
 import FooterForm from './FooterForm'
 import ReactJson from 'react-json-view'
-import { Grid, Segment, Button, Icon } from 'semantic-ui-react'
+import { Grid, Button, Icon, Divider } from 'semantic-ui-react'
 
 class DisplayChatbotPage extends Component {
 
@@ -75,10 +75,10 @@ class DisplayChatbotPage extends Component {
                     <Grid.Column width={5}>
 
                         <Button primary circular disabled={chosenChatbot.isTraining} loading={chosenChatbot.isTraining} onClick={() => { this.SaveChatbotDatas(chosenChatbot, chatbotIndex) }} >
-                            <Icon name='configure' />Start Training
+                            <Icon name='configure' />Turing Test
                         </Button>
 
-                        <Segment>Chatbot Testing</Segment>
+                        <Divider />
 
                         <FooterForm placeholder='Check cb' formSubmit={(formvalue) => {
                             this.props.checkQuery(chosenChatbot.uuid, formvalue, (displayTmpJson) => {
