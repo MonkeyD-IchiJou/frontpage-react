@@ -1,7 +1,7 @@
 class Entity {
-    constructor(value, synonyms) {
-        this.value = value
-        this.synonyms = synonyms
+    constructor(name, values) {
+        this.name = name
+        this.values = values
     }
 }
 

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Entity from './../classes/Entity'
 import ProgressSave from './ProgressSave'
 import { Prompt } from 'react-router-dom'
-import { Icon, Button, Input, Header, Grid, Table, Form } from 'semantic-ui-react'
+import EditEntityValue from './EditEntityValue'
+import { Input, Header } from 'semantic-ui-react'
 
 class EditEntity extends Component {
 
@@ -10,17 +11,15 @@ class EditEntity extends Component {
         super(props)
 
         this.state = {
-            value: '',
-            synonyms: [],
-            newsynonym: '',
+            name: '',
+            values: [],
             hasSaved: true
         }
 
         if (this.props.entity) {
             this.state = {
-                value: this.props.entity.value,
-                synonyms: JSON.parse(JSON.stringify(this.props.entity.synonyms)),
-                newsynonym: '',
+                name: this.props.entity.name,
+                values: JSON.parse(JSON.stringify(this.props.entity.values)),
                 hasSaved: true
             }
         }
@@ -29,9 +28,8 @@ class EditEntity extends Component {
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.entity) {
             this.setState({
-                value: nextProps.entity.value,
-                synonyms: JSON.parse(JSON.stringify(nextProps.entity.synonyms)),
-                newsynonym: '',
+                value: nextProps.entity.name,
+                synonyms: JSON.parse(JSON.stringify(nextProps.entity.values)),
                 hasSaved: true
             })
         }
@@ -45,7 +43,7 @@ class EditEntity extends Component {
 
     render() {
 
-        let { value, synonyms, newsynonym, hasSaved } = this.state
+        let { name, values, hasSaved } = this.state
 
         return(
             <div style={{ padding: '10px' }}>
@@ -55,67 +53,23 @@ class EditEntity extends Component {
                 <ProgressSave
                     clickDone={() => {
                         this.setState({hasSaved: true})
-                        this.props.updateEntities(new Entity(value, synonyms))
+                        this.props.updateEntities(new Entity(name, values))
                     }}
                 />
 
-                <Grid columns='equal' stackable>
+                <Header>Name</Header>
 
-                    <Grid.Column>
-                        <Header>Value</Header>
-                        <Input value={value} onChange={(event, data) => {
-                            this.editChanges({ value: data.value })
-                        }} />
-                    </Grid.Column>
+                <Input fluid value={name} onChange={(event, data) => {
+                    this.editChanges({ name: data.value })
+                }} />
 
-                    <Grid.Column>
+                <Header>Values</Header>
 
-                        <Header>Synonyms</Header>
-
-                        <Table striped selectable>
-
-                            <Table.Body>
-                                {synonyms.map((synonym, index) => {
-                                    return (
-                                        <Table.Row key={index}>
-                                            <Table.Cell>
-                                                <Input value={synonym} onChange={(event, data) => {
-                                                    // update this new synonym
-                                                    synonyms[index] = data.value
-                                                    this.editChanges({ synonyms: synonyms })
-                                                }} />
-                                                <Button icon basic floated='right' size='mini' negative onClick={() => {
-                                                    // delete this synonym
-                                                    synonyms.splice(index, 1)
-                                                    this.editChanges({ synonyms: synonyms })
-                                                }}>
-                                                    <Icon name='minus' />
-                                                </Button>
-                                            </Table.Cell>
-                                        </Table.Row>
-                                    )
-                                })}
-                            </Table.Body>
-
-                            <Table.Footer fullWidth>
-                                <Table.Row>
-                                    <Table.HeaderCell>
-                                        <Form onSubmit={() => {
-                                            // add a new synonym
-                                            synonyms.push(newsynonym)
-                                            this.editChanges({ synonyms: synonyms, newsynonym: '' })
-                                        }}>
-                                            <Form.Input placeholder='Create New Synonym' name='newsynonym' value={newsynonym} onChange={this.handleChange} />
-                                        </Form>
-                                    </Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Footer>
-
-                        </Table>
-
-                    </Grid.Column>
-
-                </Grid>
+                {
+                    values.map((value)=>{
+                        return <EditEntityValue value={value} />
+                    })
+                }
 
             </div>
         )
@@ -123,3 +77,35 @@ class EditEntity extends Component {
 }
 
 export default EditEntity
+
+
+/**
+ * {synonyms.map((synonym, index) => {
+        return (
+            <Table.Row key={index}>
+                <Table.Cell>
+                    <Input value={synonym} onChange={(event, data) => {
+                        // update this new synonym
+                        synonyms[index] = data.value
+                        this.editChanges({ synonyms: synonyms })
+                    }} />
+                    <Button icon basic floated='right' size='mini' negative onClick={() => {
+                        // delete this synonym
+                        synonyms.splice(index, 1)
+                        this.editChanges({ synonyms: synonyms })
+                    }}>
+                        <Icon name='minus' />
+                    </Button>
+                </Table.Cell>
+            </Table.Row>
+        )
+    })}
+
+    <Form onSubmit={() => {
+        // add a new synonym
+        synonyms.push(newsynonym)
+        this.editChanges({ synonyms: synonyms, newsynonym: '' })
+    }}>
+        <Form.Input placeholder='Create New Synonym' name='newsynonym' value={newsynonym} onChange={this.handleChange} />
+    </Form>
+ */

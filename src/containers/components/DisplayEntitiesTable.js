@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Entity from './../classes/Entity'
 import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
-import { Table, Label, Pagination, Header } from 'semantic-ui-react'
+import { Table, Pagination } from 'semantic-ui-react'
 
 class DisplayEntitiesTable extends Component {
 
@@ -40,20 +40,13 @@ class DisplayEntitiesTable extends Component {
                         return (
                             <Table.Row key={index}>
                                 <Table.Cell>
-                                    <Header style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{entity.value}</Header>
                                     <ConfirmRemove confirmAction={() => {
                                         // remove this entity
                                         entities.splice(index, 1)
                                         // then update my redux store
                                         updateEntities(entities)
                                     }} />
-                                    {entity.synonyms.map((synonym, index) => {
-                                        return (
-                                            <Label key={index}>
-                                                {synonym}
-                                            </Label>
-                                        )
-                                    })}
+                                    <span style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{entity.name}</span>
                                 </Table.Cell>
                             </Table.Row>
                         )

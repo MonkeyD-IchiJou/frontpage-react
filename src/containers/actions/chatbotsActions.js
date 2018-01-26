@@ -207,9 +207,16 @@ export function setChatbotTrainingStatus_act(cbindex, isTraining) {
 
 /**
  * // tmp delete later
-/*result.result[i].entities = [
-    new Entity('cuisine', ['Chinese', 'chinese']),
-    new Entity('Outlook', ['outlook', 'OUTLOOK', 'Microsoft Outlook'])
+/*
+refres.entities = [
+    new Entity(
+        'city',
+        [
+            new EntityValues('New York City', ['NYC', 'nyc', 'ny city']),
+            new EntityValues('Manhatten City', ['MHC', 'mhc', 'mh city']),
+            new EntityValues('England', ['uk', 'UK', 'british'])
+        ]
+    )
 ]
 
 result.result[i].intents = [
@@ -255,4 +262,6 @@ result.result[i].stories = [
         new Path('outlook_related', ['outlook_search_response'])
     ])
 ]
+
+
 */
