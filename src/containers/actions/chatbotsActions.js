@@ -5,7 +5,6 @@
 })*/
 
 import request from 'superagent'
-import SocketConnect from './../classes/SocketConnect'
 
 // ignore my self-signed ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -32,7 +31,7 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             throw new Error('no body msg')
                         }
 
-                        for(let i = 0; i < result.result.length; ++i) {
+                        /*for(let i = 0; i < result.result.length; ++i) {
                             // init setting for the chatbot object
 
                             let refres = result.result[i]
@@ -47,8 +46,7 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
                             refres.actions = []
                             refres.stories = []
                             refres.isTraining = false
-
-                        }
+                        }*/
 
                         resolve(result.result)
                     }
@@ -59,6 +57,32 @@ var GetAllChatbotsInfos = (backendurl, jwt) => {
             })
     })
 }
+
+// request chatbot info action
+export function reqChatbotsInfos_act(backendurl, jwt) {
+    return {
+        type: 'USR_REQ_CHATBOTS',
+        payload: GetAllChatbotsInfos(backendurl, jwt)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // post my datas back to mongodb
 var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt, cbid) => {
@@ -131,13 +155,7 @@ var GetChatbotMLData = (backendurl, cbuuid, jwt, cbid) => {
     })
 }
 
-// request chatbot info action
-export function reqChatbotsInfos_act(backendurl, jwt) {
-    return {
-        type: 'USR_REQ_CHATBOTS',
-        payload: GetAllChatbotsInfos(backendurl, jwt)
-    }
-}
+
 
 // chatbot listening for new client online
 export function chatbotClientsListUpdate_act(cbindex, clientsList) {
