@@ -5,6 +5,7 @@ import promiseMiddleware from 'redux-promise-middleware'
 import envReducer from './reducers/envReducer'
 import userReducer from './reducers/userReducer'
 import chatbotsReducer from './reducers/chatbotsReducer'
+import chatbotReducer from './reducers/chatbotReducer'
 import livechatReducer from './reducers/livechatReducer'
 
 const logger = createLogger({
@@ -12,7 +13,7 @@ const logger = createLogger({
 })
 
 export default createStore(
-    combineReducers({ envReducer, userReducer, chatbotsReducer, livechatReducer }),
+    combineReducers({ envReducer, userReducer, chatbotsReducer, livechatReducer, chatbotReducer }),
     {},
     applyMiddleware(logger, thunk, promiseMiddleware())
 )
