@@ -13,75 +13,56 @@ class DisplayChatbotPage extends Component {
         }
     }
 
-    updateEntities = (entities) => {
-        // this is the chatbot that want to update the entities
-        this.props.updateEntities(this.props.match.params.topicId, entities)
-    }
-
-    updateIntents = (intents) => {
-        // this is the chatbot that want to update the intents
-        this.props.updateIntents(this.props.match.params.topicId, intents)
-    }
-
-    updateActions = (actions) => {
-        // this is the chatbot that want to update the actions
-        this.props.updateActions(this.props.match.params.topicId, actions)
-    }
-
-    updateStories = (stories) => {
-        // this is the chatbot that want to update the stories
-        this.props.updateStories(this.props.match.params.topicId, stories)
-    }
-
-    // save chatbot datas and Train
-    SaveChatbotDatas = (chosenChatbot, cbid) => {
-        this.props.SaveChatbotDatas(
-            chosenChatbot.uuid,
-            {
-                entities: chosenChatbot.entities,
-                intents: chosenChatbot.intents,
-                actions: chosenChatbot.actions,
-                stories: chosenChatbot.stories
-            },
-            cbid
-        )
-    }
-
     render() {
 
-        const chatbotsReducer = this.props.chatbotsReducer
+        const {
+            chosenChatbot,
+            updateEntities,
+            updateIntents,
+            updateActions,
+            updateStories,
+            match,
+            history,
+            SaveChatbotDatas,
+            checkQuery
+        } = this.props
 
-        if (chatbotsReducer.length > 0) {
-            // if there are any chatbots
-
-            const chatbotIndex = this.props.match.params.topicId
-            let chosenChatbot = chatbotsReducer[chatbotIndex]
+        if (chosenChatbot) {
 
             return (
                 <Grid columns={2} stackable divided>
 
                     <Grid.Column width={11}>
                         <ChatbotConsole
-                            match={this.props.match}
-                            history={this.props.history}
+                            match={match}
+                            history={history}
                             chatbotInfo={chosenChatbot}
-                            updateEntities={this.updateEntities}
-                            updateIntents={this.updateIntents}
-                            updateActions={this.updateActions}
-                            updateStories={this.updateStories}
+                            updateEntities={updateEntities}
+                            updateIntents={updateIntents}
+                            updateActions={updateActions}
+                            updateStories={updateStories}
                         />
                     </Grid.Column>
 
                     <Grid.Column width={5}>
 
-                        <Button primary circular disabled={chosenChatbot.isTraining} loading={chosenChatbot.isTraining} onClick={() => { this.SaveChatbotDatas(chosenChatbot, chatbotIndex) }} >
-                            <Icon name='configure' />Turing Test
+                        <Button primary circular disabled={chosenChatbot.isTraining} loading={chosenChatbot.isTraining} onClick={() => {
+                            SaveChatbotDatas(
+                                {
+                                    entities: chosenChatbot.entities,
+                                    intents: chosenChatbot.intents,
+                                    actions: chosenChatbot.actions,
+                                    stories: chosenChatbot.stories
+                                }
+                            )
+                        }} >
+                            <Icon name='configure' />Train Chatbot
                         </Button>
 
                         <Divider />
 
-                        <FooterForm placeholder='Check cb' formSubmit={(formvalue) => {
-                            this.props.checkQuery(chosenChatbot.uuid, formvalue, (displayTmpJson) => {
+                        <FooterForm placeholder='Turing Test' formSubmit={(formvalue) => {
+                            checkQuery(formvalue, (displayTmpJson) => {
                                 this.setState({ displayTmpJson: displayTmpJson })
                             })
                         }} />
