@@ -8,7 +8,8 @@ import {
     SaveChatbotDatas_act,
     setChatbotTrainingStatus_act,
     reqChatbotMLData_act,
-    chatbotClientsListUpdate_act
+    chatbotClientsListUpdate_act,
+    reqChatbotInfos_act
 } from './actions/chatbotActions'
 import request from 'superagent'
 import DisplayChatbotPage from './components/DisplayChatbotPage'
@@ -22,6 +23,7 @@ class Chatbot extends Component {
         // first I need to request all the datas tht this chatbot has
         const { jwt, backendUrl } = this.props
         this.props.dispatch(reqChatbotMLData_act(backendUrl, jwt, this.props.match.params.topicId))
+        this.props.dispatch(reqChatbotInfos_act(backendUrl, jwt, this.props.match.params.topicId))
 
         // rmb to connect to my socket server
     }
