@@ -1,5 +1,11 @@
 const chatbotReducer = (
     state = {
+        id: 0,
+        uuid: '',
+        createdby: 73,
+        name: "",
+        description: "",
+        creationdate: "",
         clientsList: [],
         entities: [],
         intents: [],
@@ -30,6 +36,21 @@ const chatbotReducer = (
                 state.actions = res.actions
                 state.stories = res.stories
             }
+
+            break
+
+        case "USR_REQ_CHATBOT_INFO_FULFILLED":
+
+            // deep clone first
+            state = {
+                ...state,
+                ...action.payload
+            }
+            state.clientsList = [...state.clientsList]
+            state.entities = [...state.entities]
+            state.intents = [...state.intents]
+            state.actions = [...state.actions]
+            state.stories = [...state.stories]
 
             break
 
