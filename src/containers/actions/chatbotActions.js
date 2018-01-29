@@ -134,3 +134,64 @@ export function setChatbotTrainingStatus_act(isTraining = false) {
         payload: { isTraining: isTraining }
     }
 }
+
+/**
+ * // tmp delete later
+/*
+refres.entities = [
+    new Entity(
+        'city',
+        [
+            new EntityValues('New York City', ['NYC', 'nyc', 'ny city']),
+            new EntityValues('Manhatten City', ['MHC', 'mhc', 'mh city']),
+            new EntityValues('England', ['uk', 'UK', 'british'])
+        ]
+    )
+]
+
+result.result[i].intents = [
+    new Intent('restaurant_search', ['cuisine'], ['show me chinese restaurants', 'chinese restaurant']),
+    new Intent('outlook_related', ['Outlook'], ['outlook got problem', 'my Microsoft Outlook got problem']),
+]
+
+result.result[i].actions = [
+    new Action('restaurant_search_response', [
+        [
+            new TextResponse('hey bye'),
+            new QuickReplies([
+                {
+                    text: 'button name',
+                    payload: 'button payload'
+                }
+            ]),
+            new ImageResponse('kek.png')
+        ]
+    ]),
+    new Action('outlook_search_response', [
+        [
+            new TextResponse('yo look'),
+            new ImageResponse('kek.png')
+        ],
+        [
+            new QuickReplies([
+                {
+                    text: 'button name',
+                    payload: 'button payload'
+                }
+            ])
+        ]
+    ])
+]
+
+result.result[i].stories = [
+    new Story('story 1', [
+        new Path('restaurant_search', ['restaurant_search_response'])
+    ]),
+    new Story('story 2', [
+        new Path('restaurant_search', ['restaurant_search_response']),
+        new Path('outlook_related', ['outlook_search_response'])
+    ])
+]
+
+
+*/

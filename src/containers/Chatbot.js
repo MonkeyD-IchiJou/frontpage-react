@@ -7,13 +7,14 @@ import {
     chatbotStoriesUpdate_act,
     SaveChatbotDatas_act,
     setChatbotTrainingStatus_act,
-    reqChatbotMLData_act
+    reqChatbotMLData_act,
+    chatbotClientsListUpdate_act
 } from './actions/chatbotActions'
 import request from 'superagent'
 import DisplayChatbotPage from './components/DisplayChatbotPage'
 
 class Chatbot extends Component {
-   
+
     componentDidMount() {
         // change the header title to dashboard
         this.props.changeTitle('Chatbot Console')
@@ -21,6 +22,43 @@ class Chatbot extends Component {
         // first I need to request all the datas tht this chatbot has
         const { jwt, backendUrl } = this.props
         this.props.dispatch(reqChatbotMLData_act(backendUrl, jwt, this.props.match.params.topicId))
+
+        // rmb to connect to my socket server
+    }
+
+    connectChatbots = (backendUrl) => {
+        // get all the chatbots infos
+        let chatbotsReducer = this.props.chatbotsReducer
+
+        chatbotsReducer.forEach((chatbot, index) => {
+            // get this chatbot socket
+            let chatbotSocket = chatbot.chatbotSocket
+
+            // trying to join a room by its uuid
+            let roomId = chatbot.uuid
+
+            // connect to my socket server
+            chatbotSocket.connectSocket(backendUrl + '/cbIO')
+
+            // my chatbot socket server subscription
+            chatbotSocket.subscribe('connect', () => {
+
+                // first, asking to join my chatbot room
+                chatbotSocket.socketEmit('admin_join_room', {
+                    roomId: roomId
+                })
+
+                chatbotSocket.subscribe('admin_joined', (data) => {
+                    // client successfully joined the room liao
+                })
+
+                chatbotSocket.subscribe('clientlist_update', (data) => {
+                    // when there are someone connect to this chatbot, admin will get notified
+                    this.props.dispatch(chatbotClientsListUpdate_act(index, data.clientsInfo))
+                })
+
+            })
+        })
     }
 
     updateEntities = (entities) => {
