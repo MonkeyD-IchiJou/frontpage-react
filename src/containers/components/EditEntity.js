@@ -31,8 +31,8 @@ class EditEntity extends Component {
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.entity) {
             this.setState({
-                value: nextProps.entity.name,
-                synonyms: JSON.parse(JSON.stringify(nextProps.entity.values)),
+                name: nextProps.entity.name,
+                values: JSON.parse(JSON.stringify(nextProps.entity.values)),
                 hasSaved: true,
                 newvalue: ''
             })
@@ -55,13 +55,16 @@ class EditEntity extends Component {
                 <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
                 <ProgressSave
+                    hasSaved={hasSaved}
                     clickDone={() => {
                         this.setState({hasSaved: true})
                         this.props.updateEntities(new Entity(name, values))
                     }}
                 />
 
-                <Header>Name</Header>
+                <Header>
+                    Name
+                </Header>
 
                 <Input fluid value={name} onChange={(event, data) => {
                     this.editChanges({ name: data.value })
@@ -70,22 +73,27 @@ class EditEntity extends Component {
                 <Header>Values</Header>
 
                 {
-                    values.map((value, vindex)=>{
-                        return <EditEntityValue 
-                        key={vindex} 
-                        value={value} 
-                        editValueName={(valuename)=>{
-                            values[vindex].name = valuename
-                            this.editChanges({ values: values })
-                        }} 
-                        addNewSynonym={(synonym)=>{
-                            values[vindex].synonyms.push(synonym)
-                            this.editChanges({ values: values })
-                        }}
-                        deleteSynonym={(sindex) =>{
-                            values[vindex].synonyms.splice(sindex, 1)
-                            this.editChanges({ values: values })
-                        }}/>
+                    values.map((value, vindex) => {
+                        return <EditEntityValue
+                            key={vindex}
+                            value={value}
+                            editValueName={(valuename) => {
+                                values[vindex].name = valuename
+                                this.editChanges({ values: values })
+                            }}
+                            addNewSynonym={(synonym) => {
+                                values[vindex].synonyms.push(synonym)
+                                this.editChanges({ values: values })
+                            }}
+                            deleteSynonym={(sindex) => {
+                                values[vindex].synonyms.splice(sindex, 1)
+                                this.editChanges({ values: values })
+                            }}
+                            removeValue={() => {
+                                values.splice(vindex, 1)
+                                this.editChanges({ values: values })
+                            }}
+                        />
                     })
                 }
 

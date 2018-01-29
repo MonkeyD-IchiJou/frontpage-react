@@ -30,6 +30,7 @@ class TrainingChatbot extends Component {
             match,
             history
         } = this.props
+        const { entities, intents, actions, stories } = chatbotInfo
         let gs = history.location.pathname.split("/")
         let pathname = gs[5] // hardcoded magic number here.. whatever
 
@@ -59,22 +60,22 @@ class TrainingChatbot extends Component {
 
                 <Route
                     path={`${match.url}/${menuItems[0]}`}
-                    render={props => <Entities {...props} cbEntities={chatbotInfo.entities} updateEntities={updateEntities} />}
+                    render={props => <Entities {...props} cbEntities={entities} updateEntities={updateEntities} />}
                 />
 
                 <Route
                     path={`${match.url}/${menuItems[1]}`}
-                    render={props => <Intents {...props} cbIntents={chatbotInfo.intents} cbEntities={chatbotInfo.entities} updateIntents={updateIntents} />}
+                    render={props => <Intents {...props} cbIntents={intents} cbEntities={entities} updateIntents={updateIntents} />}
                 />
 
                 <Route
                     path={`${match.url}/${menuItems[2]}`}
-                    render={props => <Actions {...props} cbActions={chatbotInfo.actions} updateActions={updateActions}/>}
+                    render={props => <Actions {...props} cbActions={actions} updateActions={updateActions}/>}
                 />
 
                 <Route
                     path={`${match.url}/${menuItems[3]}`}
-                    render={props => <Stories {...props} cbStories={chatbotInfo.stories} cbIntents={chatbotInfo.intents} cbActions={chatbotInfo.actions} cbEntities={chatbotInfo.entities} updateStories={updateStories}/>}
+                    render={props => <Stories {...props} cbStories={stories} cbIntents={intents} cbActions={actions} cbEntities={entities} updateStories={updateStories}/>}
                 />
 
             </div>

@@ -49,6 +49,7 @@ class EditAction extends Component {
                 <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
                 <ProgressSave
+                    hasSaved={hasSaved}
                     clickDone={() => {
                         this.props.updateActions({ name: actionName, allActions: allActions })
                     }}

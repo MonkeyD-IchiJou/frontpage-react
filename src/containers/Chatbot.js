@@ -28,6 +28,10 @@ class Chatbot extends Component {
         // rmb to connect to my socket server
     }
 
+    componentWillUnmount() {
+        // disconnect my socket server pls
+    }
+
     connectChatbots = (backendUrl) => {
         // get all the chatbots infos
         let chatbotsReducer = this.props.chatbotsReducer

@@ -1,13 +1,23 @@
 import React, { Component } from 'react'
-import { Button } from 'semantic-ui-react'
+import { Button, Icon } from 'semantic-ui-react'
 
 class ProgressSave extends Component {
     render() {
 
-        const { clickDone } = this.props
+        const { clickDone, hasSaved } = this.props
+
+        let iconcorner = 'checkmark'
+        if(!hasSaved) {
+            iconcorner = 'remove'
+        }
 
         return (
-            <Button onClick={() => { clickDone() }} icon='save' basic floated="right"/>
+            <Button onClick={() => { clickDone() }} basic positive={hasSaved} negative={!hasSaved} floated="right">
+                <Icon.Group size='large'>
+                    <Icon name='save' />
+                    <Icon corner name={iconcorner} />
+                </Icon.Group>
+            </Button>
         )
     }
 }

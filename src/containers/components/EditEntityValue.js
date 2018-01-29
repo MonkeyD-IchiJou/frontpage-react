@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Segment, Input, Label, Icon, Form, Grid } from 'semantic-ui-react'
+import { Segment, Input, Label, Icon, Form, Grid, Popup } from 'semantic-ui-react'
 
 class EditEntityValue extends Component {
 
@@ -19,6 +19,15 @@ class EditEntityValue extends Component {
 
         return(
             <Segment>
+
+                <Label attached='top'>
+                    <Popup
+                        trigger={
+                            <Icon name='close' color='red' onClick={this.props.removeValue} style={{ float: 'right' }} />
+                        }
+                        content='Remove Value'
+                    />
+                </Label>
 
                 <Grid columns='equal'>
                     <Grid.Column>

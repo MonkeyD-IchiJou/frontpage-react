@@ -60,6 +60,7 @@ class EditStory extends Component {
                 <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
                 <ProgressSave
+                    hasSaved={hasSaved}
                     clickDone={() => {
                         this.props.updateStories({ name: storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint })
                     }}
@@ -93,6 +94,8 @@ class EditStory extends Component {
                             this.editChanges({ intent: value })
                         }}
                     />
+
+                    <Divider hidden />
 
                     <EditIntentConditions intentConditions={intentConditions} allAvailableEntities={allAvailableEntities} allAvailableEntityValues={allAvailableEntityValues} updateIntentCondition={(intentCondition, iindex)=>{
                         intentConditions[iindex] = intentCondition

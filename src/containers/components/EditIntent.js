@@ -96,6 +96,7 @@ class EditIntent extends Component {
                 <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
                 <ProgressSave
+                    hasSaved={hasSaved}
                     clickDone={() => {
                         this.props.updateIntents(new Intent(intent, entities, texts))
                     }}
@@ -122,7 +123,7 @@ class EditIntent extends Component {
                     }}
                 />
 
-                <Header>Common Examples</Header>
+                <Header>{texts.length} Common Examples</Header>
 
                 <Table striped selectable>
 
