@@ -1,11 +1,11 @@
 const userReducer = (
-    state = { 
-        userid: 0, 
-        username: '', 
-        email: '', 
-        userjoindate: '', 
-        jwt: '', 
-        uservalidate: false 
+    state = {
+        userid: 0,
+        username: '',
+        email: '',
+        userjoindate: '',
+        jwt: '',
+        uservalidate: false
     },
     action
 ) => {
@@ -51,11 +51,11 @@ const userReducer = (
             // reset the user state
             state = {
                 ...state,
-                userid: 0, 
-                username: '', 
-                email: '', 
-                userjoindate: '', 
-                jwt: '', 
+                userid: 0,
+                username: '',
+                email: '',
+                userjoindate: '',
+                jwt: '',
                 uservalidate: false
             }
             break
