@@ -8,7 +8,7 @@ class CbDashboard extends Component {
         const listChatbots = chatbotsReducer.map((chatbot, index) =>
             <Table.Row key={index}>
                 <Table.Cell>
-                    <a href={'/homepage/console/chatbot/' + index}>{chatbot.name}</a>
+                    <a href={'/homepage/console/chatbot/' + chatbot.uuid}>{chatbot.name}</a>
                 </Table.Cell>
                 <Table.Cell>
                     {chatbot.description}

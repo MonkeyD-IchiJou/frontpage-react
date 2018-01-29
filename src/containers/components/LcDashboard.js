@@ -4,7 +4,16 @@ import { Segment, Button, Table, Header, Popup, Divider } from 'semantic-ui-reac
 class LcDashboard extends Component {
     render() {
         const livechatsReducer = this.props.livechatsReducer
-        let listLivechats = ''
+        let listLivechats = (
+            <Table.Row>
+                <Table.Cell>
+                    
+                </Table.Cell>
+                <Table.Cell>
+                    
+                </Table.Cell>
+            </Table.Row>
+        )
         if (livechatsReducer) {
             listLivechats = livechatsReducer.map((livechat) =>
                 <Table.Row key={livechat.uuid}>
