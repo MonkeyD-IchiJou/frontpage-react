@@ -71,6 +71,39 @@ var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
     })
 }
 
+// get single chatbot infos
+var GetChatbotInfos = (backendurl, jwt, cbuuid) => {
+    return new Promise((resolve, reject) => {
+        request
+            .get(backendurl + '/chatbot/v1/info')
+            .query({
+                token: jwt,
+                uuid: cbuuid
+            })
+            .end((err, res) => {
+
+                try {
+                    if (err || !res.ok) {
+                        let errormsg = res.body.errors
+                        throw errormsg
+                    }
+                    else {
+                        let result = res.body
+
+                        if (!result) {
+                            throw new Error('no body msg')
+                        }
+
+                        resolve(result.result[0])
+                    }
+                } catch (e) {
+                    reject(e.toString())
+                }
+
+            })
+    })
+}
+
 // request to get domain, nlu data, stories of this chatbot
 export function reqChatbotMLData_act(backendurl, jwt, cbuuid) {
     return {
@@ -84,6 +117,14 @@ export function SaveChatbotDatas_act(backendurl, cbuuid, cbdatas, jwt) {
     return {
         type: 'SAVE_CB_DATAS',
         payload: SaveChatbotData(backendurl, cbuuid, cbdatas, jwt)
+    }
+}
+
+// request a single chatbot info
+export function reqChatbotInfos_act(backendurl, jwt, cbuuid) {
+    return {
+        type: 'USR_REQ_CHATBOT_INFO',
+        payload: GetChatbotInfos(backendurl, jwt, cbuuid)
     }
 }
 
