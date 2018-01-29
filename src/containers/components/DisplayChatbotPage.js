@@ -52,7 +52,8 @@ class DisplayChatbotPage extends Component {
                                     entities: chosenChatbot.entities,
                                     intents: chosenChatbot.intents,
                                     actions: chosenChatbot.actions,
-                                    stories: chosenChatbot.stories
+                                    stories: chosenChatbot.stories,
+                                    subDomains: chosenChatbot.subDomains
                                 }
                             )
                         }} >

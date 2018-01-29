@@ -9,7 +9,8 @@ import {
     setChatbotTrainingStatus_act,
     reqChatbotMLData_act,
     chatbotClientsListUpdate_act,
-    reqChatbotInfos_act
+    reqChatbotInfos_act,
+    chatbotSubDomainsUpdate_act
 } from './actions/chatbotActions'
 import request from 'superagent'
 import DisplayChatbotPage from './components/DisplayChatbotPage'
@@ -85,6 +86,10 @@ class Chatbot extends Component {
     updateStories = (stories) => {
         // there is a chatbot want to update its stories
         this.props.dispatch(chatbotStoriesUpdate_act(stories))
+    }
+
+    updateSubDomains = (subDomains) => {
+        this.props.dispatch(chatbotSubDomainsUpdate_act(subDomains))
     }
 
     // save and train the chatbot datas, need give uuid for knowing which cb is it
