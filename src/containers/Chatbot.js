@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
 import {
     chatbotEntitiesUpdate_act,
     chatbotIntentsUpdate_act,
     chatbotActionsUpdate_act,
     chatbotStoriesUpdate_act,
     SaveChatbotDatas_act,
-    setChatbotTrainingStatus_act
-} from './actions/chatbotsActions'
+    setChatbotTrainingStatus_act,
+    reqChatbotMLData_act
+} from './actions/chatbotActions'
 import request from 'superagent'
 import DisplayChatbotPage from './components/DisplayChatbotPage'
 
@@ -17,44 +17,48 @@ class Chatbot extends Component {
     componentDidMount() {
         // change the header title to dashboard
         this.props.changeTitle('Chatbot Console')
+
+        // first I need to request all the datas tht this chatbot has
+        const { jwt, backendUrl } = this.props
+        this.props.dispatch(reqChatbotMLData_act(backendUrl, jwt, this.props.match.params.topicId))
     }
 
-    updateEntities = (cbindex, entities) => {
+    updateEntities = (entities) => {
         // there is a chatbot want to update its entities
-        this.props.dispatch(chatbotEntitiesUpdate_act(cbindex, entities))
+        this.props.dispatch(chatbotEntitiesUpdate_act(entities))
     }
 
-    updateIntents = (cbindex, intents) => {
+    updateIntents = (intents) => {
         // there is a chatbot want to update its intents
-        this.props.dispatch(chatbotIntentsUpdate_act(cbindex, intents))
+        this.props.dispatch(chatbotIntentsUpdate_act(intents))
     }
 
-    updateActions = (cbindex, actions) => {
+    updateActions = (actions) => {
         // there is a chatbot want to update its actions
-        this.props.dispatch(chatbotActionsUpdate_act(cbindex, actions))
+        this.props.dispatch(chatbotActionsUpdate_act(actions))
     }
 
-    updateStories = (cbindex, stories) => {
+    updateStories = (stories) => {
         // there is a chatbot want to update its stories
-        this.props.dispatch(chatbotStoriesUpdate_act(cbindex, stories))
+        this.props.dispatch(chatbotStoriesUpdate_act(stories))
     }
 
     // save and train the chatbot datas, need give uuid for knowing which cb is it
-    SaveChatbotDatas = (cbuuid, cbdatas, cbid) => {
+    SaveChatbotDatas = (cbdatas) => {
         const { jwt, backendUrl } = this.props
-        this.props.dispatch(setChatbotTrainingStatus_act(cbid, true))
-        this.props.dispatch(SaveChatbotDatas_act(backendUrl, cbuuid, cbdatas, jwt, cbid))
+        this.props.dispatch(setChatbotTrainingStatus_act(true))
+        this.props.dispatch(SaveChatbotDatas_act(backendUrl, this.props.match.params.topicId, cbdatas, jwt))
     }
 
     // simple testing with my nlu engine, uuid for knowing which cb to communicate to
-    checkQuery = (cbuuid, textmsg, callback) => {
+    checkQuery = (textmsg, callback) => {
         const { backendUrl, usremail } = this.props
         request
             .post(backendUrl + '/chatbot/v1/query')
             .set('contentType', 'application/json; charset=utf-8')
             .set('dataType', 'json')
             .send({
-                uuid: cbuuid,
+                uuid: this.props.match.params.topicId,
                 text_message: textmsg,
                 sender_id: usremail
             })
@@ -72,7 +76,7 @@ class Chatbot extends Component {
                             throw new Error('no body msg')
                         }
 
-                        this.executeAction(backendUrl, result.next_action, cbuuid, usremail, callback, [result])
+                        this.executeAction(backendUrl, result.next_action, usremail, callback, [result])
 
                     }
                 } catch (e) {
@@ -82,7 +86,7 @@ class Chatbot extends Component {
             })
     }
 
-    executeAction = (backendUrl, next_action, uuid, sender_id, callback, compileActions) => {
+    executeAction = (backendUrl, next_action, sender_id, callback, compileActions) => {
         if (next_action === 'action_listen') {
             // stop calling execute action liao.. done
             callback(compileActions)
@@ -95,7 +99,7 @@ class Chatbot extends Component {
                 .set('contentType', 'application/json; charset=utf-8')
                 .set('dataType', 'json')
                 .send({
-                    uuid: uuid,
+                    uuid: this.props.match.params.topicId,
                     action: next_action,
                     sender_id: sender_id
                 })
@@ -117,7 +121,7 @@ class Chatbot extends Component {
                             compileActions.push(result.returnAct)
 
                             // execute again to see whether still got any action need to execute mah
-                            this.executeAction(backendUrl, result.result.next_action, uuid, sender_id, callback, compileActions)
+                            this.executeAction(backendUrl, result.result.next_action, sender_id, callback, compileActions)
 
                         }
                     } catch (e) {
@@ -130,31 +134,26 @@ class Chatbot extends Component {
     }
 
     render() {
+        const { chatbotReducer, match, history } = this.props
         return (
-            <div>
-                <Route 
-                    path={`${this.props.match.url}/:topicId`} 
-                    render= { 
-                        props => <DisplayChatbotPage
-                            {...props}
-                            chatbotsReducer={this.props.chatbotsReducer}
-                            updateEntities={this.updateEntities}
-                            updateIntents={this.updateIntents}
-                            updateActions={this.updateActions}
-                            updateStories={this.updateStories}
-                            SaveChatbotDatas={this.SaveChatbotDatas}
-                            checkQuery={this.checkQuery}
-                        />
-                    }
-                />
-            </div>
+            <DisplayChatbotPage
+                match={match}
+                history={history}
+                chosenChatbot={chatbotReducer}
+                updateEntities={this.updateEntities}
+                updateIntents={this.updateIntents}
+                updateActions={this.updateActions}
+                updateStories={this.updateStories}
+                SaveChatbotDatas={this.SaveChatbotDatas}
+                checkQuery={this.checkQuery}
+            />
         )
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        chatbotsReducer: state.chatbotsReducer
+        chatbotReducer: state.chatbotReducer
     }
 }
 
