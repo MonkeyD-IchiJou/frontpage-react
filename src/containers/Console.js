@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Chatbot from './Chatbot'
-import Livechat from './components/Livechat'
+import Livechat from './Livechat'
 import ConsoleHeader from './components/ConsoleHeader'
 import { Container } from 'semantic-ui-react'
 
@@ -25,8 +25,6 @@ class Console extends Component {
             ClickLogout,
             history,
             userReducer,
-            chatbotsReducer,
-            livechatReducer,
             backendUrl
         } = this.props
 
@@ -45,8 +43,6 @@ class Console extends Component {
                             {...props}
                             changeTitle={this.changeTitle}
                             userReducer={userReducer}
-                            chatbotsReducer={chatbotsReducer}
-                            livechatsReducer={livechatReducer}
                             backendUrl={backendUrl}
                         />
                     }
@@ -66,13 +62,11 @@ class Console extends Component {
                 />
 
                 <Route
-                    path={`${match.url}/livechat`}
+                    path={`${match.url}/livechat/:topicId`}
                     render={
                         props => <Livechat
                             {...props}
                             changeTitle={this.changeTitle}
-                            livechatsReducer={livechatReducer}
-                            sendClientMsg={this.LivechatSendClientMsg}
                         />
                     }
                 />

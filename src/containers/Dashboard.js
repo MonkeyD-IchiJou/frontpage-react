@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { reqChatbotsInfos_act } from './actions/chatbotsActions'
+import { reqLivechatsInfos_act } from './actions/livechatsActions'
 import UsrDashboard from './components/UsrDashboard'
 import CbDashboard from './components/CbDashboard'
 import LcDashboard from './components/LcDashboard'
@@ -19,6 +20,7 @@ class Dashboard extends Component {
         this.props.dispatch(reqChatbotsInfos_act(backendUrl, jwt))
 
         // same thing for live chat projects
+        this.props.dispatch(reqLivechatsInfos_act(backendUrl, jwt))
     }
 
     render() {
@@ -47,7 +49,7 @@ class Dashboard extends Component {
 const mapStateToProps = (state) => {
     return {
         chatbotsReducer: state.chatbotsReducer,
-        livechatReducer: state.livechatReducer
+        livechatsReducer: state.livechatsReducer
     }
 }
 

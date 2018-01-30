@@ -1,8 +1,39 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
-import { Table, Header, Button, Form } from 'semantic-ui-react'
+import { connect } from 'react-redux'
 
-class HardcodedSendMsg extends Component {
+class Livechat extends Component {
+
+    componentDidMount() {
+        // change the header title to dashboard
+        this.props.changeTitle('Livechat Console')
+
+        // req this livechat project info
+        // and then connect to my socket server
+    }
+
+    componentWillUnmount() {
+        // disconnect my socket server pls
+    }
+
+    render() {
+        return (
+            <div>
+                adfasf
+            </div>
+        )
+    }
+
+}
+
+const mapStateToProps = (state) => {
+    return {
+        livechatReducer: state.livechatReducer
+    }
+}
+
+export default connect(mapStateToProps)(Livechat)
+
+/*class HardcodedSendMsg extends Component {
 
     constructor(props) {
         super(props)
@@ -33,8 +64,6 @@ class HardcodedSendMsg extends Component {
         )
     }
 }
-
-
 
 class DisplayLivechat extends Component {
     sendMsg = (clientSocketId, clientName, msg) => {
@@ -93,27 +122,7 @@ class DisplayLivechat extends Component {
             </div>
         )
     }
-}
-
-class Livechat extends Component {
-    componentDidMount() {
-        // change the header title to dashboard
-        this.props.changeTitle('Livechat')
-    }
-
-    render() {
-        return (
-            <div>
-                <Route
-                    path={`${this.props.match.url}/:topicId`}
-                    render={props => <DisplayLivechat {...props} livechatsReducer={this.props.livechatsReducer} sendClientMsg={this.props.sendClientMsg}/>}
-                />
-            </div>
-        )
-    }
-}
-
-export default Livechat
+}*/
 
 /**
  * getAllLivechatsInfo = () => {
