@@ -66,6 +66,8 @@ class Console extends Component {
                     render={
                         props => <Livechat
                             {...props}
+                            jwt={jwt}
+                            backendUrl={backendUrl}
                             changeTitle={this.changeTitle}
                         />
                     }

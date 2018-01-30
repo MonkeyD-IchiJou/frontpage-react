@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { reqLivechatInfos_act } from './actions/livechatActions'
 
 class Livechat extends Component {
 
@@ -8,6 +9,8 @@ class Livechat extends Component {
         this.props.changeTitle('Livechat Console')
 
         // req this livechat project info
+        const { jwt, backendUrl } = this.props
+        this.props.dispatch(reqLivechatInfos_act(backendUrl, jwt, this.props.match.params.topicId))
         // and then connect to my socket server
     }
 
