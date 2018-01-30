@@ -6,14 +6,14 @@ import envReducer from './reducers/envReducer'
 import userReducer from './reducers/userReducer'
 import chatbotsReducer from './reducers/chatbotsReducer'
 import chatbotReducer from './reducers/chatbotReducer'
-import livechatReducer from './reducers/livechatReducer'
+import livechatsReducer from './reducers/livechatsReducer'
 
 const logger = createLogger({
     collapsed: true
 })
 
 export default createStore(
-    combineReducers({ envReducer, userReducer, chatbotsReducer, livechatReducer, chatbotReducer }),
+    combineReducers({ envReducer, userReducer, chatbotsReducer, livechatsReducer, chatbotReducer }),
     {},
     applyMiddleware(logger, thunk, promiseMiddleware())
 )
