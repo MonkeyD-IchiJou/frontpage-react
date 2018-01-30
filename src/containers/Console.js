@@ -68,6 +68,7 @@ class Console extends Component {
                             {...props}
                             jwt={jwt}
                             backendUrl={backendUrl}
+                            userReducer={userReducer}
                             changeTitle={this.changeTitle}
                         />
                     }

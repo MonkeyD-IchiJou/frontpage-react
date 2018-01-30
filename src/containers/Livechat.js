@@ -1,27 +1,105 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { reqLivechatInfos_act } from './actions/livechatActions'
+import SocketConnect from './classes/SocketConnect'
+import { Button } from 'semantic-ui-react'
 
 class Livechat extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            livechatSocket: new SocketConnect(this.props.match.params.topicId),
+            clientLists: []
+        }
+    }
 
     componentDidMount() {
         // change the header title to dashboard
         this.props.changeTitle('Livechat Console')
 
         // req this livechat project info
-        const { jwt, backendUrl } = this.props
-        this.props.dispatch(reqLivechatInfos_act(backendUrl, jwt, this.props.match.params.topicId))
+        const { jwt, backendUrl, match, userReducer } = this.props
+        const lcuuid = match.params.topicId
+        this.props.dispatch(reqLivechatInfos_act(backendUrl, jwt, lcuuid))
+
         // and then connect to my socket server
+        let livechatSocket = this.state.livechatSocket
+
+        // disconnect the previous live chat if exist
+        livechatSocket.disconnectSocket()
+
+        livechatSocket.connectSocket(backendUrl + '/lcIO')
+
+        // my livechat socket server subscription
+        livechatSocket.subscribe('connect', () => {
+
+            // first, asking to join my chatbot room
+            livechatSocket.socketEmit('admin_join_room', {
+                roomId: lcuuid,
+                username: userReducer.username,
+                userid: userReducer.userid
+            })
+
+            // waiting for confirmation for joining room
+            livechatSocket.subscribe('admin_joined', (data) => {
+
+            })
+
+            // admin constantly listening for new update of client list
+            livechatSocket.subscribe('clientlist_update', (data) => {
+                // when there are someone connect to this chatbot, admin will get notified
+                this.setState({ clientLists: data.clientsInfo})
+            })
+
+            // waiting for any clients to send me some msg
+            livechatSocket.subscribe('admin_receiving_msg', (data) => {
+                console.log(data)
+            })
+
+        })
+
     }
 
     componentWillUnmount() {
         // disconnect my socket server pls
+        this.state.livechatSocket.disconnectSocket()
+    }
+
+    LivechatSendClientMsg = (clientSocketId, clientUsername, msg) => {
+
+        const { userReducer } = this.props
+        let livechatSocket = this.state.livechatSocket
+
+        if (livechatSocket) {
+            livechatSocket.socketEmit('admin_send_client_msg', {
+                clientSocketId: clientSocketId,
+                clientUsername: clientUsername,
+                username: userReducer.username,
+                userid: userReducer.userid,
+                msg: msg
+            })
+        }
+
     }
 
     render() {
         return (
             <div>
                 adfasf
+                {
+                    this.state.clientLists.map((client, index)=>{
+                        /**
+                         * clientMsg clientName clientSocketId
+                         */
+                        return (<div key={index}>{client.clientMsg} {client.clientName} {client.clientSocketId}</div>)
+                    })
+                }
+
+                <Button onClick={()=>{
+                    const chosenClient = this.state.clientLists[0]
+                    this.LivechatSendClientMsg(chosenClient.clientSocketId, chosenClient.clientName, 'hello??')
+                }}>ClickSend</Button>
             </div>
         )
     }
@@ -35,6 +113,21 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(Livechat)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*class HardcodedSendMsg extends Component {
 
