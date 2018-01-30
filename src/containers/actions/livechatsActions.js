@@ -1,5 +1,4 @@
 import request from 'superagent'
-import SocketConnect from './../classes/SocketConnect'
 
 // get all chatbots infos
 var GetAllLivechatsInfos = (backendurl, jwt) => {
@@ -23,10 +22,6 @@ var GetAllLivechatsInfos = (backendurl, jwt) => {
                             throw new Error('no body msg')
                         }
 
-                        for (let i = 0; i < result.result.length; ++i) {
-                            result.result[i].livechatSocket = new SocketConnect(result.result[i].uuid)
-                        }
-
                         resolve(result.result)
                     }
                 } catch (e) {
@@ -42,13 +37,5 @@ export function reqLivechatsInfos_act(backendurl, jwt) {
     return {
         type: 'USR_REQ_LIVECHATS',
         payload: GetAllLivechatsInfos(backendurl, jwt)
-    }
-}
-
-// livechat listening for new client online
-export function livechatsClientsListUpdate_act(cbindex, clientsList) {
-    return {
-        type: 'LIVECHAT_UPDATE_CLIENTS',
-        payload: { cbindex: cbindex, clientsList: clientsList }
     }
 }
