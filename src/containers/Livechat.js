@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { reqLivechatInfos_act } from './actions/livechatActions'
 import SocketConnect from './classes/SocketConnect'
-import { Button } from 'semantic-ui-react'
+import DisplayLivechatPage from './components/DisplayLivechatPage'
 
 class Livechat extends Component {
 
@@ -10,7 +10,9 @@ class Livechat extends Component {
         super(props)
         this.state = {
             livechatSocket: new SocketConnect(this.props.match.params.topicId),
-            clientLists: []
+            clientLists: [],
+            currentClient: {},
+            currentChatLogs: []
         }
     }
 
@@ -54,7 +56,7 @@ class Livechat extends Component {
 
             // waiting for any clients to send me some msg
             livechatSocket.subscribe('admin_receiving_msg', (data) => {
-                console.log(data)
+                this.setState({ currentChatLogs: [...this.state.currentChatLogs, data.msg] })
             })
 
         })
@@ -72,6 +74,7 @@ class Livechat extends Component {
         let livechatSocket = this.state.livechatSocket
 
         if (livechatSocket) {
+            this.setState({ currentChatLogs: [...this.state.currentChatLogs, msg] })
             livechatSocket.socketEmit('admin_send_client_msg', {
                 clientSocketId: clientSocketId,
                 clientUsername: clientUsername,
@@ -83,24 +86,25 @@ class Livechat extends Component {
 
     }
 
-    render() {
-        return (
-            <div>
-                adfasf
-                {
-                    this.state.clientLists.map((client, index)=>{
-                        /**
-                         * clientMsg clientName clientSocketId
-                         */
-                        return (<div key={index}>{client.clientMsg} {client.clientName} {client.clientSocketId}</div>)
-                    })
-                }
+    selectCurrentClientToChatWith = (index) => {
+        this.setState({ currentClient: this.state.clientLists[index], currentChatLogs: [] })
+    }
 
-                <Button onClick={()=>{
-                    const chosenClient = this.state.clientLists[0]
-                    this.LivechatSendClientMsg(chosenClient.clientSocketId, chosenClient.clientName, 'hello??')
-                }}>ClickSend</Button>
-            </div>
+    render() {
+        const { livechatReducer, match, history } = this.props
+        const { clientLists, currentClient, currentChatLogs } = this.state
+
+        return (
+            <DisplayLivechatPage
+                match={match}
+                history={history}
+                chosenLivechat={livechatReducer}
+                clientOnlineLists={clientLists}
+                selectCurrentClientToChatWith={this.selectCurrentClientToChatWith}
+                LivechatSendClientMsg={this.LivechatSendClientMsg}
+                currentClient={currentClient}
+                currentChatLogs={currentChatLogs}
+            />
         )
     }
 
