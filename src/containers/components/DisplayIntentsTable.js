@@ -51,7 +51,7 @@ class DisplayIntentsTable extends Component {
                 <Dropdown text='Actions'>
                     <Dropdown.Menu>
                         <Dropdown.Item icon='share' text='Move to other Subdomain' onClick={()=>{
-                            console.log('click move to other domain')
+                            
                         }}/>
                         <Dropdown.Divider />
                         <Dropdown.Item icon='trash' text='Remove' onClick={()=>{

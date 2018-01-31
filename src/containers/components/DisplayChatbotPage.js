@@ -21,6 +21,7 @@ class DisplayChatbotPage extends Component {
             updateIntents,
             updateActions,
             updateStories,
+            updateSubDomains,
             match,
             history,
             SaveChatbotDatas,
@@ -41,6 +42,7 @@ class DisplayChatbotPage extends Component {
                             updateIntents={updateIntents}
                             updateActions={updateActions}
                             updateStories={updateStories}
+                            updateSubDomains={updateSubDomains}
                         />
                     </Grid.Column>
 
