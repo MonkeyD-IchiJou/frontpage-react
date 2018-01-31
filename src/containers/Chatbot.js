@@ -89,6 +89,7 @@ class Chatbot extends Component {
     }
 
     updateSubDomains = (subDomains) => {
+        // update this subdomains
         this.props.dispatch(chatbotSubDomainsUpdate_act(subDomains))
     }
 
@@ -193,6 +194,7 @@ class Chatbot extends Component {
                 updateIntents={this.updateIntents}
                 updateActions={this.updateActions}
                 updateStories={this.updateStories}
+                updateSubDomains={this.updateSubDomains}
                 SaveChatbotDatas={this.SaveChatbotDatas}
                 checkQuery={this.checkQuery}
             />
