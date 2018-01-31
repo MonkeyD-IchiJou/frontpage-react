@@ -4,6 +4,7 @@ import Entities from './Entities'
 import Intents from './Intents'
 import Actions from './Actions'
 import Stories from './Stories'
+import CreateNewSubdomain from './CreateNewSubdomain'
 import { Menu, Dropdown } from 'semantic-ui-react'
 
 class TrainingChatbot extends Component {
@@ -12,7 +13,7 @@ class TrainingChatbot extends Component {
         super(props)
         this.state = {
             menuItems: ['Entities', 'Intents', 'Actions', 'Stories'],
-            selectedSubdomains: 'Main'
+            selectedSubdomains: 'Main',
         }
     }
 
@@ -28,6 +29,7 @@ class TrainingChatbot extends Component {
             updateIntents,
             updateEntities,
             updateActions,
+            updateSubDomains,
             match,
             history
         } = this.props
@@ -43,6 +45,7 @@ class TrainingChatbot extends Component {
         let availableSubDomains = subDomains.map((SubDomain)=>{
             return { text: SubDomain.name, value: SubDomain.name }
         })
+
         availableSubDomains.push({
             text: 'Main',
             value: 'Main'
@@ -50,7 +53,8 @@ class TrainingChatbot extends Component {
 
         return (
             <div>
-                <Menu inverted>
+                <Menu inverted size='small'>
+
                     <Menu.Item>
                         <Dropdown
                             value={selectedSubdomains}
@@ -60,13 +64,38 @@ class TrainingChatbot extends Component {
                                 this.setState({ selectedSubdomains: value })
                             }}
                         />
+                        
                     </Menu.Item>
+
+                    <Menu.Item>
+                        <CreateNewSubdomain
+                            selectedSubdomains={selectedSubdomains}
+                            createNew={(subdomainName) => {
+                                // create a new subDomains
+                                let subsubDomains = JSON.parse(JSON.stringify(subDomains))
+                                subsubDomains.push({ name: subdomainName, intents: [], actions: [], stories: [] })
+                                updateSubDomains(subsubDomains)
+                            }}
+                            removeSubdomain={(subdomainName, index) => {
+                                let subsubDomains = JSON.parse(JSON.stringify(subDomains))
+                                subsubDomains.forEach((subsub, index) => {
+                                    if (subsub.name === subdomainName) {
+                                        subsubDomains.splice(index, 1)
+                                    }
+                                })
+                                updateSubDomains(subsubDomains)
+                                this.setState({ selectedSubdomains: 'Main' })
+                            }}
+                        />
+                    </Menu.Item>
+
                     <Menu.Menu position='right'>
                         <Menu.Item name={menuItems[0]} active={pathname === menuItems[0]} onClick={this.handleItemClick} />
                         <Menu.Item name={menuItems[1]} active={pathname === menuItems[1]} onClick={this.handleItemClick} />
                         <Menu.Item name={menuItems[2]} active={pathname === menuItems[2]} onClick={this.handleItemClick} />
                         <Menu.Item name={menuItems[3]} active={pathname === menuItems[3]} onClick={this.handleItemClick} />
                     </Menu.Menu>
+
                 </Menu>
 
                 <Route

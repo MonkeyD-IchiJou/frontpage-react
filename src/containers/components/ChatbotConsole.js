@@ -27,6 +27,7 @@ class ChatbotConsole extends Component {
             updateIntents,
             updateActions,
             updateStories,
+            updateSubDomains,
             match
         } = this.props
         let gs = history.location.pathname.split("/")
@@ -76,6 +77,7 @@ class ChatbotConsole extends Component {
                                 updateIntents={updateIntents}
                                 updateActions={updateActions}
                                 updateStories={updateStories}
+                                updateSubDomains={updateSubDomains}
                             />
                         }
                     />
