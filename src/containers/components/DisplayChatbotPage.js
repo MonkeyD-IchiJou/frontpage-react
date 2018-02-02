@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ChatbotConsole from './ChatbotConsole'
 import FooterForm from './FooterForm'
-import ReactJson from 'react-json-view'
+import DisplayCbQueryRes from './DisplayCbQueryRes'
 import { Grid, Button, Icon, Divider } from 'semantic-ui-react'
 
 class DisplayChatbotPage extends Component {
@@ -25,7 +25,8 @@ class DisplayChatbotPage extends Component {
             match,
             history,
             SaveChatbotDatas,
-            checkQuery
+            checkQuery,
+            uuid
         } = this.props
 
         if (chosenChatbot) {
@@ -70,7 +71,7 @@ class DisplayChatbotPage extends Component {
                             })
                         }} />
 
-                        <ReactJson src={this.state.displayTmpJson} displayDataTypes={false} displayObjectSize={false}/>
+                        <DisplayCbQueryRes displayTmpJson={this.state.displayTmpJson} uuid={uuid} chatbotInfo={chosenChatbot}/>
 
                     </Grid.Column>
 
