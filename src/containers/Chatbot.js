@@ -126,7 +126,7 @@ class Chatbot extends Component {
                             throw new Error('no body msg')
                         }
 
-                        this.executeAction(backendUrl, result.next_action, usremail, callback, [result])
+                        this.executeAction(backendUrl, result.next_action, usremail, callback, [result.tracker])
 
                     }
                 } catch (e) {
@@ -168,7 +168,7 @@ class Chatbot extends Component {
                             }
 
                             // store the action definition
-                            compileActions.push(result.returnAct)
+                            compileActions.push({actionName: next_action, actionsExecuted: result.returnAct})
 
                             // execute again to see whether still got any action need to execute mah
                             this.executeAction(backendUrl, result.result.next_action, sender_id, callback, compileActions)
@@ -196,6 +196,7 @@ class Chatbot extends Component {
                 updateStories={this.updateStories}
                 updateSubDomains={this.updateSubDomains}
                 SaveChatbotDatas={this.SaveChatbotDatas}
+                uuid={match.params.topicId}
                 checkQuery={this.checkQuery}
             />
         )
