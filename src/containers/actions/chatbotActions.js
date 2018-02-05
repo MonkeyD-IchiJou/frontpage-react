@@ -219,7 +219,8 @@ result.result[i].actions = [
     new Action('outlook_search_response', [
         [
             new TextResponse('yo look'),
-            new ImageResponse('kek.png')
+            new ImageResponse('kek.png'),
+            new CustomResponse({msg: 'custom msg'})
         ],
         [
             new QuickReplies([
