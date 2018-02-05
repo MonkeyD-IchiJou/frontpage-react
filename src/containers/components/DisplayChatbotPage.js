@@ -26,7 +26,8 @@ class DisplayChatbotPage extends Component {
             history,
             SaveChatbotDatas,
             checkQuery,
-            uuid
+            uuid,
+            backendUrl
         } = this.props
 
         if (chosenChatbot) {
@@ -44,6 +45,7 @@ class DisplayChatbotPage extends Component {
                             updateActions={updateActions}
                             updateStories={updateStories}
                             updateSubDomains={updateSubDomains}
+                            backendUrl={backendUrl}
                         />
                     </Grid.Column>
 
