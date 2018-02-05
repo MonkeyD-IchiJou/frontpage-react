@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Entity from './../classes/Entity'
 import FooterForm from './FooterForm'
 import ConfirmRemove from './ConfirmRemove'
-import { Table, Pagination } from 'semantic-ui-react'
+import { Table, Pagination, Message } from 'semantic-ui-react'
 
 class DisplayEntitiesTable extends Component {
 
@@ -30,42 +30,54 @@ class DisplayEntitiesTable extends Component {
         const sliceStartId = (activePage - 1) * 10
         const sliceEndId = activePage * 10
 
+        let EmptyEntitiesMsg = ''
+        if (entities.length === 0) {
+            EmptyEntitiesMsg = (
+                <Message info>
+                    <Message.Header>0 Entites Found</Message.Header>
+                    <p>Create a new entity by submitting a form below</p>
+                </Message>
+            )
+        }
         return (
-            <Table selectable>
+            <div>
+                {EmptyEntitiesMsg}
+                <Table selectable>
 
-                <Table.Body>
-                    {entities.slice(sliceStartId, sliceEndId).map((entity, index) => {
-                        // the real index
-                        index += sliceStartId
-                        return (
-                            <Table.Row key={index}>
-                                <Table.Cell>
-                                    <ConfirmRemove confirmAction={() => {
-                                        // remove this entity
-                                        entities.splice(index, 1)
-                                        // then update my redux store
-                                        updateEntities(entities)
-                                    }} />
-                                    <span style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{entity.name}</span>
-                                </Table.Cell>
-                            </Table.Row>
-                        )
-                    })}
-                </Table.Body>
+                    <Table.Body>
+                        {entities.slice(sliceStartId, sliceEndId).map((entity, index) => {
+                            // the real index
+                            index += sliceStartId
+                            return (
+                                <Table.Row key={index}>
+                                    <Table.Cell>
+                                        <ConfirmRemove confirmAction={() => {
+                                            // remove this entity
+                                            entities.splice(index, 1)
+                                            // then update my redux store
+                                            updateEntities(entities)
+                                        }} />
+                                        <span style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{entity.name}</span>
+                                    </Table.Cell>
+                                </Table.Row>
+                            )
+                        })}
+                    </Table.Body>
 
-                <Table.Footer fullWidth>
-                    <Table.Row>
-                        <Table.HeaderCell>
-                            <FooterForm placeholder='Create New Entity' formSubmit={(formvalue) => {
-                                entities.push(new Entity(formvalue, []))
-                                updateEntities(entities)
-                            }} />
-                            {displayPagination}
-                        </Table.HeaderCell>
-                    </Table.Row>
-                </Table.Footer>
+                    <Table.Footer fullWidth>
+                        <Table.Row>
+                            <Table.HeaderCell>
+                                <FooterForm placeholder='Create New Entity' formSubmit={(formvalue) => {
+                                    entities.push(new Entity(formvalue, []))
+                                    updateEntities(entities)
+                                }} />
+                                {displayPagination}
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Footer>
 
-            </Table>
+                </Table>
+            </div>
         )
     }
 }
