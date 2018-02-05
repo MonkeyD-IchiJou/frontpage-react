@@ -3,10 +3,12 @@ import TextResponse from './../classes/TextResponse'
 import ImageResponse from './../classes/ImageResponse'
 import QuickReplies from './../classes/QuickReplies'
 import TmpFormResponse from './../classes/TmpFormResponse'
+import CustomResponse from './../classes/CustomResponse'
 import ResponseText from './ResponseText'
 import ResponseImage from './ResponseImage'
 import ResponseQR from './ResponseQR'
 import ResponseTmp from './ResponseTmp'
+import ResponseCustom from './ResponseCustom'
 import { Segment, Label, Popup, Icon, Button, Divider } from 'semantic-ui-react'
 
 class EditSingleAction extends Component {
@@ -61,6 +63,14 @@ class EditSingleAction extends Component {
                             )
                             title = 'Tmp Response'
                             break
+
+                        case 'CR':
+                            torender = (
+                                <ResponseCustom action={action} updateAction={ua} />
+                            )
+                            title = 'Custom Response'
+                            break
+
                         default:
                             break
                     }
@@ -120,6 +130,13 @@ class EditSingleAction extends Component {
                             this.props.updateActions(actions)
                         }}>
                             TmpForm
+                        </Button>
+
+                        <Button onClick={() => {
+                            actions.push(new CustomResponse({}))
+                            this.props.updateActions(actions)
+                        }}>
+                            Custom Response
                         </Button>
 
                     </Button.Group>
