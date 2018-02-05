@@ -181,7 +181,7 @@ class Chatbot extends Component {
     }
 
     render() {
-        const { chatbotReducer, match, history } = this.props
+        const { chatbotReducer, match, history, backendUrl } = this.props
         return (
             <DisplayChatbotPage
                 match={match}
@@ -195,6 +195,7 @@ class Chatbot extends Component {
                 SaveChatbotDatas={this.SaveChatbotDatas}
                 uuid={match.params.topicId}
                 checkQuery={this.checkQuery}
+                backendUrl={backendUrl}
             />
         )
     }
