@@ -8,7 +8,6 @@ import {
     SaveChatbotDatas_act,
     setChatbotTrainingStatus_act,
     reqChatbotMLData_act,
-    chatbotClientsListUpdate_act,
     reqChatbotInfos_act,
     chatbotSubDomainsUpdate_act
 } from './actions/chatbotActions'
@@ -35,37 +34,35 @@ class Chatbot extends Component {
 
     connectChatbots = (backendUrl) => {
         // get all the chatbots infos
-        let chatbotsReducer = this.props.chatbotsReducer
+        /*let chatbotReducer = this.props.chatbotReducer
 
-        chatbotsReducer.forEach((chatbot, index) => {
             // get this chatbot socket
-            let chatbotSocket = chatbot.chatbotSocket
+        let chatbotSocket = chatbotReducer.chatbotSocket
 
-            // trying to join a room by its uuid
-            let roomId = chatbot.uuid
+        // trying to join a room by its uuid
+        let roomId = chatbot.uuid
 
-            // connect to my socket server
-            chatbotSocket.connectSocket(backendUrl + '/cbIO')
+        // connect to my socket server
+        chatbotSocket.connectSocket(backendUrl + '/cbIO')
 
-            // my chatbot socket server subscription
-            chatbotSocket.subscribe('connect', () => {
+        // my chatbot socket server subscription
+        chatbotSocket.subscribe('connect', () => {
 
-                // first, asking to join my chatbot room
-                chatbotSocket.socketEmit('admin_join_room', {
-                    roomId: roomId
-                })
-
-                chatbotSocket.subscribe('admin_joined', (data) => {
-                    // client successfully joined the room liao
-                })
-
-                chatbotSocket.subscribe('clientlist_update', (data) => {
-                    // when there are someone connect to this chatbot, admin will get notified
-                    this.props.dispatch(chatbotClientsListUpdate_act(index, data.clientsInfo))
-                })
-
+            // first, asking to join my chatbot room
+            chatbotSocket.socketEmit('admin_join_room', {
+                roomId: roomId
             })
-        })
+
+            chatbotSocket.subscribe('admin_joined', (data) => {
+                // client successfully joined the room liao
+            })
+
+            chatbotSocket.subscribe('clientlist_update', (data) => {
+                // when there are someone connect to this chatbot, admin will get notified
+                this.props.dispatch(chatbotClientsListUpdate_act(index, data.clientsInfo))
+            })
+
+        })*/
     }
 
     updateEntities = (entities) => {
