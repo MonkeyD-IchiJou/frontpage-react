@@ -2,7 +2,8 @@ const livechatReducer = (
     state = {
         name: '',
         description: '',
-        creationdate:''
+        creationdate:'',
+        uuid: ''
     },
     action
 ) => {
@@ -13,7 +14,8 @@ const livechatReducer = (
                 ...state,
                 name: action.payload.description,
                 description: action.payload.description,
-                creationdate: action.payload.creationdate
+                creationdate: action.payload.creationdate,
+                uuid: action.payload.uuid
             }
             break
 
