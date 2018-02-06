@@ -15,7 +15,8 @@ class DisplayLivechatPage extends Component {
             selectCurrentClientToChatWith,
             LivechatSendClientMsg,
             currentClient,
-            currentChatLogs
+            currentChatLogs,
+            backendUrl
         } = this.props
 
         if (chosenLivechat) {
@@ -30,6 +31,7 @@ class DisplayLivechatPage extends Component {
                             livechatInfo={chosenLivechat}
                             clientOnlineLists={clientOnlineLists}
                             selectCurrentClientToChatWith={selectCurrentClientToChatWith}
+                            backendUrl={backendUrl}
                         />
                     </Grid.Column>
 

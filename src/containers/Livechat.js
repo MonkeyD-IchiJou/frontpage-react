@@ -91,7 +91,7 @@ class Livechat extends Component {
     }
 
     render() {
-        const { livechatReducer, match, history } = this.props
+        const { livechatReducer, match, history, backendUrl } = this.props
         const { clientLists, currentClient, currentChatLogs } = this.state
 
         return (
@@ -104,6 +104,7 @@ class Livechat extends Component {
                 LivechatSendClientMsg={this.LivechatSendClientMsg}
                 currentClient={currentClient}
                 currentChatLogs={currentChatLogs}
+                backendUrl={backendUrl}
             />
         )
     }

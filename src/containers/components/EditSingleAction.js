@@ -4,7 +4,9 @@ import ImageResponse from './../classes/ImageResponse'
 import QuickReplies from './../classes/QuickReplies'
 import TmpFormResponse from './../classes/TmpFormResponse'
 import CustomResponse from './../classes/CustomResponse'
+import LinkResponse from './../classes/LinkResponse'
 import ResponseText from './ResponseText'
+import ResponseLink from './ResponseLink'
 import ResponseImage from './ResponseImage'
 import ResponseQR from './ResponseQR'
 import ResponseTmp from './ResponseTmp'
@@ -62,6 +64,13 @@ class EditSingleAction extends Component {
                                 <ResponseTmp action={action} updateAction={ua} />
                             )
                             title = 'Tmp Response'
+                            break
+
+                        case 'LINK':
+                            torender = (
+                                <ResponseLink action={action} updateAction={ua} />
+                            )
+                            title = 'Link Response'
                             break
 
                         case 'CR':
@@ -126,6 +135,13 @@ class EditSingleAction extends Component {
                         </Button>
 
                         <Button onClick={() => {
+                            actions.push(new LinkResponse(''))
+                            this.props.updateActions(actions)
+                        }}>
+                            Link
+                        </Button>
+
+                        <Button onClick={() => {
                             actions.push(new TmpFormResponse())
                             this.props.updateActions(actions)
                         }}>
@@ -136,7 +152,7 @@ class EditSingleAction extends Component {
                             actions.push(new CustomResponse({}))
                             this.props.updateActions(actions)
                         }}>
-                            Custom Response
+                            Custom
                         </Button>
 
                     </Button.Group>

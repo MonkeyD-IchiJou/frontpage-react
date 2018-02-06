@@ -24,7 +24,8 @@ class ChatbotConsole extends Component {
             history,
             match,
             clientOnlineLists,
-            selectCurrentClientToChatWith
+            selectCurrentClientToChatWith,
+            backendUrl
         } = this.props
         let gs = history.location.pathname.split("/")
         let pathname = gs[4] // hardcoded magic number here.. whatever
@@ -62,7 +63,7 @@ class ChatbotConsole extends Component {
                     <Route
                         exact
                         path={`${match.url}/${menuItems[0]}`}
-                        render={props => <SettingLivechat livechatInfo={livechatInfo} />}
+                        render={props => <SettingLivechat livechatInfo={livechatInfo} backendUrl={backendUrl}/>}
                     />
 
                     <Route
