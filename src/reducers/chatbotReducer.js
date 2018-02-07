@@ -1,205 +1,205 @@
 const chatbotReducer = (
-    state = {
-        id: 0,
-        uuid: '',
-        createdby: 73,
-        name: "",
-        description: "",
-        creationdate: "",
-        clientsList: [],
-        entities: [],
-        intents: [],
-        actions: [],
-        stories: [],
-        subDomains: [],
-        isTraining: false
-    },
-    action
+  state = {
+    id: 0,
+    uuid: '',
+    createdby: 73,
+    name: "",
+    description: "",
+    creationdate: "",
+    clientsList: [],
+    entities: [],
+    intents: [],
+    actions: [],
+    stories: [],
+    subDomains: [],
+    isTraining: false
+  },
+  action
 ) => {
-    switch (action.type) {
+  switch (action.type) {
 
-        case "USR_REQ_CHATBOT_ML_DATA_FULFILLED":
+    case "USR_REQ_CHATBOT_ML_DATA_FULFILLED":
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-            {
-                const res = action.payload.result
-                state.entities = res.entities
-                state.intents = res.intents
-                state.actions = res.actions
-                state.stories = res.stories
-                state.subDomains = res.subDomains
-            }
+      {
+        const res = action.payload.result
+        state.entities = res.entities
+        state.intents = res.intents
+        state.actions = res.actions
+        state.stories = res.stories
+        state.subDomains = res.subDomains
+      }
 
-            break
+      break
 
-        case "USR_REQ_CHATBOT_INFO_FULFILLED":
+    case "USR_REQ_CHATBOT_INFO_FULFILLED":
 
-            // deep clone first
-            state = {
-                ...state,
-                ...action.payload
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      // deep clone first
+      state = {
+        ...state,
+        ...action.payload
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-            break
+      break
 
-        case "CHATBOT_UPDATE_CLIENTS":
+    case "CHATBOT_UPDATE_CLIENTS":
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-            // update the online client list for this chatbot
-            state.clientsList = action.payload.clientsList
+      // update the online client list for this chatbot
+      state.clientsList = action.payload.clientsList
 
-            break
+      break
 
-        case "USR_UPDATE_CHATBOT_ENTITIES":
-            
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+    case "USR_UPDATE_CHATBOT_ENTITIES":
 
-            state.entities = action.payload.entities
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-            break
+      state.entities = action.payload.entities
 
-        case "USR_UPDATE_CHATBOT_INTENTS":
+      break
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+    case "USR_UPDATE_CHATBOT_INTENTS":
 
-            state.intents = action.payload.intents
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-            break
+      state.intents = action.payload.intents
 
-        case "USR_UPDATE_CHATBOT_ACTIONS":
-            
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      break
 
-            state.actions = action.payload.actions
+    case "USR_UPDATE_CHATBOT_ACTIONS":
 
-            break
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-        case "USR_UPDATE_CHATBOT_STORIES":
+      state.actions = action.payload.actions
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      break
 
-            state.stories = action.payload.stories
+    case "USR_UPDATE_CHATBOT_STORIES":
 
-            break
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-        case "USR_UPDATE_CHATBOT_SUBDOMAINS":
+      state.stories = action.payload.stories
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      break
 
-            state.subDomains = action.payload.subDomains
+    case "USR_UPDATE_CHATBOT_SUBDOMAINS":
 
-            break
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-        case "SAVE_CB_DATAS_FULFILLED":
+      state.subDomains = action.payload.subDomains
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      break
 
-            state.isTraining = false
+    case "SAVE_CB_DATAS_FULFILLED":
 
-            break
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-        case "SET_CHATBOT_TRAINING_STATUS":
+      state.isTraining = false
 
-            // deep clone first
-            state = {
-                ...state
-            }
-            state.clientsList = [...state.clientsList]
-            state.entities = [...state.entities]
-            state.intents = [...state.intents]
-            state.actions = [...state.actions]
-            state.stories = [...state.stories]
-            state.subDomains = [...state.subDomains]
+      break
 
-            state.isTraining = action.payload.isTraining
+    case "SET_CHATBOT_TRAINING_STATUS":
 
-            break
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.clientsList = [...state.clientsList]
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.subDomains = [...state.subDomains]
 
-        default:
-            break
-    }
+      state.isTraining = action.payload.isTraining
 
-    return state
+      break
+
+    default:
+      break
+  }
+
+  return state
 }
 
 export default chatbotReducer

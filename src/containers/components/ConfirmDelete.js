@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Button, Confirm, Icon } from 'semantic-ui-react'
+import { Button, Confirm } from 'semantic-ui-react'
 
-class ConfirmRemove extends Component {
+class ConfirmDelete extends Component {
   state = { open: false }
 
   show = () => this.setState({ open: true })
@@ -16,12 +16,12 @@ class ConfirmRemove extends Component {
   render() {
     return (
       <div>
-        <Button icon basic negative floated='right' size='mini' onClick={this.show}>
-          <Icon name='minus' />
+        <Button negative onClick={this.show} floated={'right'}>
+          Delete Chatbot
         </Button>
         <Confirm
           header='Warning'
-          content='Are you sure to remove this'
+          content='Are you sure to delete this chatbot?!'
           open={this.state.open}
           onCancel={this.handleCancel}
           onConfirm={this.handleConfirm}
@@ -31,4 +31,4 @@ class ConfirmRemove extends Component {
   }
 }
 
-export default ConfirmRemove
+export default ConfirmDelete
