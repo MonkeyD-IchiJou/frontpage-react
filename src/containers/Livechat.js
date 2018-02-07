@@ -56,7 +56,7 @@ class Livechat extends Component {
 
             // waiting for any clients to send me some msg
             livechatSocket.subscribe('admin_receiving_msg', (data) => {
-                this.setState({ currentChatLogs: [...this.state.currentChatLogs, data.msg] })
+                this.setState({ currentChatLogs: [...this.state.currentChatLogs, {msg: data.msg, id: data.clientSocketId}] })
             })
 
         })
@@ -74,7 +74,7 @@ class Livechat extends Component {
         let livechatSocket = this.state.livechatSocket
 
         if (livechatSocket) {
-            this.setState({ currentChatLogs: [...this.state.currentChatLogs, msg] })
+            this.setState({ currentChatLogs: [...this.state.currentChatLogs, {msg: msg, id: 'admin'}] })
             livechatSocket.socketEmit('admin_send_client_msg', {
                 clientSocketId: clientSocketId,
                 clientUsername: clientUsername,
@@ -87,7 +87,7 @@ class Livechat extends Component {
     }
 
     selectCurrentClientToChatWith = (index) => {
-        this.setState({ currentClient: this.state.clientLists[index], currentChatLogs: [] })
+        this.setState({ currentClient: this.state.clientLists[index] })
     }
 
     render() {

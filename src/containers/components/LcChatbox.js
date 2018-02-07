@@ -32,7 +32,7 @@ class LcChatbox extends Component {
                 {this.props.currentClient.clientName} msg: 
 
                 {currentChatLogs.map((log, index)=>{
-                    return (<div key={index}>{log}</div>)
+                    return (<div key={index}>{log.id}: {log.msg}</div>)
                 })}
 
             </div>
