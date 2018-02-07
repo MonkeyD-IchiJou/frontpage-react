@@ -1,22 +1,22 @@
 const chatbotsReducer = (
-    state = [], // array of chatbots
-    action
+  state = [], // array of chatbots
+  action
 ) => {
-    switch (action.type) {
+  switch (action.type) {
 
-        case "USR_REQ_CHATBOTS_FULFILLED":
-            state = [
-                ...state
-            ]
-            // straight away = to the payload
-            state = action.payload
-            break
+    case "USR_REQ_CHATBOTS_FULFILLED":
+      state = [
+        ...state
+      ]
+      // straight away = to the payload
+      state = action.payload
+      break
 
-        default:
-            break
-    }
+    default:
+      break
+  }
 
-    return state
+  return state
 }
 
 export default chatbotsReducer
