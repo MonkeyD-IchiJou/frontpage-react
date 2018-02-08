@@ -12,57 +12,61 @@ import {
   reqDelCB_act
 } from './actions/chatbotActions'
 import request from 'superagent'
+import SocketConnect from './classes/SocketConnect'
 import DisplayChatbotPage from './components/DisplayChatbotPage'
 
 class Chatbot extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      chatbotSocket: new SocketConnect(this.props.match.params.topicId),
+      clientLists: []
+    }
+  }
 
   componentDidMount() {
     // change the header title to dashboard
     this.props.changeTitle('Chatbot Console')
 
     // first I need to request all the datas tht this chatbot has
-    const { jwt, backendUrl } = this.props
-    this.props.dispatch(reqChatbotMLData_act(backendUrl, jwt, this.props.match.params.topicId))
-    this.props.dispatch(reqChatbotInfos_act(backendUrl, jwt, this.props.match.params.topicId))
+    const { jwt, backendUrl, match } = this.props
+    const cbuuid = match.params.topicId
+    this.props.dispatch(reqChatbotMLData_act(backendUrl, jwt, cbuuid))
+    this.props.dispatch(reqChatbotInfos_act(backendUrl, jwt, cbuuid))
 
     // rmb to connect to my socket server
-  }
+    let chatbotSocket = this.state.chatbotSocket
 
-  componentWillUnmount() {
-    // disconnect my socket server pls
-  }
+    // disconnect the previous socket if exist
+    chatbotSocket.disconnectSocket()
 
-  connectChatbots = (backendUrl) => {
-    // get all the chatbots infos
-    /*let chatbotReducer = this.props.chatbotReducer
-
-        // get this chatbot socket
-    let chatbotSocket = chatbotReducer.chatbotSocket
-
-    // trying to join a room by its uuid
-    let roomId = chatbot.uuid
-
-    // connect to my socket server
     chatbotSocket.connectSocket(backendUrl + '/cbIO')
 
     // my chatbot socket server subscription
     chatbotSocket.subscribe('connect', () => {
 
-        // first, asking to join my chatbot room
-        chatbotSocket.socketEmit('admin_join_room', {
-            roomId: roomId
-        })
+      // first, asking to join my chatbot room
+      chatbotSocket.socketEmit('admin_join_room', {
+        roomId: cbuuid
+      })
 
-        chatbotSocket.subscribe('admin_joined', (data) => {
-            // client successfully joined the room liao
-        })
+      chatbotSocket.subscribe('admin_joined', (data) => {
+        // client successfully joined the room liao
+      })
 
-        chatbotSocket.subscribe('clientlist_update', (data) => {
-            // when there are someone connect to this chatbot, admin will get notified
-            this.props.dispatch(chatbotClientsListUpdate_act(index, data.clientsInfo))
-        })
+      chatbotSocket.subscribe('clientlist_update', (data) => {
+        // when there are someone connect to this chatbot, admin will get notified
+        this.setState({ clientLists: data.clientsInfo })
+      })
 
-    })*/
+    })
+
+  }
+
+  componentWillUnmount() {
+    // disconnect my socket server pls
+    this.state.chatbotSocket.disconnectSocket()
   }
 
   updateEntities = (entities) => {
@@ -198,6 +202,7 @@ class Chatbot extends Component {
         checkQuery={this.checkQuery}
         backendUrl={backendUrl}
         DeleteChatbot={this.DeleteChatbot}
+        clientLists={this.state.clientLists}
       />
     )
   }
