@@ -211,14 +211,6 @@ export function chatbotStoriesUpdate_act(stories = []) {
   }
 }
 
-// chatbot stories update
-export function chatbotSubDomainsUpdate_act(subDomains = []) {
-  return {
-    type: 'USR_UPDATE_CHATBOT_SUBDOMAINS',
-    payload: { subDomains: subDomains }
-  }
-}
-
 // chatbot is traing status update
 export function setChatbotTrainingStatus_act(isTraining = false) {
   return {

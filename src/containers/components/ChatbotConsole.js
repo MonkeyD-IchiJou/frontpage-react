@@ -27,7 +27,6 @@ class ChatbotConsole extends Component {
       updateIntents,
       updateActions,
       updateStories,
-      updateSubDomains,
       match,
       backendUrl,
       DeleteChatbot
@@ -79,7 +78,6 @@ class ChatbotConsole extends Component {
                 updateIntents={updateIntents}
                 updateActions={updateActions}
                 updateStories={updateStories}
-                updateSubDomains={updateSubDomains}
               />
             }
           />

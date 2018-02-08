@@ -11,7 +11,6 @@ const chatbotReducer = (
     intents: [],
     actions: [],
     stories: [],
-    subDomains: [],
     isTraining: false
   },
   action
@@ -29,7 +28,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       {
         const res = action.payload.result
@@ -37,7 +35,6 @@ const chatbotReducer = (
         state.intents = res.intents
         state.actions = res.actions
         state.stories = res.stories
-        state.subDomains = res.subDomains
       }
 
       break
@@ -54,7 +51,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       break
 
@@ -69,7 +65,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       // update the online client list for this chatbot
       state.clientsList = action.payload.clientsList
@@ -87,7 +82,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       state.entities = action.payload.entities
 
@@ -104,7 +98,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       state.intents = action.payload.intents
 
@@ -121,7 +114,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       state.actions = action.payload.actions
 
@@ -138,26 +130,8 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       state.stories = action.payload.stories
-
-      break
-
-    case "USR_UPDATE_CHATBOT_SUBDOMAINS":
-
-      // deep clone first
-      state = {
-        ...state
-      }
-      state.clientsList = [...state.clientsList]
-      state.entities = [...state.entities]
-      state.intents = [...state.intents]
-      state.actions = [...state.actions]
-      state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
-
-      state.subDomains = action.payload.subDomains
 
       break
 
@@ -172,7 +146,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       state.isTraining = false
 
@@ -189,7 +162,6 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-      state.subDomains = [...state.subDomains]
 
       state.isTraining = action.payload.isTraining
 
