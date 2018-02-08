@@ -7,93 +7,83 @@ import { Button, Icon, Header, Input, Divider } from 'semantic-ui-react'
 
 class EditAction extends Component {
 
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-        this.state = {
-            actionName: '',
-            allActions: [],
-            hasSaved: true
-        }
-
-        if(this.props.action) {
-            this.state = {
-                actionName: this.props.action.name,
-                allActions: JSON.parse(JSON.stringify(this.props.action.allActions)),
-                hasSaved: true
-            }
-        }
+    this.state = {
+      actionName: '',
+      allActions: [],
+      hasSaved: true
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        if(nextProps.action) {
-            this.setState({
-                actionName: nextProps.action.name,
-                allActions: JSON.parse(JSON.stringify(nextProps.action.allActions)),
-                hasSaved: true
-            })
-        }
+    if (this.props.action) {
+      this.state = {
+        actionName: this.props.action.name,
+        allActions: JSON.parse(JSON.stringify(this.props.action.allActions)),
+        hasSaved: true
+      }
     }
+  }
 
-    editChanges = (states) => {
-        this.setState({ ...states, hasSaved: false })
-    }
+  editChanges = (states) => {
+    this.setState({ ...states, hasSaved: false })
+  }
 
-    render() {
+  render() {
 
-        let { actionName, allActions, hasSaved } = this.state
+    let { actionName, allActions, hasSaved } = this.state
 
-        return(
-            <div style={{padding: '10px'}}>
+    return (
+      <div style={{ padding: '10px' }}>
 
-                <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
+        <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
-                <ProgressSave
-                    hasSaved={hasSaved}
-                    clickDone={() => {
-                        this.props.updateActions({ name: actionName, allActions: allActions })
-                    }}
-                />
+        <ProgressSave
+          hasSaved={hasSaved}
+          clickDone={() => {
+            this.props.updateActions({ name: actionName, allActions: allActions })
+          }}
+        />
 
-                <Header>Action Name</Header>
+        <Header>Action Name</Header>
 
-                <Input value={actionName} fluid onChange={(event, data) => {
-                    this.editChanges({ actionName: data.value })
-                }} />
+        <Input value={actionName} fluid onChange={(event, data) => {
+          this.editChanges({ actionName: data.value })
+        }} />
 
-                <Header>Actions</Header>
+        <Header>Actions</Header>
 
-                {allActions.map((actions, index)=>{
-                    return (
-                        <EditSingleAction
-                            actions={actions}
-                            removeAction={() => {
-                                allActions.splice(index, 1)
-                                this.editChanges({ allActions: allActions })
-                            }}
-                            updateActions={(actions)=>{
-                                allActions[index] = actions
-                                this.editChanges({ allActions: allActions })
-                            }}
-                            key={index} 
-                        />
-                    )
-                })}
+        {allActions.map((actions, index) => {
+          return (
+            <EditSingleAction
+              actions={actions}
+              removeAction={() => {
+                allActions.splice(index, 1)
+                this.editChanges({ allActions: allActions })
+              }}
+              updateActions={(actions) => {
+                allActions[index] = actions
+                this.editChanges({ allActions: allActions })
+              }}
+              key={index}
+            />
+          )
+        })}
 
-                <Divider hidden /><Divider hidden />
+        <Divider hidden /><Divider hidden />
 
-                <Divider />
+        <Divider />
 
-                <Button primary onClick={()=>{
-                    allActions.push([new TextResponse('')])
-                    this.editChanges({ allActions: allActions })
-                }}>
-                    <Icon name='plus'/>Create New Action
-                </Button>
+        <Button primary onClick={() => {
+          allActions.push([new TextResponse('')])
+          this.editChanges({ allActions: allActions })
+        }}>
+          <Icon name='plus' />Create New Action
+        </Button>
 
-            </div>
-        )
-    }
+      </div>
+    )
+  }
 }
 
 export default EditAction

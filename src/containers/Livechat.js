@@ -6,115 +6,115 @@ import DisplayLivechatPage from './components/DisplayLivechatPage'
 
 class Livechat extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            livechatSocket: new SocketConnect(this.props.match.params.topicId),
-            clientLists: [],
-            currentClient: {},
-            currentChatLogs: []
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      livechatSocket: new SocketConnect(this.props.match.params.topicId),
+      clientLists: [],
+      currentClient: {},
+      currentChatLogs: []
+    }
+  }
+
+  componentDidMount() {
+    // change the header title to dashboard
+    this.props.changeTitle('Livechat Console')
+
+    // req this livechat project info
+    const { jwt, backendUrl, match, userReducer } = this.props
+    const lcuuid = match.params.topicId
+    this.props.dispatch(reqLivechatInfos_act(backendUrl, jwt, lcuuid))
+
+    // and then connect to my socket server
+    let livechatSocket = this.state.livechatSocket
+
+    // disconnect the previous live chat if exist
+    livechatSocket.disconnectSocket()
+
+    livechatSocket.connectSocket(backendUrl + '/lcIO')
+
+    // my livechat socket server subscription
+    livechatSocket.subscribe('connect', () => {
+
+      // first, asking to join my chatbot room
+      livechatSocket.socketEmit('admin_join_room', {
+        roomId: lcuuid,
+        username: userReducer.username,
+        userid: userReducer.userid
+      })
+
+      // waiting for confirmation for joining room
+      livechatSocket.subscribe('admin_joined', (data) => {
+
+      })
+
+      // admin constantly listening for new update of client list
+      livechatSocket.subscribe('clientlist_update', (data) => {
+        // when there are someone connect to this chatbot, admin will get notified
+        this.setState({ clientLists: data.clientsInfo })
+      })
+
+      // waiting for any clients to send me some msg
+      livechatSocket.subscribe('admin_receiving_msg', (data) => {
+        this.setState({ currentChatLogs: [...this.state.currentChatLogs, { msg: data.msg, id: data.clientSocketId }] })
+      })
+
+    })
+
+  }
+
+  componentWillUnmount() {
+    // disconnect my socket server pls
+    this.state.livechatSocket.disconnectSocket()
+  }
+
+  LivechatSendClientMsg = (clientSocketId, clientUsername, msg) => {
+
+    const { userReducer } = this.props
+    let livechatSocket = this.state.livechatSocket
+
+    if (livechatSocket) {
+      this.setState({ currentChatLogs: [...this.state.currentChatLogs, { msg: msg, id: 'admin' }] })
+      livechatSocket.socketEmit('admin_send_client_msg', {
+        clientSocketId: clientSocketId,
+        clientUsername: clientUsername,
+        username: userReducer.username,
+        userid: userReducer.userid,
+        msg: msg
+      })
     }
 
-    componentDidMount() {
-        // change the header title to dashboard
-        this.props.changeTitle('Livechat Console')
+  }
 
-        // req this livechat project info
-        const { jwt, backendUrl, match, userReducer } = this.props
-        const lcuuid = match.params.topicId
-        this.props.dispatch(reqLivechatInfos_act(backendUrl, jwt, lcuuid))
+  selectCurrentClientToChatWith = (index) => {
+    this.setState({ currentClient: this.state.clientLists[index] })
+  }
 
-        // and then connect to my socket server
-        let livechatSocket = this.state.livechatSocket
+  render() {
+    const { livechatReducer, match, history, backendUrl } = this.props
+    const { clientLists, currentClient, currentChatLogs } = this.state
 
-        // disconnect the previous live chat if exist
-        livechatSocket.disconnectSocket()
-
-        livechatSocket.connectSocket(backendUrl + '/lcIO')
-
-        // my livechat socket server subscription
-        livechatSocket.subscribe('connect', () => {
-
-            // first, asking to join my chatbot room
-            livechatSocket.socketEmit('admin_join_room', {
-                roomId: lcuuid,
-                username: userReducer.username,
-                userid: userReducer.userid
-            })
-
-            // waiting for confirmation for joining room
-            livechatSocket.subscribe('admin_joined', (data) => {
-
-            })
-
-            // admin constantly listening for new update of client list
-            livechatSocket.subscribe('clientlist_update', (data) => {
-                // when there are someone connect to this chatbot, admin will get notified
-                this.setState({ clientLists: data.clientsInfo})
-            })
-
-            // waiting for any clients to send me some msg
-            livechatSocket.subscribe('admin_receiving_msg', (data) => {
-                this.setState({ currentChatLogs: [...this.state.currentChatLogs, {msg: data.msg, id: data.clientSocketId}] })
-            })
-
-        })
-
-    }
-
-    componentWillUnmount() {
-        // disconnect my socket server pls
-        this.state.livechatSocket.disconnectSocket()
-    }
-
-    LivechatSendClientMsg = (clientSocketId, clientUsername, msg) => {
-
-        const { userReducer } = this.props
-        let livechatSocket = this.state.livechatSocket
-
-        if (livechatSocket) {
-            this.setState({ currentChatLogs: [...this.state.currentChatLogs, {msg: msg, id: 'admin'}] })
-            livechatSocket.socketEmit('admin_send_client_msg', {
-                clientSocketId: clientSocketId,
-                clientUsername: clientUsername,
-                username: userReducer.username,
-                userid: userReducer.userid,
-                msg: msg
-            })
-        }
-
-    }
-
-    selectCurrentClientToChatWith = (index) => {
-        this.setState({ currentClient: this.state.clientLists[index] })
-    }
-
-    render() {
-        const { livechatReducer, match, history, backendUrl } = this.props
-        const { clientLists, currentClient, currentChatLogs } = this.state
-
-        return (
-            <DisplayLivechatPage
-                match={match}
-                history={history}
-                chosenLivechat={livechatReducer}
-                clientOnlineLists={clientLists}
-                selectCurrentClientToChatWith={this.selectCurrentClientToChatWith}
-                LivechatSendClientMsg={this.LivechatSendClientMsg}
-                currentClient={currentClient}
-                currentChatLogs={currentChatLogs}
-                backendUrl={backendUrl}
-            />
-        )
-    }
+    return (
+      <DisplayLivechatPage
+        match={match}
+        history={history}
+        chosenLivechat={livechatReducer}
+        clientOnlineLists={clientLists}
+        selectCurrentClientToChatWith={this.selectCurrentClientToChatWith}
+        LivechatSendClientMsg={this.LivechatSendClientMsg}
+        currentClient={currentClient}
+        currentChatLogs={currentChatLogs}
+        backendUrl={backendUrl}
+      />
+    )
+  }
 
 }
 
 const mapStateToProps = (state) => {
-    return {
-        livechatReducer: state.livechatReducer
-    }
+  return {
+    livechatReducer: state.livechatReducer
+  }
 }
 
 export default connect(mapStateToProps)(Livechat)

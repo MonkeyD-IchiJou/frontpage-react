@@ -7,185 +7,172 @@ import { Icon, Button, Input, Header, Table, Accordion, Form, Dropdown } from 's
 
 class EditIntent extends Component {
 
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-        this.state = {
-            intent: '',
-            entities: [],
-            texts: [],
-            activeIndex: -1,
-            newusersay: '',
-            hasSaved: true
-        }
-
-        if(this.props.intent) {
-            this.state = {
-                intent: this.props.intent.intent,
-                entities: JSON.parse(JSON.stringify(this.props.intent.entities)),
-                texts: JSON.parse(JSON.stringify(this.props.intent.texts)),
-                activeIndex: -1,
-                newusersay: '',
-                hasSaved: true
-            }
-        }
+    this.state = {
+      intent: '',
+      entities: [],
+      texts: [],
+      activeIndex: -1,
+      newusersay: '',
+      hasSaved: true
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        if(nextProps.intent) {
-            this.setState({
-                intent: nextProps.intent.intent,
-                entities: JSON.parse(JSON.stringify(nextProps.intent.entities)),
-                texts: JSON.parse(JSON.stringify(nextProps.intent.texts)),
-                activeIndex: -1,
-                newusersay: '',
-                hasSaved: true
+    if (this.props.intent) {
+      this.state = {
+        intent: this.props.intent.intent,
+        entities: JSON.parse(JSON.stringify(this.props.intent.entities)),
+        texts: JSON.parse(JSON.stringify(this.props.intent.texts)),
+        activeIndex: -1,
+        newusersay: '',
+        hasSaved: true
+      }
+    }
+  }
+
+  editChanges = (states) => {
+    this.setState({ ...states, hasSaved: false })
+  }
+
+  // for accordian
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps
+    const { activeIndex } = this.state
+    const newIndex = activeIndex === index ? -1 : index
+
+    this.setState({ activeIndex: newIndex })
+  }
+
+  // for create intent form
+  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+  render() {
+
+    let { intent, entities, texts, activeIndex, newusersay, hasSaved } = this.state
+
+    // all the available entities in this chatbot
+    const availableEntities = this.props.availableEntities
+    let availableEntitiesValue = []
+    let allsynonyms = []
+
+    if (availableEntities) {
+
+      // simple mapping value only
+      availableEntitiesValue = availableEntities.map((val, index) => {
+        return { text: val.name, value: val.name }
+      })
+
+      // for highlighting words
+      entities.forEach((entity, index) => {
+        availableEntities.forEach((ae, aindex) => {
+          if (ae.name === entity) {
+            ae.values.forEach((evalue, evindex) => {
+              allsynonyms.push(evalue.name)
+              allsynonyms.push(...evalue.synonyms)
             })
-        }
+          }
+        })
+      })
+
     }
 
-    editChanges = (states) => {
-        this.setState({ ...states, hasSaved: false })
-    }
+    return (
+      <div style={{ padding: '10px' }}>
 
-    // for accordian
-    handleClick = (e, titleProps) => {
-        const { index } = titleProps
-        const { activeIndex } = this.state
-        const newIndex = activeIndex === index ? -1 : index
+        <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
-        this.setState({ activeIndex: newIndex })
-    }
+        <ProgressSave
+          hasSaved={hasSaved}
+          clickDone={() => {
+            this.props.updateIntents(new Intent(intent, entities, texts))
+          }}
+        />
 
-    // for create intent form
-    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+        <Header>Intent Name</Header>
 
-    render() {
+        <Input value={intent} fluid onChange={(event, data) => {
+          this.editChanges({ intent: data.value })
+        }} />
 
-        let { intent, entities, texts, activeIndex, newusersay, hasSaved } = this.state
+        <Header>Associate Entities</Header>
 
-        // all the available entities in this chatbot
-        const availableEntities = this.props.availableEntities
-        let availableEntitiesValue = []
-        let allsynonyms = []
+        <Dropdown
+          value={entities}
+          placeholder='Select Entity'
+          fluid
+          search
+          multiple
+          selection
+          options={availableEntitiesValue}
+          onChange={(e, { value }) => {
+            this.editChanges({ entities: value })
+          }}
+        />
 
-        if (availableEntities) {
+        <Header>{texts.length} Common Examples</Header>
 
-            // simple mapping value only
-            availableEntitiesValue = availableEntities.map((val, index) => {
-                return { text: val.name, value: val.name }
-            })
+        <Table striped selectable>
 
-            // for highlighting words
-            entities.forEach((entity, index) => {
-                availableEntities.forEach((ae, aindex) => {
-                    if (ae.name === entity) {
-                        ae.values.forEach((evalue, evindex) => {
-                            allsynonyms.push(evalue.name)
-                            allsynonyms.push(...evalue.synonyms)
-                        })
-                    }
-                })
-            })
-    
-        }
+          <Table.Body>
+            {texts.map((text, index) => {
+              return (
+                <Table.Row key={index}>
 
-        return (
-            <div style={{ padding: '10px' }}>
+                  <Table.Cell>
+                    <Accordion>
+                      <Accordion.Title active={activeIndex === index} index={index} onClick={this.handleClick}>
+                        <Highlighter
+                          searchWords={allsynonyms}
+                          autoEscape={true}
+                          textToHighlight={text}
+                          caseSensitive={true}
+                        />
+                      </Accordion.Title>
+                      <Accordion.Content active={activeIndex === index}>
+                        <Input value={text} onChange={(event, data) => {
+                          // update this new usersay example
+                          texts[index] = data.value
+                          this.editChanges({ texts: texts })
+                        }} fluid />
+                      </Accordion.Content>
+                    </Accordion>
+                  </Table.Cell>
 
-                <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
+                  <Table.Cell>
+                    <Button icon basic floated='right' size='mini' negative onClick={() => {
+                      // delete this example
+                      texts.splice(index, 1)
+                      this.editChanges({ texts: texts })
+                    }}>
+                      <Icon name='minus' />
+                    </Button>
+                  </Table.Cell>
 
-                <ProgressSave
-                    hasSaved={hasSaved}
-                    clickDone={() => {
-                        this.props.updateIntents(new Intent(intent, entities, texts))
-                    }}
-                />
+                </Table.Row>
+              )
+            })}
+          </Table.Body>
 
-                <Header>Intent Name</Header>
+          <Table.Footer fullWidth>
+            <Table.Row>
+              <Table.HeaderCell colSpan='2'>
+                <Form onSubmit={() => {
+                  texts.push(newusersay)
+                  this.editChanges({ texts: texts, newusersay: '' })
+                }}>
+                  <Form.Input required placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
+                </Form>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
 
-                <Input value={intent} fluid onChange={(event, data) => {
-                    this.editChanges({ intent: data.value })
-                }} />
+        </Table>
 
-                <Header>Associate Entities</Header>
+      </div>
+    )
+  }
 
-                <Dropdown
-                    value={entities}
-                    placeholder='Select Entity'
-                    fluid
-                    search
-                    multiple
-                    selection
-                    options={availableEntitiesValue}
-                    onChange={(e, { value }) => {
-                        this.editChanges({ entities: value })
-                    }}
-                />
-
-                <Header>{texts.length} Common Examples</Header>
-
-                <Table striped selectable>
-
-                    <Table.Body>
-                        {texts.map((text, index)=>{
-                            return (
-                                <Table.Row key={index}>
-
-                                    <Table.Cell>
-                                        <Accordion>
-                                            <Accordion.Title active={activeIndex === index} index={index} onClick={this.handleClick}>
-                                                <Highlighter
-                                                    searchWords={allsynonyms}
-                                                    autoEscape={true}
-                                                    textToHighlight={text}
-                                                    caseSensitive={true}
-                                                />
-                                            </Accordion.Title>
-                                            <Accordion.Content active={activeIndex === index}>
-                                                <Input value={text} onChange={(event, data) => {
-                                                    // update this new usersay example
-                                                    texts[index] = data.value
-                                                    this.editChanges({texts: texts})
-                                                }} fluid/>
-                                            </Accordion.Content>
-                                        </Accordion>
-                                    </Table.Cell>
-
-                                    <Table.Cell>
-                                        <Button icon basic floated='right' size='mini' negative onClick={() => {
-                                            // delete this example
-                                            texts.splice(index, 1)
-                                            this.editChanges({ texts: texts })
-                                        }}>
-                                            <Icon name='minus' />
-                                        </Button>
-                                    </Table.Cell>
-
-                                </Table.Row>
-                            )
-                        })}
-                    </Table.Body>
-
-                    <Table.Footer fullWidth>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='2'>
-                                <Form onSubmit={() => {
-                                    texts.push(newusersay)
-                                    this.editChanges({ texts: texts, newusersay: '' })
-                                }}>
-                                    <Form.Input required placeholder='Create New Example' name='newusersay' value={newusersay} onChange={this.handleChange} />
-                                </Form>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
-
-                </Table>
-
-            </div>
-        )
-    }
-    
 }
 
 export default EditIntent

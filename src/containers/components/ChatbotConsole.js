@@ -29,7 +29,8 @@ class ChatbotConsole extends Component {
       updateStories,
       match,
       backendUrl,
-      DeleteChatbot
+      DeleteChatbot,
+      clientLists
     } = this.props
     let gs = history.location.pathname.split("/")
     let pathname = gs[4] // hardcoded magic number here.. whatever
@@ -84,7 +85,7 @@ class ChatbotConsole extends Component {
 
           <Route
             path={`${match.url}/${menuItems[2]}`}
-            render={props => <MonitorChatbot {...props} clientsOnlineList={chatbotInfo.clientsList} />}
+            render={props => <MonitorChatbot {...props} clientsOnlineList={clientLists} />}
           />
 
         </Segment>

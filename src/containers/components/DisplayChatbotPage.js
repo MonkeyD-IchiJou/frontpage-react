@@ -27,7 +27,8 @@ class DisplayChatbotPage extends Component {
       checkQuery,
       uuid,
       backendUrl,
-      DeleteChatbot
+      DeleteChatbot,
+      clientLists
     } = this.props
 
     if (chosenChatbot) {
@@ -46,6 +47,7 @@ class DisplayChatbotPage extends Component {
               updateStories={updateStories}
               backendUrl={backendUrl}
               DeleteChatbot={DeleteChatbot}
+              clientLists={clientLists}
             />
           </Grid.Column>
 
@@ -57,13 +59,12 @@ class DisplayChatbotPage extends Component {
                   entities: chosenChatbot.entities,
                   intents: chosenChatbot.intents,
                   actions: chosenChatbot.actions,
-                  stories: chosenChatbot.stories,
-                  subDomains: chosenChatbot.subDomains
+                  stories: chosenChatbot.stories
                 }
               )
             }} >
               <Icon name='configure' />Train Chatbot
-                        </Button>
+            </Button>
 
             <Divider />
 

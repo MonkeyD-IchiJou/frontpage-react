@@ -6,154 +6,140 @@ import { Button, Icon, Header, Input, Divider, Segment, Dropdown } from 'semanti
 
 class EditStory extends Component {
 
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-        this.state = {
-            storyName: '',
-            wait_checkpoint: '',
-            intent: '',
-            intentConditions: [],
-            actions: [],
-            return_checkpoint: '',
-            hasSaved: true
-        }
-
-        if (this.props.story) {
-            this.state = {
-                storyName: this.props.story.name,
-                wait_checkpoint: this.props.story.wait_checkpoint,
-                intent: this.props.story.intent,
-                intentConditions: JSON.parse(JSON.stringify(this.props.story.intentConditions)),
-                actions: JSON.parse(JSON.stringify(this.props.story.actions)),
-                return_checkpoint: this.props.story.return_checkpoint,
-                hasSaved: true
-            }
-        }
+    this.state = {
+      storyName: '',
+      wait_checkpoint: '',
+      intent: '',
+      intentConditions: [],
+      actions: [],
+      return_checkpoint: '',
+      hasSaved: true
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        if(nextProps.story) {
-            this.setState({
-                storyName: nextProps.story.name,
-                wait_checkpoint: nextProps.story.wait_checkpoint,
-                intent: nextProps.story.intent,
-                intentConditions: JSON.parse(JSON.stringify(nextProps.story.intentConditions)),
-                actions: JSON.parse(JSON.stringify(nextProps.story.actions)),
-                return_checkpoint: nextProps.story.return_checkpoint,
-                hasSaved: true
-            })
-        }
+    if (this.props.story) {
+      this.state = {
+        storyName: this.props.story.name,
+        wait_checkpoint: this.props.story.wait_checkpoint,
+        intent: this.props.story.intent,
+        intentConditions: JSON.parse(JSON.stringify(this.props.story.intentConditions)),
+        actions: JSON.parse(JSON.stringify(this.props.story.actions)),
+        return_checkpoint: this.props.story.return_checkpoint,
+        hasSaved: true
+      }
     }
+  }
 
-    editChanges = (states) => {
-        this.setState({ ...states, hasSaved: false })
-    }
+  editChanges = (states) => {
+    this.setState({ ...states, hasSaved: false })
+  }
 
-    render() {
-        let { storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint, hasSaved } = this.state
-        const { allAvailableActions, allAvailableIntents, allAvailableEntities, allAvailableEntityValues } = this.props
+  render() {
+    let { storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint, hasSaved } = this.state
+    const { allAvailableActions, allAvailableIntents, allAvailableEntities, allAvailableEntityValues } = this.props
 
-        return (
-            <div style={{ padding: '10px' }}>
+    return (
+      <div style={{ padding: '10px' }}>
 
-                <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
+        <Prompt when={!hasSaved} message="Warning! All the progress will be lost if you leave this place" />
 
-                <ProgressSave
-                    hasSaved={hasSaved}
-                    clickDone={() => {
-                        this.props.updateStories({ name: storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint })
-                    }}
-                />
+        <ProgressSave
+          hasSaved={hasSaved}
+          clickDone={() => {
+            this.props.updateStories({ name: storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint })
+          }}
+        />
 
-                <Header>Story Name</Header>
+        <Header>Story Name</Header>
 
-                <Input value={storyName} fluid onChange={(event, data) => {
-                    this.editChanges({ storyName: data.value })
-                }} />
+        <Input value={storyName} fluid onChange={(event, data) => {
+          this.editChanges({ storyName: data.value })
+        }} />
 
-                <Header>Paths</Header>
+        <Header>Paths</Header>
 
-                <Segment>
+        <Segment>
 
-                    <Header>Checkpoint In</Header>
-                    <Input value={wait_checkpoint} fluid onChange={(event, data) => {
-                        this.editChanges({ wait_checkpoint: data.value })
-                    }} />
+          <Header>Checkpoint In</Header>
+          <Input value={wait_checkpoint} fluid onChange={(event, data) => {
+            this.editChanges({ wait_checkpoint: data.value })
+          }} />
 
-                    <Header>Intent</Header>
+          <Header>Intent</Header>
 
-                    <Dropdown
-                        value={intent}
-                        placeholder='Select Intent'
-                        fluid
-                        search
-                        selection
-                        options={allAvailableIntents}
-                        onChange={(e, { value }) => {
-                            this.editChanges({ intent: value })
-                        }}
-                    />
+          <Dropdown
+            value={intent}
+            placeholder='Select Intent'
+            fluid
+            search
+            selection
+            options={allAvailableIntents}
+            onChange={(e, { value }) => {
+              this.editChanges({ intent: value })
+            }}
+          />
 
-                    <Divider hidden />
+          <Divider hidden />
 
-                    <EditIntentConditions intentConditions={intentConditions} allAvailableEntities={allAvailableEntities} allAvailableEntityValues={allAvailableEntityValues} updateIntentCondition={(intentCondition, iindex)=>{
-                        intentConditions[iindex] = intentCondition
-                        this.editChanges({ intentConditions: intentConditions })
-                    }}/>
+          <EditIntentConditions intentConditions={intentConditions} allAvailableEntities={allAvailableEntities} allAvailableEntityValues={allAvailableEntityValues} updateIntentCondition={(intentCondition, iindex) => {
+            intentConditions[iindex] = intentCondition
+            this.editChanges({ intentConditions: intentConditions })
+          }} />
 
-                    <Divider hidden />
+          <Divider hidden />
 
-                    <Button onClick={ ()=>{
-                        intentConditions.push({ entity: '', value: '' })
-                        this.editChanges({ intentConditions: intentConditions })
-                    }}>
-                        <Icon name='plus' />Add Condition
+          <Button onClick={() => {
+            intentConditions.push({ entity: '', value: '' })
+            this.editChanges({ intentConditions: intentConditions })
+          }}>
+            <Icon name='plus' />Add Condition
                     </Button>
 
-                    <Header>Actions</Header>
+          <Header>Actions</Header>
 
-                    {actions.map((action, aindex)=>{
-                        return(
-                            <Dropdown
-                                key={aindex}
-                                value={action}
-                                placeholder='Select Action'
-                                fluid
-                                search
-                                selection
-                                options={allAvailableActions}
-                                onChange={(e, { value }) => {
-                                    actions[aindex] = value
-                                    this.editChanges({ actions: actions })
-                                }}
-                            />
-                        )
-                    })}
+          {actions.map((action, aindex) => {
+            return (
+              <Dropdown
+                key={aindex}
+                value={action}
+                placeholder='Select Action'
+                fluid
+                search
+                selection
+                options={allAvailableActions}
+                onChange={(e, { value }) => {
+                  actions[aindex] = value
+                  this.editChanges({ actions: actions })
+                }}
+              />
+            )
+          })}
 
-                    <Divider hidden />
+          <Divider hidden />
 
-                    <Button onClick={() => {
-                        actions.push('')
-                        this.editChanges({ actions: actions })
-                    }}>
-                        <Icon name='plus' />Add New Action
+          <Button onClick={() => {
+            actions.push('')
+            this.editChanges({ actions: actions })
+          }}>
+            <Icon name='plus' />Add New Action
                     </Button>
 
-                    <Divider hidden />
+          <Divider hidden />
 
-                    <Header>Checkpoint Out</Header>
-                    <Input value={return_checkpoint} fluid onChange={(event, data) => {
-                        this.editChanges({ return_checkpoint: data.value })
-                    }} />
+          <Header>Checkpoint Out</Header>
+          <Input value={return_checkpoint} fluid onChange={(event, data) => {
+            this.editChanges({ return_checkpoint: data.value })
+          }} />
 
-                </Segment>
+        </Segment>
 
-                <Divider hidden /><Divider hidden />
+        <Divider hidden /><Divider hidden />
 
-            </div>
-        )
-    }
+      </div>
+    )
+  }
 }
 
 export default EditStory
