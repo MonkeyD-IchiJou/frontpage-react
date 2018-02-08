@@ -106,7 +106,7 @@ class Chatbot extends Component {
       .send({
         uuid: this.props.match.params.topicId,
         text_message: textmsg,
-        sender_id: usremail
+        sender_id: 'admin: '+ usremail
       })
       .end((err, res) => {
 

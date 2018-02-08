@@ -6,7 +6,6 @@ const chatbotReducer = (
     name: "",
     description: "",
     creationdate: "",
-    clientsList: [],
     entities: [],
     intents: [],
     actions: [],
@@ -23,7 +22,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
@@ -46,28 +44,10 @@ const chatbotReducer = (
         ...state,
         ...action.payload
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
-
-      break
-
-    case "CHATBOT_UPDATE_CLIENTS":
-
-      // deep clone first
-      state = {
-        ...state
-      }
-      state.clientsList = [...state.clientsList]
-      state.entities = [...state.entities]
-      state.intents = [...state.intents]
-      state.actions = [...state.actions]
-      state.stories = [...state.stories]
-
-      // update the online client list for this chatbot
-      state.clientsList = action.payload.clientsList
 
       break
 
@@ -77,7 +57,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
@@ -93,7 +72,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
@@ -109,7 +87,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
@@ -125,7 +102,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
@@ -141,7 +117,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
@@ -157,7 +132,6 @@ const chatbotReducer = (
       state = {
         ...state
       }
-      state.clientsList = [...state.clientsList]
       state.entities = [...state.entities]
       state.intents = [...state.intents]
       state.actions = [...state.actions]
