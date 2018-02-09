@@ -41,6 +41,7 @@ class EditAction extends Component {
         <ProgressSave
           hasSaved={hasSaved}
           clickDone={() => {
+            this.setState({ hasSaved: true })
             this.props.updateActions({ name: actionName, allActions: allActions })
           }}
         />

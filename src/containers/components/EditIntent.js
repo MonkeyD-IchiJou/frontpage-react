@@ -85,6 +85,7 @@ class EditIntent extends Component {
         <ProgressSave
           hasSaved={hasSaved}
           clickDone={() => {
+            this.setState({hasSaved: true})
             this.props.updateIntents(new Intent(intent, entities, texts))
           }}
         />

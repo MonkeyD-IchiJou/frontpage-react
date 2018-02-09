@@ -9,7 +9,8 @@ import {
   setChatbotTrainingStatus_act,
   reqChatbotMLData_act,
   reqChatbotInfos_act,
-  reqDelCB_act
+  reqDelCB_act,
+  combinedCbProjs_act
 } from './actions/chatbotActions'
 import request from 'superagent'
 import SocketConnect from './classes/SocketConnect'
@@ -87,6 +88,10 @@ class Chatbot extends Component {
   updateStories = (stories) => {
     // there is a chatbot want to update its stories
     this.props.dispatch(chatbotStoriesUpdate_act(stories))
+  }
+
+  combinedCbProjs = (combinedprojs) => {
+    this.props.dispatch(combinedCbProjs_act(combinedprojs))
   }
 
   // save and train the chatbot datas, need give uuid for knowing which cb is it
@@ -187,7 +192,7 @@ class Chatbot extends Component {
   }
 
   render() {
-    const { chatbotReducer, match, history, backendUrl } = this.props
+    const { chatbotReducer, match, history, backendUrl, jwt } = this.props
     return (
       <DisplayChatbotPage
         match={match}
@@ -203,6 +208,8 @@ class Chatbot extends Component {
         backendUrl={backendUrl}
         DeleteChatbot={this.DeleteChatbot}
         clientLists={this.state.clientLists}
+        combinedCbProjs={this.combinedCbProjs}
+        jwt={jwt}
       />
     )
   }

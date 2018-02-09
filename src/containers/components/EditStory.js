@@ -48,6 +48,7 @@ class EditStory extends Component {
         <ProgressSave
           hasSaved={hasSaved}
           clickDone={() => {
+            this.setState({ hasSaved: true })
             this.props.updateStories({ name: storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint })
           }}
         />

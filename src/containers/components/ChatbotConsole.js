@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import TrainingChatbot from './TrainingChatbot'
 import MonitorChatbot from './MonitorChatbot'
-import SettingChatbot from './SettingChatbot'
+import SettingChatbot from './../SettingChatbot'
 import { Menu, Icon, Segment } from 'semantic-ui-react'
 
 class ChatbotConsole extends Component {
@@ -30,7 +30,9 @@ class ChatbotConsole extends Component {
       match,
       backendUrl,
       DeleteChatbot,
-      clientLists
+      clientLists,
+      combinedCbProjs,
+      jwt
     } = this.props
     let gs = history.location.pathname.split("/")
     let pathname = gs[4] // hardcoded magic number here.. whatever
@@ -66,7 +68,7 @@ class ChatbotConsole extends Component {
           <Route
             exact
             path={`${match.url}/${menuItems[0]}`}
-            render={props => <SettingChatbot {...props} chatbotInfo={chatbotInfo} backendUrl={backendUrl} DeleteChatbot={DeleteChatbot}/>}
+            render={props => <SettingChatbot {...props} chatbotInfo={chatbotInfo} backendUrl={backendUrl} DeleteChatbot={DeleteChatbot} combinedCbProjs={combinedCbProjs} jwt={jwt}/>}
           />
 
           <Route

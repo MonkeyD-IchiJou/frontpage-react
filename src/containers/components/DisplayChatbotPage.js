@@ -28,7 +28,9 @@ class DisplayChatbotPage extends Component {
       uuid,
       backendUrl,
       DeleteChatbot,
-      clientLists
+      clientLists,
+      combinedCbProjs,
+      jwt
     } = this.props
 
     if (chosenChatbot) {
@@ -48,6 +50,8 @@ class DisplayChatbotPage extends Component {
               backendUrl={backendUrl}
               DeleteChatbot={DeleteChatbot}
               clientLists={clientLists}
+              combinedCbProjs={combinedCbProjs}
+              jwt={jwt}
             />
           </Grid.Column>
 
@@ -59,7 +63,8 @@ class DisplayChatbotPage extends Component {
                   entities: chosenChatbot.entities,
                   intents: chosenChatbot.intents,
                   actions: chosenChatbot.actions,
-                  stories: chosenChatbot.stories
+                  stories: chosenChatbot.stories,
+                  combinedprojs: chosenChatbot.combinedprojs
                 }
               )
             }} >
