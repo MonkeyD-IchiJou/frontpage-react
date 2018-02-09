@@ -11,7 +11,7 @@ class TrainingChatbot extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      menuItems: ['Entities', 'Intents', 'Actions', 'Stories']
+      menuItems: ['Stories', 'Entities', 'Intents', 'Actions']
     }
   }
 
@@ -60,23 +60,24 @@ class TrainingChatbot extends Component {
 
         <Route
           path={`${match.url}/${menuItems[0]}`}
-          render={props => <Entities {...props} cbEntities={entities} updateEntities={updateEntities} />}
+          render={props => <Stories {...props} cbStories={stories} cbIntents={intents} cbActions={actions} cbEntities={entities} updateStories={updateStories} />}
         />
 
         <Route
           path={`${match.url}/${menuItems[1]}`}
-          render={props => <Intents {...props} cbIntents={intents} cbEntities={entities} updateIntents={updateIntents} />}
+          render={props => <Entities {...props} cbEntities={entities} updateEntities={updateEntities} />}
         />
 
         <Route
           path={`${match.url}/${menuItems[2]}`}
-          render={props => <Actions {...props} cbActions={actions} updateActions={updateActions} />}
+          render={props => <Intents {...props} cbIntents={intents} cbEntities={entities} updateIntents={updateIntents} />}
         />
 
         <Route
           path={`${match.url}/${menuItems[3]}`}
-          render={props => <Stories {...props} cbStories={stories} cbIntents={intents} cbActions={actions} cbEntities={entities} updateStories={updateStories} />}
+          render={props => <Actions {...props} cbActions={actions} updateActions={updateActions} />}
         />
+
       </div>
     )
   }
