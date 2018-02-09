@@ -6,6 +6,7 @@ const chatbotReducer = (
     name: "",
     description: "",
     creationdate: "",
+    combinedprojs: [],
     entities: [],
     intents: [],
     actions: [],
@@ -26,6 +27,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       {
         const res = action.payload.result
@@ -33,6 +35,7 @@ const chatbotReducer = (
         state.intents = res.intents
         state.actions = res.actions
         state.stories = res.stories
+        state.combinedprojs = res.combinedprojs
       }
 
       break
@@ -48,6 +51,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       break
 
@@ -61,6 +65,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       state.entities = action.payload.entities
 
@@ -76,6 +81,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       state.intents = action.payload.intents
 
@@ -91,6 +97,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       state.actions = action.payload.actions
 
@@ -106,8 +113,25 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       state.stories = action.payload.stories
+
+      break
+
+    case "USR_COMBINED_CHATBOT_PROJS":
+
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
+
+      state.combinedprojs = action.payload.combinedprojs
 
       break
 
@@ -121,6 +145,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       state.isTraining = false
 
@@ -136,6 +161,7 @@ const chatbotReducer = (
       state.intents = [...state.intents]
       state.actions = [...state.actions]
       state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
 
       state.isTraining = action.payload.isTraining
 

@@ -211,6 +211,14 @@ export function chatbotStoriesUpdate_act(stories = []) {
   }
 }
 
+// chatbot combinedprojs update
+export function combinedCbProjs_act(combinedprojs = []) {
+  return {
+    type: 'USR_COMBINED_CHATBOT_PROJS',
+    payload: { combinedprojs: combinedprojs }
+  }
+}
+
 // chatbot is traing status update
 export function setChatbotTrainingStatus_act(isTraining = false) {
   return {
