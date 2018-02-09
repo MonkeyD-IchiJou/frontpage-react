@@ -21,7 +21,7 @@ class SettingChatbot extends Component {
         
         <DisplayChatbotInfo backendUrl={backendUrl} chatbotInfo={chatbotInfo} />
 
-        <CombineChatbotProjs chatbotsReducer={chatbotsReducer} combinedCbProjs={combinedCbProjs}/>
+        <CombineChatbotProjs chatbotInfo={chatbotInfo} chatbotsReducer={chatbotsReducer} combinedCbProjs={combinedCbProjs}/>
 
         <ConfirmDelete confirmAction={() => {
           DeleteChatbot()
