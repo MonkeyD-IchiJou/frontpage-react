@@ -31,6 +31,20 @@ class EditIntent extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // cases like when user refresh the this current page and parents send down the props
+    if (nextProps.intent) {
+      this.setState({
+        intent: nextProps.intent.intent,
+        entities: JSON.parse(JSON.stringify(nextProps.intent.entities)),
+        texts: JSON.parse(JSON.stringify(nextProps.intent.texts)),
+        activeIndex: -1,
+        newusersay: '',
+        hasSaved: true
+      })
+    }
+  }
+
   editChanges = (states) => {
     this.setState({ ...states, hasSaved: false })
   }

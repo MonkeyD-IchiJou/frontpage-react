@@ -32,6 +32,21 @@ class EditStory extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // cases like when user refresh the this current page and parents send down the props
+    if (nextProps.story) {
+      this.setState({
+        storyName: nextProps.story.name,
+        wait_checkpoint: nextProps.story.wait_checkpoint,
+        intent: nextProps.story.intent,
+        intentConditions: JSON.parse(JSON.stringify(nextProps.story.intentConditions)),
+        actions: JSON.parse(JSON.stringify(nextProps.story.actions)),
+        return_checkpoint: nextProps.story.return_checkpoint,
+        hasSaved: true
+      })
+    }
+  }
+
   editChanges = (states) => {
     this.setState({ ...states, hasSaved: false })
   }
@@ -39,6 +54,7 @@ class EditStory extends Component {
   render() {
     let { storyName, wait_checkpoint, intent, intentConditions, actions, return_checkpoint, hasSaved } = this.state
     const { allAvailableActions, allAvailableIntents, allAvailableEntities, allAvailableEntityValues } = this.props
+    
 
     return (
       <div style={{ padding: '10px' }}>

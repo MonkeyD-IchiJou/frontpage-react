@@ -25,6 +25,17 @@ class EditAction extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // cases like when user refresh the this current page and parents send down the props
+    if (nextProps.action) {
+      this.setState({
+        actionName: nextProps.action.name,
+        allActions: JSON.parse(JSON.stringify(nextProps.action.allActions)),
+        hasSaved: true
+      })
+    }
+  }
+
   editChanges = (states) => {
     this.setState({ ...states, hasSaved: false })
   }

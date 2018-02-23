@@ -28,6 +28,18 @@ class EditEntity extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // cases like when user refresh the this current page and parents send down the props
+    if (nextProps.entity) {
+      this.setState({
+        name: nextProps.entity.name,
+        values: JSON.parse(JSON.stringify(nextProps.entity.values)),
+        hasSaved: true,
+        newvalue: ''
+      })
+    }
+  }
+
   editChanges = (states) => {
     this.setState({ ...states, hasSaved: false })
   }
