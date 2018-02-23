@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Segment, Button, Table, Header, Divider, Modal } from 'semantic-ui-react'
 import CreateNewCB from './CreateNewCB'
+import { Link } from "react-router-dom"
 
 class CbDashboard extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class CbDashboard extends Component {
     const listChatbots = chatbotsReducer.map((chatbot, index) =>
       <Table.Row key={index}>
         <Table.Cell>
-          <a href={'/homepage/console/chatbot/' + chatbot.uuid}>{chatbot.name}</a>
+          <Link to={'/console/chatbot/' + chatbot.uuid}>{chatbot.name}</Link>
         </Table.Cell>
         <Table.Cell>
           {chatbot.description}
