@@ -227,6 +227,13 @@ export function setChatbotTrainingStatus_act(isTraining = false) {
   }
 }
 
+// chatbot is traing status update
+export function setChatbotInitialResponse_act(initialResponse = '') {
+  return {
+    type: 'SET_CHATBOT_INIT_RES',
+    payload: { initialResponse: initialResponse }
+  }
+}
 /**
  * // tmp delete later
 /*

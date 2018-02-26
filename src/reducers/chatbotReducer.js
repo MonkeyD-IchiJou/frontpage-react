@@ -11,7 +11,8 @@ const chatbotReducer = (
     intents: [],
     actions: [],
     stories: [],
-    isTraining: false
+    isTraining: false,
+    initialResponse: ''
   },
   action
 ) => {
@@ -36,6 +37,7 @@ const chatbotReducer = (
         state.actions = res.actions
         state.stories = res.stories
         state.combinedprojs = res.combinedprojs
+        state.initialResponse = res.initialResponse
       }
 
       break
@@ -164,6 +166,22 @@ const chatbotReducer = (
       state.combinedprojs = [...state.combinedprojs]
 
       state.isTraining = action.payload.isTraining
+
+      break
+
+    case "SET_CHATBOT_INIT_RES":
+
+      // deep clone first
+      state = {
+        ...state
+      }
+      state.entities = [...state.entities]
+      state.intents = [...state.intents]
+      state.actions = [...state.actions]
+      state.stories = [...state.stories]
+      state.combinedprojs = [...state.combinedprojs]
+
+      state.initialResponse = action.payload.initialResponse
 
       break
 

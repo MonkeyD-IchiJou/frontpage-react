@@ -4,6 +4,7 @@ import { reqChatbotsInfos_act } from './actions/chatbotsActions'
 import DisplayChatbotInfo from './components/DisplayChatbotInfo'
 import ConfirmDelete from './components/ConfirmDelete'
 import CombineChatbotProjs from './components/CombineChatbotProjs'
+import EditInitRes from './components/EditInitRes'
 
 class SettingChatbot extends Component {
 
@@ -14,7 +15,7 @@ class SettingChatbot extends Component {
   }
 
   render() {
-    const { backendUrl, chatbotInfo, DeleteChatbot, chatbotsReducer, combinedCbProjs } = this.props
+    const { backendUrl, chatbotInfo, DeleteChatbot, chatbotsReducer, combinedCbProjs, SetInitResponse } = this.props
 
     return (
       <div>
@@ -22,6 +23,8 @@ class SettingChatbot extends Component {
         <DisplayChatbotInfo backendUrl={backendUrl} chatbotInfo={chatbotInfo} />
 
         <CombineChatbotProjs chatbotInfo={chatbotInfo} chatbotsReducer={chatbotsReducer} combinedCbProjs={combinedCbProjs}/>
+
+        <EditInitRes initialResponse={chatbotInfo.initialResponse} SetInitResponse={SetInitResponse}/>
 
         <ConfirmDelete confirmAction={() => {
           DeleteChatbot()

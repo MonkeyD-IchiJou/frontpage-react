@@ -30,7 +30,8 @@ class DisplayChatbotPage extends Component {
       DeleteChatbot,
       clientLists,
       combinedCbProjs,
-      jwt
+      jwt,
+      SetInitResponse
     } = this.props
 
     if (chosenChatbot) {
@@ -52,6 +53,7 @@ class DisplayChatbotPage extends Component {
               clientLists={clientLists}
               combinedCbProjs={combinedCbProjs}
               jwt={jwt}
+              SetInitResponse={SetInitResponse}
             />
           </Grid.Column>
 
@@ -64,7 +66,8 @@ class DisplayChatbotPage extends Component {
                   intents: chosenChatbot.intents,
                   actions: chosenChatbot.actions,
                   stories: chosenChatbot.stories,
-                  combinedprojs: chosenChatbot.combinedprojs
+                  combinedprojs: chosenChatbot.combinedprojs,
+                  initialResponse: chosenChatbot.initialResponse
                 }
               )
             }} >

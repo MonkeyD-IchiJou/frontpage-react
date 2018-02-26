@@ -32,7 +32,8 @@ class ChatbotConsole extends Component {
       DeleteChatbot,
       clientLists,
       combinedCbProjs,
-      jwt
+      jwt,
+      SetInitResponse
     } = this.props
     let gs = history.location.pathname.split("/")
     let pathname = gs[4] // hardcoded magic number here.. whatever
@@ -68,7 +69,17 @@ class ChatbotConsole extends Component {
           <Route
             exact
             path={`${match.url}/${menuItems[0]}`}
-            render={props => <SettingChatbot {...props} chatbotInfo={chatbotInfo} backendUrl={backendUrl} DeleteChatbot={DeleteChatbot} combinedCbProjs={combinedCbProjs} jwt={jwt}/>}
+            render={
+              props => <SettingChatbot
+                {...props}
+                chatbotInfo={chatbotInfo}
+                backendUrl={backendUrl}
+                DeleteChatbot={DeleteChatbot}
+                combinedCbProjs={combinedCbProjs}
+                jwt={jwt}
+                SetInitResponse={SetInitResponse}
+              />
+            }
           />
 
           <Route

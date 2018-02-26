@@ -10,7 +10,8 @@ import {
   reqChatbotMLData_act,
   reqChatbotInfos_act,
   reqDelCB_act,
-  combinedCbProjs_act
+  combinedCbProjs_act,
+  setChatbotInitialResponse_act
 } from './actions/chatbotActions'
 import request from 'superagent'
 import SocketConnect from './classes/SocketConnect'
@@ -99,6 +100,10 @@ class Chatbot extends Component {
     const { jwt, backendUrl } = this.props
     this.props.dispatch(setChatbotTrainingStatus_act(true))
     this.props.dispatch(SaveChatbotDatas_act(backendUrl, this.props.match.params.topicId, cbdatas, jwt))
+  }
+
+  SetInitResponse = (initialResponse) => {
+    this.props.dispatch(setChatbotInitialResponse_act(initialResponse))
   }
 
   // simple testing with my nlu engine, uuid for knowing which cb to communicate to
@@ -209,6 +214,7 @@ class Chatbot extends Component {
         DeleteChatbot={this.DeleteChatbot}
         clientLists={this.state.clientLists}
         combinedCbProjs={this.combinedCbProjs}
+        SetInitResponse={this.SetInitResponse}
         jwt={jwt}
       />
     )
