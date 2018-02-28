@@ -57,7 +57,7 @@ const chatbotReducer = (
 
       break
 
-    case "USR_UPDATE_CHATBOT_ENTITIES":
+    case "USR_UPDATE_CHATBOT_ENTITIES_FULFILLED":
 
       // deep clone first
       state = {
@@ -73,7 +73,7 @@ const chatbotReducer = (
 
       break
 
-    case "USR_UPDATE_CHATBOT_INTENTS":
+    case "USR_UPDATE_CHATBOT_INTENTS_FULFILLED":
 
       // deep clone first
       state = {
@@ -89,7 +89,7 @@ const chatbotReducer = (
 
       break
 
-    case "USR_UPDATE_CHATBOT_ACTIONS":
+    case "USR_UPDATE_CHATBOT_ACTIONS_FULFILLED":
 
       // deep clone first
       state = {
@@ -105,7 +105,7 @@ const chatbotReducer = (
 
       break
 
-    case "USR_UPDATE_CHATBOT_STORIES":
+    case "USR_UPDATE_CHATBOT_STORIES_FULFILLED":
 
       // deep clone first
       state = {
@@ -121,7 +121,7 @@ const chatbotReducer = (
 
       break
 
-    case "USR_COMBINED_CHATBOT_PROJS":
+    case "USR_COMBINED_CHATBOT_PROJS_FULFILLED":
 
       // deep clone first
       state = {
@@ -133,7 +133,7 @@ const chatbotReducer = (
       state.stories = [...state.stories]
       state.combinedprojs = [...state.combinedprojs]
 
-      state.combinedprojs = action.payload.combinedprojs
+      state.combinedprojs = [...action.payload.combinedprojs]
 
       break
 
@@ -169,7 +169,7 @@ const chatbotReducer = (
 
       break
 
-    case "SET_CHATBOT_INIT_RES":
+    case "SET_CHATBOT_INIT_RES_FULFILLED":
 
       // deep clone first
       state = {

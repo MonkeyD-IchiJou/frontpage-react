@@ -36,10 +36,47 @@ var GetChatbotMLData = (backendurl, jwt, cbuuid) => {
 }
 
 // post my datas back to mongodb
+// and then will start training
 var SaveChatbotData = (backendurl, cbuuid, cbdatas, jwt) => {
   return new Promise((resolve, reject) => {
     request
       .post(backendurl + '/chatbot/v1/CBDatas')
+      .set('contentType', 'application/json; charset=utf-8')
+      .set('dataType', 'json')
+      .send({
+        token: jwt,
+        uuid: cbuuid,
+        cbdatas: cbdatas
+      })
+      .end((err, res) => {
+
+        try {
+          if (err || !res.ok) {
+            let errormsg = res.body.errors
+            throw errormsg
+          }
+          else {
+            let result = res.body
+
+            if (!result) {
+              throw new Error('no body msg')
+            }
+
+            resolve(true)
+          }
+        } catch (e) {
+          reject(e.toString())
+        }
+
+      })
+  })
+}
+
+// post my datas back to mongodb only
+var SaveChatbotDataOnly = (backendurl, cbuuid, cbdatas, jwt) => {
+  return new Promise((resolve, reject) => {
+    request
+      .put(backendurl + '/chatbot/v1/CBDatas')
       .set('contentType', 'application/json; charset=utf-8')
       .set('dataType', 'json')
       .send({
@@ -155,11 +192,19 @@ export function reqChatbotMLData_act(backendurl, jwt, cbuuid) {
   }
 }
 
-// load cbdatas back to my server
+// load cbdatas back to my server and then train it
 export function SaveChatbotDatas_act(backendurl, cbuuid, cbdatas, jwt) {
   return {
     type: 'SAVE_CB_DATAS',
     payload: SaveChatbotData(backendurl, cbuuid, cbdatas, jwt)
+  }
+}
+
+// load cbdatas back to my server and then train it
+export function SaveChatbotDatasOnly_act(backendurl, cbuuid, cbdatas, jwt) {
+  return {
+    type: 'SAVE_CB_DATAS_ONLY',
+    payload: SaveChatbotDataOnly(backendurl, cbuuid, cbdatas, jwt)
   }
 }
 
@@ -183,7 +228,9 @@ export function chatbotClientsListUpdate_act(clientsList = []) {
 export function chatbotEntitiesUpdate_act(entities = []) {
   return {
     type: 'USR_UPDATE_CHATBOT_ENTITIES',
-    payload: { entities: entities }
+    payload: new Promise((resolve, reject) => {
+      resolve({ entities: entities })
+    })
   }
 }
 
@@ -191,7 +238,9 @@ export function chatbotEntitiesUpdate_act(entities = []) {
 export function chatbotIntentsUpdate_act(intents = []) {
   return {
     type: 'USR_UPDATE_CHATBOT_INTENTS',
-    payload: { intents: intents }
+    payload: new Promise((resolve, reject) => {
+      resolve({ intents: intents })
+    })
   }
 }
 
@@ -199,7 +248,9 @@ export function chatbotIntentsUpdate_act(intents = []) {
 export function chatbotActionsUpdate_act(actions = []) {
   return {
     type: 'USR_UPDATE_CHATBOT_ACTIONS',
-    payload: { actions: actions }
+    payload: new Promise((resolve, reject) => {
+      resolve({ actions: actions })
+    })
   }
 }
 
@@ -207,7 +258,9 @@ export function chatbotActionsUpdate_act(actions = []) {
 export function chatbotStoriesUpdate_act(stories = []) {
   return {
     type: 'USR_UPDATE_CHATBOT_STORIES',
-    payload: { stories: stories }
+    payload: new Promise((resolve, reject) => {
+      resolve({ stories: stories })
+    })
   }
 }
 
@@ -215,7 +268,9 @@ export function chatbotStoriesUpdate_act(stories = []) {
 export function combinedCbProjs_act(combinedprojs = []) {
   return {
     type: 'USR_COMBINED_CHATBOT_PROJS',
-    payload: { combinedprojs: combinedprojs }
+    payload: new Promise((resolve, reject) => {
+      resolve({ combinedprojs: combinedprojs })
+    })
   }
 }
 
@@ -227,11 +282,13 @@ export function setChatbotTrainingStatus_act(isTraining = false) {
   }
 }
 
-// chatbot is traing status update
+// chatbot setting init response
 export function setChatbotInitialResponse_act(initialResponse = '') {
   return {
     type: 'SET_CHATBOT_INIT_RES',
-    payload: { initialResponse: initialResponse }
+    payload: new Promise((resolve, reject) => {
+      resolve({ initialResponse: initialResponse })
+    })
   }
 }
 /**
