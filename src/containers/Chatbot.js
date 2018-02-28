@@ -6,6 +6,7 @@ import {
   chatbotActionsUpdate_act,
   chatbotStoriesUpdate_act,
   SaveChatbotDatas_act,
+  SaveChatbotDatasOnly_act,
   setChatbotTrainingStatus_act,
   reqChatbotMLData_act,
   reqChatbotInfos_act,
@@ -73,26 +74,36 @@ class Chatbot extends Component {
 
   updateEntities = (entities) => {
     // there is a chatbot want to update its entities
-    this.props.dispatch(chatbotEntitiesUpdate_act(entities))
+    this.props.dispatch(chatbotEntitiesUpdate_act(entities)).then((res) => {
+      this.SaveChatbotDatasOnly()
+    })
   }
 
   updateIntents = (intents) => {
     // there is a chatbot want to update its intents
-    this.props.dispatch(chatbotIntentsUpdate_act(intents))
+    this.props.dispatch(chatbotIntentsUpdate_act(intents)).then((res) => {
+      this.SaveChatbotDatasOnly()
+    })
   }
 
   updateActions = (actions) => {
     // there is a chatbot want to update its actions
-    this.props.dispatch(chatbotActionsUpdate_act(actions))
+    this.props.dispatch(chatbotActionsUpdate_act(actions)).then((res) => {
+      this.SaveChatbotDatasOnly()
+    })
   }
 
   updateStories = (stories) => {
     // there is a chatbot want to update its stories
-    this.props.dispatch(chatbotStoriesUpdate_act(stories))
+    this.props.dispatch(chatbotStoriesUpdate_act(stories)).then((res) => {
+      this.SaveChatbotDatasOnly()
+    })
   }
 
   combinedCbProjs = (combinedprojs) => {
-    this.props.dispatch(combinedCbProjs_act(combinedprojs))
+    this.props.dispatch(combinedCbProjs_act(combinedprojs)).then((res) => {
+      this.SaveChatbotDatasOnly()
+    })
   }
 
   // save and train the chatbot datas, need give uuid for knowing which cb is it
@@ -102,8 +113,30 @@ class Chatbot extends Component {
     this.props.dispatch(SaveChatbotDatas_act(backendUrl, this.props.match.params.topicId, cbdatas, jwt))
   }
 
+  // save the cb datas only...
+  SaveChatbotDatasOnly = () => {
+    const { jwt, backendUrl, dispatch } = this.props
+    const chosenChatbot = this.props.chatbotReducer
+
+    dispatch(SaveChatbotDatasOnly_act(
+      backendUrl, 
+      this.props.match.params.topicId, 
+      {
+        entities: chosenChatbot.entities,
+        intents: chosenChatbot.intents,
+        actions: chosenChatbot.actions,
+        stories: chosenChatbot.stories,
+        combinedprojs: chosenChatbot.combinedprojs,
+        initialResponse: chosenChatbot.initialResponse
+      },
+      jwt
+    ))
+  }
+
   SetInitResponse = (initialResponse) => {
-    this.props.dispatch(setChatbotInitialResponse_act(initialResponse))
+    this.props.dispatch(setChatbotInitialResponse_act(initialResponse)).then((res)=>{
+      this.SaveChatbotDatasOnly()
+    })
   }
 
   // simple testing with my nlu engine, uuid for knowing which cb to communicate to
@@ -199,6 +232,7 @@ class Chatbot extends Component {
   render() {
     const { chatbotReducer, match, history, backendUrl, jwt } = this.props
     return (
+      <div>
       <DisplayChatbotPage
         match={match}
         history={history}
@@ -217,6 +251,7 @@ class Chatbot extends Component {
         SetInitResponse={this.SetInitResponse}
         jwt={jwt}
       />
+      </div>
     )
   }
 }
