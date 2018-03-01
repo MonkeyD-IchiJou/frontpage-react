@@ -7,8 +7,8 @@ import 'semantic-ui-css/semantic.min.css'
 import 'babel-polyfill'
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
 )
