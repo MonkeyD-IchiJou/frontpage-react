@@ -4,6 +4,7 @@ import App from './containers/App'
 import store from './store'
 import { Provider } from 'react-redux'
 import 'semantic-ui-css/semantic.min.css'
+import 'babel-polyfill'
 
 ReactDOM.render(
     <Provider store={store}>
