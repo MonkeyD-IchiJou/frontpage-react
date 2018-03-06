@@ -328,7 +328,8 @@ result.result[i].actions = [
             new TextResponse('yo look'),
             new ImageResponse('kek.png'),
             new CustomResponse({msg: 'custom msg'}),
-            new LinkResponse('link.com')
+            new LinkResponse('link.com'),
+            new FulfillmentResponse('link.com')
         ],
         [
             new QuickReplies([

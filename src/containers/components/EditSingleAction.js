@@ -5,11 +5,13 @@ import QuickReplies from './../classes/QuickReplies'
 import TmpFormResponse from './../classes/TmpFormResponse'
 import CustomResponse from './../classes/CustomResponse'
 import LinkResponse from './../classes/LinkResponse'
+import FulfillmentResponse from './../classes/FulfillmentResponse'
 import ResponseText from './ResponseText'
 import ResponseLink from './ResponseLink'
 import ResponseImage from './ResponseImage'
 import ResponseQR from './ResponseQR'
 import ResponseTmp from './ResponseTmp'
+import ResponseFulfillment from './ResponseFulfillment'
 import ResponseCustom from './ResponseCustom'
 import { Segment, Label, Popup, Icon, Button, Divider } from 'semantic-ui-react'
 
@@ -71,6 +73,13 @@ class EditSingleAction extends Component {
                 <ResponseLink action={action} updateAction={ua} />
               )
               title = 'Link Response'
+              break
+
+            case 'WH':
+              torender = (
+                <ResponseFulfillment action={action} updateAction={ua} />
+              )
+              title = 'Fulfillment'
               break
 
             case 'CR':
@@ -146,6 +155,13 @@ class EditSingleAction extends Component {
               this.props.updateActions(actions)
             }}>
               TmpForm
+            </Button>
+
+            <Button onClick={() => {
+              actions.push(new FulfillmentResponse(''))
+              this.props.updateActions(actions)
+            }}>
+              Fulfillment
             </Button>
 
             <Button onClick={() => {

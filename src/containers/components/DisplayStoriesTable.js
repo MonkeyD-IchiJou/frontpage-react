@@ -110,7 +110,7 @@ class DisplayStoriesTable extends Component {
                       }
                     }} />
                     &nbsp; &nbsp;
-                                        <span style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{action.name}</span>
+                    <span style={{ cursor: 'pointer' }} onClick={() => { history.push(`${match.url}/${index}`) }}>{action.name}</span>
                   </Table.Cell >
                 </Table.Row>
               )
